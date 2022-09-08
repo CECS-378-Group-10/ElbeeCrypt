@@ -1,0 +1,30 @@
+{
+	"recommendations": [
+		"akecel.makefiles-runner", 
+		"DavidAnson.vscode-markdownlint", 
+		"DavidAnson.vscode-markdownlint", 
+		"dcasella.monokai-plusplus", 
+		"eamodio.gitlens", 
+		"fabiospampinato.vscode-todo-plus", 
+		"formulahendry.code-runner", 
+		"GitHub.vscode-pull-request-github", 
+		"hars.CppSnippets", 
+		"jaycetyle.vscode-gnu-global", 
+		"jeff-hykin.better-cpp-syntax", 
+		"josetr.cmake-language-support-vscode", 
+		"mesonbuild.mesonbuild", 
+		"ms-vscode.cmake-tools", 
+		"ms-vscode.cpptools", 
+		"ms-vscode.cpptools-extension-pack", 
+		"ms-vscode.cpptools-themes", 
+		"ms-vscode.makefile-tools", 
+		"notskm.clang-tidy", 
+		"shanoor.vscode-nginx",  
+		"streetsidesoftware.code-spell-checker", 
+		"twxs.cmake", 
+		"VisualStudioExptTeam.intellicode-api-usage-examples", 
+		"VisualStudioExptTeam.vscodeintellicode", 
+		"xaver.clang-format",
+		"christian-kohler.path-intellisense"
+	]
+}
