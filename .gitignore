@@ -25,6 +25,10 @@
 .vscode/
 .vscodium/
 
+# Exclusions for user-specific files
+!.vscode/extensions.json
+!.vscode/settings.json
+
 # Build results
 [Dd]ebug/
 [Rr]elease/
@@ -121,6 +125,7 @@ Desktop.ini
 #############
 ## Meson
 #############
+
 build/
 meson-info/
 meson-logs/
