@@ -21,10 +21,12 @@ All of the following requirements can be met via your package manager (eg: apt, 
 - Python (at least version 3.5)
   - Available as `python3` on most Linux distributions
   - Available on Windows via [Python's website](https://www.python.org/downloads/) or the Windows Store
+  - Having the Pip package manager installed is highly recommended, and allows builder dependencies to be acquired very easily irregardless of the host
 - Meson (at least version 0.55.0)
   - Available as a system package (`meson`) or on PyPi via Pip (`python -m pip install meson`)
 - Ninja
-  - Available as `ninja-build` (Debian and Fedora derivatives) or `ninja` (everywhere else) in most package managers; see Ninja's [Pre built Ninja packages](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages) section on the Ninja wiki for more details
+  - Available as a system package (`ninja-build` for Debian and Fedora derivatives or `ninja` for everywhere else) or on PyPi via Pip (`python -m pip install ninja`)
+    - See Ninja's [Pre built Ninja packages](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages) section on the Ninja wiki for more details
 - A compiler toolchain that supports the C++17 standard
   - GCC/Clang (any supported platform) or MSVC on Windows (improves portability and reduces binary size, accessed via the Visual Studio Developer Command Prompt)
 
@@ -37,6 +39,7 @@ Compilation has been tested and is confirmed to work on the following platforms:
 \* Other operating systems and platforms are UNTESTED, but should still work, given the aforementioned requirements are met.
 
 ### Steps (Automatic)
+
 1. Simply run either `build-gcc.bat` or `build-msvc.bat`. Each of these script will automatically build the project
 
 ### Steps (Manual)
@@ -45,7 +48,7 @@ Compilation has been tested and is confirmed to work on the following platforms:
 
 2. Run the command `meson compile -C build` in the root project directory to build the executable via Meson's backend (Ninja by default)
 
-3. Enter the build folder. The resulting executable will be available under the name `elbeecrypt`, with an appended `.exe` extension if the host is Windows
+3. Enter the build folder. The resulting executables will be available under the names `elbeecrypt-cryptor` and `elbeecrypt-decryptor`, with appended `.exe` extensions if the host is Windows
 
 \* Optionally, the above steps can be run as a single command for ease of use:
 
