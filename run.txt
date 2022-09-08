@@ -1,1 +1,3 @@
 cls && meson build && meson compile -C build && build\elbeecrypt-cryptor.exe
+
+test
