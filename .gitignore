@@ -127,6 +127,7 @@ Desktop.ini
 #############
 
 build/
+builddir/
 meson-info/
 meson-logs/
 meson-private/
