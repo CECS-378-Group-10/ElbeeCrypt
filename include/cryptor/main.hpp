@@ -12,6 +12,6 @@ void fakeError();
  * Serves as a safety net in case the user accidentally launched the
  * program on their system.
  * 
- * @return boolean Whether the application is allowed to move forward
+ * @return Whether the application is allowed to move forward
  */
 bool safetyNet();
