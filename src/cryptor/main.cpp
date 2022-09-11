@@ -17,8 +17,8 @@
 #define SAFETY_NET true //Whether there should be a warning before running
 #define SPAM_RANSOM_NOTES false //Whether there should be ransom notes dropped in every directory that the ransomware hit
 
+using namespace elbeecrypt;
 using namespace std;
-//using namespace elbeecrypt;
 
 /** 
  * Main entrypoint for ElbeeCrypt. 
@@ -30,19 +30,19 @@ using namespace std;
 int main(int argc, char **argv){
 	//Deploy the safety net before continuing
 	#if SAFETY_NET == true
-		if(!safetyNet()) exit(-1);
+		if(!cryptor::Main::safetyNet()) exit(-1);
 	#endif
 
 	cout << "Encryption routines started!" << endl;
 }
 
 /** Impl of fakeError(). */
-void fakeError(){
+void cryptor::Main::fakeError(){
 
 }
 
 /** Impl of safetyNet(). */
-bool safetyNet(){
+bool cryptor::Main::safetyNet(){
 	//First prompt with info about the program
 	int promptOne = MessageBox(
 		NULL,
