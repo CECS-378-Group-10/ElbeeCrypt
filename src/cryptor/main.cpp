@@ -21,7 +21,7 @@ using namespace elbeecrypt;
 using namespace std;
 
 /** 
- * Main entrypoint for ElbeeCrypt. 
+ * Main entrypoint for ElbeeCrypt's cryptor binary. 
  * 
  * @param argc The number of arguments
  * @param argv The arguments themselves

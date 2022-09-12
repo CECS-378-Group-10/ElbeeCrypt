@@ -8,6 +8,7 @@ Public key fingerprint: %public_key_fingerprint%
 Targeted extensions: %target_extensions%
 Root directories: %root_directories%
 Encrypted extension: %encrypted_extension%
+Encrypted file list location: %encrypted_filelist_location%
 Total files encrypted: %total_encrypted%
 Spam ransom note: %spam_ransom_note%
 Startup safety net enabled: %safety_net_enabled% (was bypassed if this option is true)

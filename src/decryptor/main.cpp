@@ -17,11 +17,11 @@
 #define SAFETY_NET true //Whether there should be a warning before running
 #define SPAM_RANSOM_NOTES false //Whether there should be ransom notes dropped in every directory that the ransomware hit
 
-using namespace std;
 //using namespace elbeecrypt;
+using namespace std;
 
 /** 
- * Main entrypoint for ElbeeCrypt. 
+ * Main entrypoint for ElbeeCrypt's decryptor binary. 
  * 
  * @param argc The number of arguments
  * @param argv The arguments themselves
