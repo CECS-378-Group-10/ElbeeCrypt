@@ -37,6 +37,6 @@ ECDHE-ECDSA-CHACHA20-POLY1305-SHA256
 ECDHE-ECDSA-AES256-SHA384
 ECDHE-ECDSA-AES128-SHA256
 
-## SSH keys (will help us balance security and performance for pubkey cryptography)
+## SSH keys (will help balance security and performance for pubkey cryptography)
 https://wiki.unimus.net/display/UNPUB/SSH+key+types+and+formats
 https://goteleport.com/blog/comparing-ssh-keys/
