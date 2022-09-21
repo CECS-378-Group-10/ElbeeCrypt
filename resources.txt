@@ -1,0 +1,2 @@
+### Place ransomware-related resources in here ###
+https://github.com/undeadwarlock/shadowcloak
