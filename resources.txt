@@ -1,2 +1,42 @@
 ### Place ransomware-related resources in here ###
+## Extension list
 https://github.com/undeadwarlock/shadowcloak
+	- Extensions: https://github.com/undeadwarlock/shadowcloak/blob/main/extensions.txt
+https://github.com/mauri870/ransomware
+	- Extensions: https://github.com/mauri870/ransomware/blob/master/cmd/common.go#L40
+https://github.com/tarcisio-marinho/GonnaCry
+	- Extensions: https://github.com/tarcisio-marinho/GonnaCry/blob/master/src/GonnaCry/get_files.py#L6
+https://github.com/PanagiotisDrakatos/JavaRansomware
+	- Extensions: https://github.com/PanagiotisDrakatos/JavaRansomware/blob/master/JavaRansomware/src/main/java/com/security/SearchDirectory.java
+https://github.com/Hackstar7/WanaCry
+	- Extensions: https://github.com/Hackstar7/WanaCry#file-types
+https://github.com/deadPix3l/CryptSky
+	- https://github.com/deadPix3l/CryptSky/blob/master/discover.py#L25
+https://github.com/Virgula0/hidden-tear
+	- Extensions: https://github.com/Virgula0/hidden-tear/blob/master/hidden-tear/hidden-tear/Form1.cs#L180
+https://github.com/sithis993/Crypter
+	- Extensions: https://github.com/sithis993/Crypter/blob/master/CrypterBuilder/Base.py#L43
+https://github.com/HugoLB0/Ransom0
+	- Extensions: https://github.com/HugoLB0/Ransom0/blob/master/ransom0.py#L46
+https://github.com/jorgetstechnology/DeathRansom
+	- Extensions: https://github.com/jorgetstechnology/DeathRansom/blob/master/deathransom.py#L61
+
+## Crypto libraries
+libsodium: https://doc.libsodium.org/
+Crypto++: https://cryptopp.com/
+OpenSSL: https://www.openssl.org/
+mbedTLS: https://www.trustedfirmware.org/projects/mbed-tls/
+
+## Secure TLS ciphers (will help determine the most secure ciphersuite for encryption)
+#TLS 1.3
+TLS_CHACHA20_POLY1305_SHA256
+TLS_AES_256_GCM_SHA384
+TLS_AES_128_GCM_SHA256
+#TLS 1.2
+ECDHE-ECDSA-CHACHA20-POLY1305-SHA256
+ECDHE-ECDSA-AES256-SHA384
+ECDHE-ECDSA-AES128-SHA256
+
+## SSH keys (will help us balance security and performance for pubkey cryptography)
+https://wiki.unimus.net/display/UNPUB/SSH+key+types+and+formats
+https://goteleport.com/blog/comparing-ssh-keys/
