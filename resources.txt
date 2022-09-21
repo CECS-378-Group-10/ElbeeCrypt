@@ -41,3 +41,6 @@ ECDHE-ECDSA-AES128-SHA256
 ## SSH keys (will help balance security and performance for pubkey cryptography)
 https://wiki.unimus.net/display/UNPUB/SSH+key+types+and+formats
 https://goteleport.com/blog/comparing-ssh-keys/
+
+## GUI libraries (for the decryptor portion of the malware)
+GuiLite: https://github.com/idea4good/GuiLite
