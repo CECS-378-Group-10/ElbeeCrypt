@@ -5,7 +5,15 @@
 ::Setup
 @echo off
 title Project Builder (MSVC)
-call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
+
+::Get the location of vcvarsall via a Python script
+for /F "tokens=*" %%g in ('python .mesondep/msvc-locator.py') do (set VCVARSALL=%%g)
+
+::Announce the location of vcvarsall
+echo Found 'vcvarsall.bat' at path '%VCVARSALL%'
+
+::Initialize the env with vcvarsall.bat
+call "%VCVARSALL%" x64
 
 ::Execute Meson
 meson build && meson compile -C build
