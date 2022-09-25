@@ -3,6 +3,7 @@
 ## Call via: msvc-locator.py
 ## Example: python .mesondep/msvc-locator.py
 
+
 ## Imports
 from pathlib import Path
 from vslocate import get_vs_installations
