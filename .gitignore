@@ -24,6 +24,7 @@
 *.sln.docstates
 .vscode/
 .vscodium/
+tempCodeRunnerFile.*
 
 # Exclusions for user-specific files
 !.vscode/extensions.json
