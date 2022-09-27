@@ -50,9 +50,9 @@ c_header_exts = '"*.h *.hh *.hpp *.hxx *.h++"'
 glob_script_dir = meson_dep_loc + 'glob.py'
 
 # Glob the source directory for the cryptor, decryptor, and common portions of the project
-csrc = run_command(python_cmd, glob_script_dir, 'src/cryptor', c_source_exts, check: true).stdout().strip()
-desrc = run_command(python_cmd, glob_script_dir, 'src/decryptor', c_source_exts, check: true).stdout().strip()
-common_sources = run_command(python_cmd, glob_script_dir, 'src/elbeecrypt', c_source_exts, check: true).stdout().strip()
+csrc = run_command(python_cmd, glob_script_dir, 'src/elbeecrypt/cryptor', c_source_exts, check: true).stdout().strip()
+desrc = run_command(python_cmd, glob_script_dir, 'src/elbeecrypt/decryptor', c_source_exts, check: true).stdout().strip()
+common_sources = run_command(python_cmd, glob_script_dir, 'src/elbeecrypt/common', c_source_exts, check: true).stdout().strip()
 
 # Combine the common portions with both the cryptor and decryptor portions 
 cryptor_sources = '\n'.join([csrc, common_sources]).split('\n')
