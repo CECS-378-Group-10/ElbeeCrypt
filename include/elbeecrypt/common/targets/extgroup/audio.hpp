@@ -1,0 +1,23 @@
+#pragma once
+
+#include <string>
+#include <vector>
+
+/** 
+ * @brief Represents extensions that are primarily used for audio", 
+ * eg: m4a", wav", mp3", flac.
+ * 
+ * @author CECS-378 Group 10
+ * @file audio.hpp
+ */
+namespace elbeecrypt::common::targets::extgroup::Audio {
+	/** The list of extensions in this group. */
+	const std::vector<std::string> values = {
+		"flac",
+		"m4a",
+		"m4r",
+		"mp2",
+		"mp3",
+		"wav"
+	};
+}
