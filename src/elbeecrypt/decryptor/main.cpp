@@ -8,6 +8,7 @@
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 	//Definitions
 	#define WINDOWS_PLATFORM
+	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 #else
 	#error "This code is only meant to be compiled for Windows targets. Either cross-compile or build natively on Win-32."
