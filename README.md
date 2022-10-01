@@ -40,7 +40,7 @@ Compilation has been tested and is confirmed to work on the following platforms:
 
 ### Steps (Automatic)
 
-1. Simply run either `build-gcc.bat` or `build-msvc.bat`. Each of these script will automatically build the project
+1. Simply run either `build-gcc.bat` or `build-msvc.bat`. Each of these scripts will automatically build the project
 
 ### Steps (Manual)
 
