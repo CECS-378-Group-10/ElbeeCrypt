@@ -14,10 +14,25 @@ namespace elbeecrypt::common::targets::extgroup::Document {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
 		"doc",
+		"docb",
+		"docm",
 		"docx",
+		"dot",
+		"dotm",
+		"dotx",
 		"odt",
 		"pdf",
 		"ppt",
-		"pptx"
+		"pptx",
+		"wbk",
+		"wll",
+		"wwl",
+		"xla_",
+		"xla5",
+		"xla8",
+		"xll_",
+		"xlm",
+		"xls",
+		"xlt"
 	};
 }
