@@ -51,7 +51,6 @@ namespace elbeecrypt::common::targets::extgroup::Document {
 		"wll",
 		"wwl",
 		"xla",
-		"xla_",
 		"xla5",
 		"xla8",
 		"xlam",
