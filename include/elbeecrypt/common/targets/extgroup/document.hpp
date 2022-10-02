@@ -56,7 +56,6 @@ namespace elbeecrypt::common::targets::extgroup::Document {
 		"xla8",
 		"xlam",
 		"xll",
-		"xll_",
 		"xlm",
 		"xls",
 		"xlsb",
