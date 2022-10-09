@@ -7,7 +7,7 @@ namespace elbeecrypt::common::utils::String {
 	bool contains(const std::string& str, const std::string& target, bool ignoreCase){
 		//Clone the input strings
 		std::string strCloned(str);
-		std::string targetCloned(str);
+		std::string targetCloned(target);
 
 		//Transform both strings to lowercase if case should be ignored
 		if(ignoreCase){
@@ -22,6 +22,48 @@ namespace elbeecrypt::common::utils::String {
 	/** Impl of contains(string, string). */
 	bool contains(const std::string& str, const std::string& target){
 		return contains(str, target, false);
+	}
+
+	/** Impl of contains(string, char, bool). */
+	bool contains(const std::string& str, const char& target, bool ignoreCase){
+		return contains(str, std::string(&target), ignoreCase);
+	}
+
+	/** Impl of contains(string, char). */
+	bool contains(const std::string& str, const char& target){
+		return contains(str, std::string(&target));
+	}
+
+	/** Impl of firstIndexOf(string, char). */
+	int firstIndexOf(const std::string& str, const char& target){
+		//Loop over the string, character by character
+		int index = -1;
+		for(int i = 0; i <= (int) str.size() - 1; i++){
+			//If the current character equals the target, set the index to be the current i value and break out
+			if(str[i] == target){
+				index = i;
+				break;
+			}
+		}
+
+		//Return the index
+		return index;
+	}
+
+	/** Impl of lastIndexOf(string, char). */
+	int lastIndexOf(const std::string& str, const char& target){
+		//Loop backwards over the string, character by character
+		int index = -1;
+		for(int i = str.size() - 1; i >= 0; i--){
+			//If the current character equals the target, set the index to be the current i value and break out
+			if(str[i] == target){
+				index = i;
+				break;
+			}
+		}
+
+		//Return the index
+		return index;
 	}
 
 	/** Impl of toLowercase(string). */

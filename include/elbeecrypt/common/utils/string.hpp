@@ -33,6 +33,46 @@ namespace elbeecrypt::common::utils::String {
 	bool contains(const std::string& str, const std::string& target);
 
 	/**
+	 * @brief Checks if a string contains a specific character.
+	 * 
+	 * @param str The string to look in
+	 * @param target The target character to look for
+	 * @param ignoreCase Whether case should be ignored when searching
+	 * @return Whether the string contans the target
+	 */
+	bool contains(const std::string& str, const char& target, bool ignoreCase);
+
+	/**
+	 * @brief Checks if a string contains a specific character. Assumes 
+	 * that the check is case sensitive.
+	 * 
+	 * @param str The string to look in
+	 * @param target The target character to look for
+	 * @return Whether the string contans the target
+	 */
+	bool contains(const std::string& str, const char& target);
+
+	/**
+	 * @brief Returns the first index of a char in a string. Returns 
+	 * -1 if the char isn't in the string.
+	 * 
+	 * @param str The string to check
+	 * @param target The target character to look for
+	 * @return The first index of the character in the string, else -1 if it is not present
+	 */
+	int firstIndexOf(const std::string& str, const char& target);
+
+	/**
+	 * @brief Returns the last index of a char in a string. Returns 
+	 * -1 if the char isn't in the string.
+	 * 
+	 * @param str The string to check
+	 * @param target The target character to look for
+	 * @return The last index of the character in the string, else -1 if it is not present
+	 */
+	int lastIndexOf(const std::string& str, const char& target);
+
+	/**
 	 * @brief Transforms a string to lowercase.
 	 * 
 	 * @param str The string to transform
