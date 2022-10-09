@@ -58,8 +58,6 @@ common_sources = run_command(python_cmd, glob_script_dir, 'src/elbeecrypt/common
 cryptor_sources = '\n'.join([csrc, common_sources]).split('\n')
 decryptor_sources = '\n'.join([desrc, common_sources]).split('\n')
 
-message(cryptor_sources)
-
 ##################
 ## Compiler/host tweaks
 
