@@ -158,7 +158,7 @@ namespace einstein_enum {
 		inline static bool contains(const std::string value){\
 			return enumValues.find(value) != enumValues.end();\
 		}\
-		inline static int size(){\
+		inline static size_t size(){\
 			return enumNames.size();\
 		}\
 		inline static const std::vector<Type>& values(){\
@@ -190,7 +190,7 @@ namespace einstein_enum {
 			return outStream;\
 		}\
 };\
-const std::vector<Type> Type::enumItems = {__VA_ARGS__};\
-const std::unordered_map<int32_t, std::string> Type::enumNames = einstein_enum::makeEnumNameMap(#__VA_ARGS__);\
-const std::unordered_map<std::string, int32_t> Type::enumValues = einstein_enum::makeEnumValuesMap(#__VA_ARGS__);\
-const std::vector<std::string> Type::enumStr = einstein_enum::makeEnumValuesVector(#__VA_ARGS__);
+const inline std::vector<Type> Type::enumItems = {__VA_ARGS__};\
+const inline std::unordered_map<int32_t, std::string> Type::enumNames = einstein_enum::makeEnumNameMap(#__VA_ARGS__);\
+const inline std::unordered_map<std::string, int32_t> Type::enumValues = einstein_enum::makeEnumValuesMap(#__VA_ARGS__);\
+const inline std::vector<std::string> Type::enumStr = einstein_enum::makeEnumValuesVector(#__VA_ARGS__);

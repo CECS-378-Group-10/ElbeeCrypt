@@ -1,3 +1,5 @@
+#pragma once
+
 #include "einstein-enum/einstein-enum.hpp"
 
 namespace elbeecrypt::common::targets {
@@ -18,5 +20,5 @@ namespace elbeecrypt::common::targets {
 		PLAIN, //Plaintext files (eg: cpp, hpp)
 		UNDEFINED, //Catch-all for unrecognized extensions
 		VIDEO //Video files (eg: avi, mp4)
-	);
+	)
 }
