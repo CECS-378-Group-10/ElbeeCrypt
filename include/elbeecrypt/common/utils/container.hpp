@@ -77,7 +77,7 @@ namespace elbeecrypt::common::utils::Container {
 	 * @return Whether the vector contains the item
 	 */
 	template<typename T>
-	bool contains(const std::vector<T>& vec, const T& target){
+	bool contains(const std::vector<T>& vec, const T& target){ //Defined here or else the linker will fail the build
 		return std::find(vec.begin(), vec.end(), target) != vec.end();
 	}
 
