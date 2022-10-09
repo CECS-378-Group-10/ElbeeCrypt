@@ -1,0 +1,42 @@
+#include <algorithm>
+#include "elbeecrypt/common/utils/string.hpp"
+
+/** Impl of string.hpp */
+namespace elbeecrypt::common::utils::String {
+	/** Impl of contains(string, string, bool). */
+	bool contains(const std::string& str, const std::string& target, bool ignoreCase){
+		//Clone the input strings
+		std::string strCloned(str);
+		std::string targetCloned(str);
+
+		//Transform both strings to lowercase if case should be ignored
+		if(ignoreCase){
+			strCloned = toLowercase(strCloned);
+			targetCloned = toLowercase(targetCloned);
+		}
+
+		//Perform the check and return the result
+		return strCloned.find(targetCloned) != std::string::npos;
+	}
+
+	/** Impl of contains(string, string). */
+	bool contains(const std::string& str, const std::string& target){
+		return contains(str, target, false);
+	}
+
+	/** Impl of toLowercase(string). */
+	const std::string toLowercase(const std::string& str){
+		//Clone the input string to maintain immutability, transform it, and return it
+		std::string cloned(str);
+		std::transform(cloned.begin(), cloned.end(), cloned.begin(), ::tolower);
+		return cloned;
+	}
+
+	/** Impl of toUppercase(string). */
+	const std::string toUppercase(const std::string& str){
+		//Clone the input string to maintain immutability, transform it, and return it
+		std::string cloned(str);
+		std::transform(cloned.begin(), cloned.end(), cloned.begin(), ::toupper);
+		return cloned;
+	}
+}

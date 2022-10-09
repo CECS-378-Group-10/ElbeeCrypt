@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -10,7 +11,7 @@
  * of an object. Credits are given where needed for 3rd party contributions.
  * 
  * @author CECS-378 Group 10
- * @file utils.hpp
+ * @file container.hpp
  */
 namespace elbeecrypt::common::utils::Container {
 	/**
@@ -65,6 +66,19 @@ namespace elbeecrypt::common::utils::Container {
 
 		//Return the output vector
 		return out;
+	}
+
+	/**
+	 * @brief Checks if a given vector contains a given item.
+	 * 
+	 * @tparam T The datatype of the vector and the item to look for
+	 * @param vec The vector to search
+	 * @param target The item to search for
+	 * @return Whether the vector contains the item
+	 */
+	template<typename T>
+	bool contains(const std::vector<T>& vec, const T& target){
+		return std::find(vec.begin(), vec.end(), target) != vec.end();
 	}
 
 	/**
