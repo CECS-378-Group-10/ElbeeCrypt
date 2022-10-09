@@ -13,7 +13,7 @@ for /F "tokens=*" %%g in ('python .mesondep/msvc-locator.py') do (set VCVARSALL=
 echo Found 'vcvarsall.bat' at path '%VCVARSALL%'
 
 ::Initialize the env with vcvarsall.bat
-call %VCVARSALL% x64
+call "%VCVARSALL%" x64
 
 ::Execute Meson
 meson build && meson compile -C build
