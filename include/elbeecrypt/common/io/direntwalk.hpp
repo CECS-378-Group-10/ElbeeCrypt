@@ -1,0 +1,45 @@
+#pragma once
+
+#include <filesystem>
+#include <functional>
+#include <vector>
+
+namespace fs = std::filesystem;
+
+/**
+ * @brief Contains the directory walking API along with multiple
+ * implementations for common operations using it. The main 
+ * function in this library, `walk()`, contains the bulk of the
+ * functionality. More can be done using this base function by
+ * passing in lambdas (anonymous functions) that can do more with
+ * the results than the base function or included implementations
+ * can provide. These lambdas should be declared with the following
+ * header: 
+ * 
+ * @author CECS-378 Group 10
+ * @file direntwalk.hpp
+ */
+namespace elbeecrypt::common::io::DirentWalk {
+	/**
+	 * @brief Performs a recursive directory listing, collecting all of
+	 * the found files in a vector. Relies on the `walk()` function to
+	 * perform the necessary work.
+	 * 
+	 * @param root The root path to start from
+	 * @param paths The vector to which the paths will be written
+	 */
+	void directoryList(const fs::path& root, std::vector<fs::path>& paths);
+
+	/**
+	 * @brief Walks a directory recursively using POSIX's `dirent.h` API.
+	 * This function, by default, does not do anything to the directory 
+	 * listings generated. That functionality must be provided via a lambda
+	 * called `consumer`. A single path is sent to the lambda for processing,
+	 * returning void (no return) when complete. Adapted from the following
+	 * Stack Overflow thread: https://stackoverflow.com/a/612176
+	 * 
+	 * @param root The root path to start from
+	 * @param consumer The callback lambda to utilize whenever a file is encountered. Doesn't process directories
+	 */
+	void walk(const fs::path& root, std::function<void(const fs::path&)> consumer);
+}
