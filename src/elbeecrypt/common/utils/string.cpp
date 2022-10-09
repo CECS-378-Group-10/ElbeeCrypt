@@ -38,10 +38,10 @@ namespace elbeecrypt::common::utils::String {
 	int firstIndexOf(const std::string& str, const char& target){
 		//Loop over the string, character by character
 		int index = -1;
-		for(int i = 0; i <= (int) str.size() - 1; i++){
+		for(size_t i = 0; i < str.length(); i++){
 			//If the current character equals the target, set the index to be the current i value and break out
 			if(str[i] == target){
-				index = i;
+				index = (int) i;
 				break;
 			}
 		}
@@ -54,10 +54,10 @@ namespace elbeecrypt::common::utils::String {
 	int lastIndexOf(const std::string& str, const char& target){
 		//Loop backwards over the string, character by character
 		int index = -1;
-		for(int i = str.size() - 1; i >= 0; i--){
+		for(size_t i = str.length(); i > 0; i--){
 			//If the current character equals the target, set the index to be the current i value and break out
 			if(str[i] == target){
-				index = i;
+				index = (int) i;
 				break;
 			}
 		}
@@ -70,7 +70,9 @@ namespace elbeecrypt::common::utils::String {
 	const std::string toLowercase(const std::string& str){
 		//Clone the input string to maintain immutability, transform it, and return it
 		std::string cloned(str);
-		std::transform(cloned.begin(), cloned.end(), cloned.begin(), ::tolower);
+		std::transform(cloned.begin(), cloned.end(), cloned.begin(), [](char c){
+			return static_cast<char>(tolower(c)); //Defined as a lambda to get rid of a compiler warning in MSVC
+		});
 		return cloned;
 	}
 
@@ -78,7 +80,9 @@ namespace elbeecrypt::common::utils::String {
 	const std::string toUppercase(const std::string& str){
 		//Clone the input string to maintain immutability, transform it, and return it
 		std::string cloned(str);
-		std::transform(cloned.begin(), cloned.end(), cloned.begin(), ::toupper);
+		std::transform(cloned.begin(), cloned.end(), cloned.begin(), [](char c){
+			return static_cast<char>(toupper(c)); //Defined as a lambda to get rid of a compiler warning in MSVC
+		});
 		return cloned;
 	}
 }
