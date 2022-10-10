@@ -39,7 +39,7 @@ int main(int argc, char **argv){
 	);
 
 	vector<fs::path> paths = {};
-	elbeecrypt::common::io::DirentWalk::directoryList("../include/", paths);
+	elbeecrypt::common::io::DirentWalk::directoryList("./include/", paths);
 
 	for(fs::path path : paths){
 		cout << "PATH: '" << path << "'" << endl;

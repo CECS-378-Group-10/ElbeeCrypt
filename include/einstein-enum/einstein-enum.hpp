@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -18,28 +19,31 @@
  * @file einstein-enum.hpp
  */
 namespace einstein_enum {
-	inline std::string trimWhitespace(std::string str){
-		// trim trailing whitespace
-		size_t endPos = str.find_last_not_of(" \t");
+	inline std::string trimWhitespace(const std::string& str){
+		//Clone the input string to maintain immutability
+		std::string out(str);
+
+		//Trim trailing whitespace
+		size_t endPos = out.find_last_not_of(" \t");
 		if(std::string::npos != endPos){
-			str = str.substr(0, endPos + 1);
+			out = out.substr(0, endPos + 1);
 		}
 
-		// trim leading spaces
-		size_t startPos = str.find_first_not_of(" \t");
+		//Trim leading spaces
+		size_t startPos = out.find_first_not_of(" \t");
 		if(std::string::npos != startPos){
-			str = str.substr(startPos);
+			out = out.substr(startPos);
 		}
 
 		//Allows enum names starting with numbers. Simply prefix the enum with a _ and its string representation will exclude the leading _
-		if(str.at(0) == '_' && isdigit(str.at(1))){ //Implements the regex "^_[0-9]{1}" (much faster)
-			str = str.substr(1);
+		if(out.at(0) == '_' && isdigit(out.at(1))){ //Implements the regex "^_[0-9]{1}" (much faster)
+			out = out.substr(1);
 		}
 
-		return str;
+		return out;
 	}
 
-	inline std::string extractEntry(std::string& valuesString){
+	inline std::string extractEntryAndTrim(std::string& valuesString){
 		std::string result;
 		size_t nextCommaPos = valuesString.find(',');
 
@@ -56,72 +60,101 @@ namespace einstein_enum {
 		return result;
 	}
 
-	inline std::unordered_map<int32_t, std::string> makeEnumNameMap(std::string enumValuesString){
-		std::unordered_map<int32_t, std::string> nameMap;
+	inline void parseEnumData(const std::string& rawEnumData, std::function<void(const std::string&, const int32_t&)> consumer){
+		//Clone the input string to maintain immutability
+		std::string processed(rawEnumData);
 
+		//Loop over the enum values while there is still more to process
 		int32_t currentEnumValue = 0;
-		while(enumValuesString != ""){
-			std::string currentEnumEntry = extractEntry(enumValuesString);
+		while(processed != ""){
+			//Get the current enum key
+			std::string currentEnumEntry = extractEntryAndTrim(processed);
 
+			//Separate the key from the value at the equals sign if it exists
 			size_t equalSignPos = currentEnumEntry.find('=');
 			if(equalSignPos != std::string::npos){
-				std::string rightHandSide = currentEnumEntry.substr(equalSignPos + 1);
-				currentEnumValue = std::stoi(rightHandSide, 0, 0);
-				currentEnumEntry.erase(equalSignPos);
-			}
-
-			currentEnumEntry = trimWhitespace(currentEnumEntry);
-
-			nameMap[currentEnumValue] = currentEnumEntry;
-
-			currentEnumValue++;
-		}
-
-		return nameMap;
-	}
-
-	inline std::unordered_map<std::string, int32_t> makeEnumValuesMap(std::string enumValuesString){
-		std::unordered_map<std::string, int32_t> nameMap;
-
-		int32_t currentEnumValue = 0;
-		while(enumValuesString != ""){
-			std::string currentEnumEntry = extractEntry(enumValuesString);
-
-			size_t equalSignPos = currentEnumEntry.find('=');
-			if(equalSignPos != std::string::npos){
+				//Get the right-hand side of the assignment, set the enum value to be that value, and erase the right hand side from the entry
 				std::string rightHandSide = currentEnumEntry.substr(equalSignPos + 1);
 				currentEnumValue = std::stoi(rightHandSide);
 				currentEnumEntry.erase(equalSignPos);
 			}
-
+			
+			//Trim any whitespace in the enum entry
 			currentEnumEntry = trimWhitespace(currentEnumEntry);
-
-			nameMap[currentEnumEntry] = currentEnumValue;
-
+			
+			//Pass the entry and value to the consumer for further processing
+			consumer(currentEnumEntry, currentEnumValue);
+			
+			//Increment the enum value
 			currentEnumValue++;
 		}
-
-		return nameMap;
 	}
 
-	inline std::vector<std::string> makeEnumValuesVector(std::string enumStr){
-		std::vector<std::string> values = {};
+	inline std::unordered_map<int32_t, std::string> makeEnumNamesMap(const std::string& enumValuesString){
+		//Create the name map
+		std::unordered_map<int32_t, std::string> namesMap;
 
-		while(enumStr != ""){
-			std::string currentEnumEntry = extractEntry(enumStr);
+		//Define the lambda that will handle the data from the enum data parser
+		auto mapPopulator = [&namesMap](const std::string& key, const int32_t& value){
+			namesMap[value] = key;
+		};
 
-			size_t equalSignPos = currentEnumEntry.find('=');
-			if(equalSignPos != std::string::npos){
-				std::string rightHandSide = currentEnumEntry.substr(equalSignPos + 1);
-				currentEnumEntry.erase(equalSignPos);
-			}
+		//Call the enum data parser with the raw enum string and the lambda
+		parseEnumData(enumValuesString, mapPopulator);
 
-			currentEnumEntry = trimWhitespace(currentEnumEntry);
+		//Return the filled map
+		return namesMap;
+	}
 
-			values.push_back(currentEnumEntry);
-		}
+	inline std::unordered_map<std::string, int32_t> makeEnumValuesMap(const std::string& enumValuesString){
+		//Create the value map
+		std::unordered_map<std::string, int32_t> valuesMap;
 
-		return values;
+		//Define the lambda that will handle the data from the enum data parser
+		auto mapPopulator = [&valuesMap](const std::string& key, const int32_t& value){
+			valuesMap[key] = value;
+		};
+
+		//Call the enum data parser with the raw enum string and the lambda
+		parseEnumData(enumValuesString, mapPopulator);
+
+		//Return the filled map
+		return valuesMap;
+	}
+
+	template<typename Type, typename Type_Val> //Two types are declared: the outer type (the outer class) and the inner value type (the enum itself)
+	std::vector<Type> makeEnumItemsVec(const std::string& enumValuesString){
+		//Create the items vector
+		std::vector<Type> itemsVec = {};
+
+		//Define the lambda that will handle the data from the enum data parser
+		auto vecPopulator = [&itemsVec](const std::string& /*key*/, const int32_t& value){ //key is unused
+			//Cast the value as the inner type (which is a member of the outer type), then push it into the vector
+			Type casted = static_cast<Type_Val>(value);
+			itemsVec.push_back(casted);
+		};
+
+		//Call the enum data parser with the raw enum string and the lambda
+		parseEnumData(enumValuesString, vecPopulator);
+
+		//Return the filled vector
+		return itemsVec;
+	}
+
+	inline std::vector<std::string> makeEnumStrVector(const std::string& enumValuesString){
+		//Create the names vector
+		std::vector<std::string> namesVec = {};
+
+		//Define the lambda that will handle the data from the enum data parser
+		auto vecPopulator = [&namesVec](const std::string& key, const int32_t& /*value*/){ //value is unused
+			namesVec.push_back(key);
+		};
+
+		//Call the enum data parser with the raw enum string and the lambda
+		parseEnumData(enumValuesString, vecPopulator);
+
+		//Return the filled vector
+		return namesVec;
 	}
 }
 
@@ -147,50 +180,56 @@ namespace einstein_enum {
 		Type(const Value& value) : _value{value}{}\
 	\
 	private:\
-		static const std::vector<Type> enumItems;\
-		static const std::unordered_map<int32_t, std::string> enumNames;\
-		static const std::unordered_map<std::string, int32_t> enumValues;\
-		static const std::vector<std::string> enumStr;\
+		static const std::vector<Type> enumItemsVec;\
+		static const std::vector<std::string> enumStrVec;\
+		static const std::unordered_map<int32_t, std::string> enumNamesMap;\
+		static const std::unordered_map<std::string, int32_t> enumValuesMap;\
 	public:\
-		inline const std::string& toString(){\
-			return enumNames.at((int32_t) _value);\
+		inline static bool contains(const std::string& value){\
+			return enumValuesMap.find(value) != enumValuesMap.end();\
 		}\
-		inline static bool contains(const std::string value){\
-			return enumValues.find(value) != enumValues.end();\
+		inline const std::string name(){\
+			return enumNamesMap.at((int32_t) _value);\
 		}\
 		inline static size_t size(){\
-			return enumNames.size();\
+			return enumNamesMap.size();\
+		}\
+		inline const std::string toString(){\
+			return name() + " = " + std::to_string(value());\
+		}\
+		inline int32_t value(){\
+			return ((int32_t) _value);\
 		}\
 		inline static const std::vector<Type>& values(){\
-			return enumItems;\
+			return enumItemsVec;\
 		}\
 		inline static const std::vector<std::string>& valuesStr(){\
-			return enumStr;\
+			return enumStrVec;\
 		}\
 	\
 	public:\
 		inline operator Value() const {\
 			return _value;\
 		}\
-		inline Type& operator=(Value newVal){\
+		inline Type& operator=(const Value& newVal){\
 			_value = newVal;\
 			return *this;\
 		}\
-		inline bool operator==(Value other){\
+		inline bool operator==(const Value& other){\
 			return _value == other;\
 		}\
-		inline bool operator!=(Value other){\
+		inline bool operator!=(const Value& other){\
 			return _value != other;\
 		}\
 		inline operator std::string(){\
-			return toString();\
+			return name();\
 		}\
 		inline friend std::ostream& operator<<(std::ostream& outStream, Type& value){\
-			outStream << value.toString();\
+			outStream << value.name();\
 			return outStream;\
 		}\
 };\
-const inline std::vector<Type> Type::enumItems = {__VA_ARGS__};\
-const inline std::unordered_map<int32_t, std::string> Type::enumNames = einstein_enum::makeEnumNameMap(#__VA_ARGS__);\
-const inline std::unordered_map<std::string, int32_t> Type::enumValues = einstein_enum::makeEnumValuesMap(#__VA_ARGS__);\
-const inline std::vector<std::string> Type::enumStr = einstein_enum::makeEnumValuesVector(#__VA_ARGS__);
+const inline std::vector<Type> Type::enumItemsVec = einstein_enum::makeEnumItemsVec<Type, Type::Value>(#__VA_ARGS__);\
+const inline std::vector<std::string> Type::enumStrVec = einstein_enum::makeEnumStrVector(#__VA_ARGS__);\
+const inline std::unordered_map<int32_t, std::string> Type::enumNamesMap = einstein_enum::makeEnumNamesMap(#__VA_ARGS__);\
+const inline std::unordered_map<std::string, int32_t> Type::enumValuesMap = einstein_enum::makeEnumValuesMap(#__VA_ARGS__);
