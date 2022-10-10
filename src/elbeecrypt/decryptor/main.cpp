@@ -44,4 +44,6 @@ int main(int argc, char **argv){
 	for(fs::path path : paths){
 		cout << "PATH: '" << path << "'" << endl;
 	}
+
+	cout << elbeecrypt::common::io::DirentWalk::pwd() << endl;
 }

@@ -31,6 +31,14 @@ namespace elbeecrypt::common::io::DirentWalk {
 	void directoryList(const fs::path& root, std::vector<fs::path>& paths);
 
 	/**
+	 * @brief Returns the current directory that the program is 
+	 * running in context to.
+	 * 
+	 * @return The path the program is running in
+	 */
+	fs::path pwd();
+
+	/**
 	 * @brief Walks a directory recursively using POSIX's `dirent.h` API.
 	 * This function, by default, does not do anything to the directory 
 	 * listings generated. That functionality must be provided via a lambda

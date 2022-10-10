@@ -22,6 +22,12 @@ namespace elbeecrypt::common::io::DirentWalk {
 		walk(root, consumer);
 	}
 
+	/** Impl of pwd(). */
+	fs::path pwd(){
+		fs::path pwd = fs::current_path();
+		return (fs::absolute(pwd.parent_path()) / pwd.filename()).lexically_normal();
+	}
+
 	/** Impl of walk(path, function<void(path)>). */
 	void walk(const fs::path& root, std::function<void(const fs::path&)> consumer){
 		//Set up dirent.h
