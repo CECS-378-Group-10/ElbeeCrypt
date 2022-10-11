@@ -113,6 +113,16 @@ namespace elbeecrypt::common::targets::Extensions {
 	bool isEncryptable(const std::string& extension);
 
 	/**
+	 * @brief Indicates whether the file at a given path is able to
+	 * by the ransomware, ie: the extension is in the list of 
+	 * targetable extensions.
+	 * 
+	 * @param path The path to check
+	 * @return Whether the file at the given path is allowed to be encrypted
+	 */
+	bool isEncryptable(const fs::path& path);
+
+	/**
 	 * @brief Indicates whether a given category is able to be
 	 * exfiltrated to the attacker by the ransomware
 	 * 
@@ -132,6 +142,18 @@ namespace elbeecrypt::common::targets::Extensions {
 	 * @return Whether the extension is allowed to be exfiltrated
 	 */
 	bool isExfiltratable(const std::string& extension);
+
+	/**
+	 * @brief Indicates whether the file at a given path is able to
+	 * be exfiltrated to the attacker by the ransomware, ie: the 
+	 * referenced file is in a list of exfiltratable extensions. The
+	 * extension, in addition, is also encryptable, so this check
+	 * may be subsituted in place.
+	 * 
+	 * @param extension The path to check
+	 * @return Whether the file at the given path is allowed to be exfiltrated
+	 */
+	bool isExfiltratable(const fs::path& path);
 
 	/**
 	 * @brief Isolates a file extension from a path.
@@ -167,4 +189,15 @@ namespace elbeecrypt::common::targets::Extensions {
 	 * @return Whether the ransomware should ignore the extension
 	 */
 	bool isPassable(const std::string& extension);
+
+	/**
+	 * @brief Indicates whether the file at a given path should
+	 * be sapred by the ransomware either because its extension
+	 * is in the list of extensions to pass or its extension isn't 
+	 * recognized.
+	 * 
+	 * @param path The path to check
+	 * @return  Whether the file at the given path should be ignored
+	 */
+	bool isPassable(const fs::path& path);
 }

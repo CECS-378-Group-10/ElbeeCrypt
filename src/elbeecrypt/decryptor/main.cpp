@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include "elbeecrypt/decryptor/main.hpp"
-#include "elbeecrypt/common/io/direntwalk.hpp"
 
 //Platform-specific includes
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
@@ -37,13 +36,4 @@ int main(int argc, char **argv){
 		"ElbeeCrypt",
 		MB_ICONASTERISK | MB_OK | MB_DEFBUTTON1
 	);
-
-	vector<fs::path> paths = {};
-	elbeecrypt::common::io::DirentWalk::directoryList("./include/", paths);
-
-	for(fs::path path : paths){
-		cout << "PATH: '" << path << "'" << endl;
-	}
-
-	cout << elbeecrypt::common::io::DirentWalk::pwd() << endl;
 }
