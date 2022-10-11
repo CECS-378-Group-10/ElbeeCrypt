@@ -114,8 +114,8 @@ namespace elbeecrypt::common::targets::Extensions {
 
 	/**
 	 * @brief Indicates whether the file at a given path is able to
-	 * by the ransomware, ie: the extension is in the list of 
-	 * targetable extensions.
+	 * be encrypted by the ransomware, ie: the extension is in the 
+	 * list of targetable extensions.
 	 * 
 	 * @param path The path to check
 	 * @return Whether the file at the given path is allowed to be encrypted
@@ -124,7 +124,7 @@ namespace elbeecrypt::common::targets::Extensions {
 
 	/**
 	 * @brief Indicates whether a given category is able to be
-	 * exfiltrated to the attacker by the ransomware
+	 * exfiltrated to the attacker by the ransomware.
 	 * 
 	 * @param extension The category to check
 	 * @return Whether the category is allowed to be exfiltrated
