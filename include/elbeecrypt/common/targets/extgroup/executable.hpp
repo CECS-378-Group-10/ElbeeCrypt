@@ -31,6 +31,8 @@ namespace elbeecrypt::common::targets::extgroup::Executable {
 		"phar",
 		"sh",
 		"so",
+		"sys",
+		"vbs",
 		"war"
 	};
 }
