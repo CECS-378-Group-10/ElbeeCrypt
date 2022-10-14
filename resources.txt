@@ -27,6 +27,7 @@ Crypto++: https://cryptopp.com/
 OpenSSL: https://www.openssl.org/
 mbedTLS: https://www.trustedfirmware.org/projects/mbed-tls/
 LibHydrogen: https://github.com/jedisct1/libhydrogen
+Monocypher: https://monocypher.org
 
 ## Secure TLS ciphers (will help determine the most secure ciphersuite for encryption)
 #TLS 1.3
