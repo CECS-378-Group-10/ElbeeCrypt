@@ -24,9 +24,13 @@ All of the following requirements can be met via your package manager (eg: apt, 
   - Having the Pip package manager installed is highly recommended, and allows builder dependencies to be acquired very easily irregardless of the host
 - Meson (at least version 0.55.0)
   - Available as a system package (`meson`) or on PyPi via Pip (`python -m pip install meson`)
+- Conan
+  - Available as a system package (`conan`) or on PyPi via Pip (`python -m pip install conan`)
 - Ninja
   - Available as a system package (`ninja-build` for Debian and Fedora derivatives or `ninja` for everywhere else) or on PyPi via Pip (`python -m pip install ninja`)
     - See Ninja's [Pre built Ninja packages](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages) section on the Ninja wiki for more details
+- CMake
+  - Available as a system package (`cmake`)
 - A compiler toolchain that supports the C++17 standard
   - GCC/Clang (any supported platform) or MSVC on Windows (improves portability and reduces binary size, accessed via the Visual Studio Developer Command Prompt)
 

@@ -39,6 +39,35 @@ meson_dep_loc = '.mesondep/'
 
 
 ####################################
+# Conan Dependencies
+####################################
+## Huge thanks to HE-Wenjian for this section! See https://gist.github.com/HE-Wenjian/f40807d24e33a5df1d46230c7e3b3844 ##
+
+## Dependency definitions
+# Do keep in mind that the @ sign is needed at the end of a listing to prevent Conan from misidentifying the package as a path
+# Example: 'fmt': 'fmt/5.3.0@'
+conan_pkgs = {
+	#LibSodium https://conan.io/center/libsodium?version=1.0.18
+	'libsodium': 'libsodium/1.0.18@'
+}
+
+## Build the dependency list using Conan
+deps = []
+
+# Acquire the dependencies with Conan
+conan = find_program('conan', required: true)
+foreach pkg_name, conan_ref : conan_pkgs
+	module_path = meson.current_build_dir() / 'conan-cmake' / pkg_name
+	conan_buildtype = get_option('debug') ? 'Debug' : 'Release'
+	run_command(conan, 'install', conan_ref, '-if', module_path,
+		'-g', 'cmake_find_package', '--build=missing', '-s:b', 'build_type=' + conan_buildtype, check: true)
+	deps += dependency(pkg_name, method: 'cmake', cmake_module_path: module_path)
+endforeach
+
+####################################
+
+
+####################################
 # Compiler Settings
 ####################################
 ## File globbing (https://github.com/mesonbuild/meson/tree/master/test%20cases/common/48%20file%20grabber)
@@ -96,6 +125,7 @@ endif
 executable(
 	executable_name + '-cryptor', # Set the name of the target
 	cryptor_sources, # Set the source files
+	dependencies: deps, # Conan dependencies
 	cpp_args: compiler_args,
 	link_args: linker_args,
 	include_directories: include_directories('include'), # Contains headers for both the project and required libs,
@@ -106,6 +136,7 @@ executable(
 executable(
 	executable_name + '-decryptor', # Set the name of the target
 	decryptor_sources, # Set the source files
+	dependencies: deps, # Conan dependencies
 	cpp_args: compiler_args,
 	link_args: linker_args,
 	include_directories: include_directories('include'), # Contains headers for both the project and required libs,
