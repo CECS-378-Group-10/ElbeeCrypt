@@ -130,6 +130,8 @@ Desktop.ini
 
 build/
 builddir/
+dist/
+conan/
 meson-info/
 meson-logs/
 meson-private/
