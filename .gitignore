@@ -139,4 +139,4 @@ meson-private/
 .ninja-log
 build.ninja
 compile_commands.json
-__pycache__
+__pycache__/
