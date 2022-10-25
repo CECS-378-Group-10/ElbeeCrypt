@@ -31,6 +31,8 @@ All of the following requirements can be met via your package manager (eg: apt, 
     - See Ninja's [Pre built Ninja packages](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages) section on the Ninja wiki for more details
 - CMake
   - Available as a system package (`cmake`)
+- pkg-config
+  - Available as a system package via Chocolatey on Windows (`choco install pkgconfiglite`)
 - A compiler toolchain that supports the C++17 standard
   - GCC/Clang (any supported platform) or MSVC on Windows (improves portability and reduces binary size, accessed via the Visual Studio Developer Command Prompt)
 
