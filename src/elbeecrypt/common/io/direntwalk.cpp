@@ -13,13 +13,18 @@ namespace elbeecrypt::common::io::DirentWalk {
 	/** Impl of directoryList(path, vector<path>). */
 	void directoryList(const fs::path& root, std::vector<fs::path>& paths){
 		//Define the lambda to collect the directory listings
-		auto consumer = [&paths](const fs::path& path){
+		auto fileConsumer = [&paths](const fs::path& path){
 			//Add the entry to the input vector
 			paths.push_back(path);
 		};
 
-		//Call the walk function with the root path and the lambda
-		walk(root, consumer);
+		//Create a no-op for the folder processor lambda
+		auto folderConsumer = [](const fs::path&){
+			return true;
+		};
+
+		//Call the walk function with the root path and the lambdas
+		walk(root, fileConsumer, folderConsumer);
 	}
 
 	/** Impl of pwd(). */
@@ -28,8 +33,8 @@ namespace elbeecrypt::common::io::DirentWalk {
 		return (fs::absolute(pwd.parent_path()) / pwd.filename()).lexically_normal();
 	}
 
-	/** Impl of walk(path, function<void(path)>). */
-	void walk(const fs::path& root, std::function<void(const fs::path&)> consumer){
+	/** Impl of walk(path, function<void(path)>, function<bool(path)>). */
+	void walk(const fs::path& root, std::function<void(const fs::path&)> fileConsumer, std::function<bool(const fs::path&)> folderConsumer){
 		//Set up dirent.h
 		DIR* dir;
 		struct dirent* dirent;
@@ -53,11 +58,15 @@ namespace elbeecrypt::common::io::DirentWalk {
 
 				//If the entry is a directory, call the walk method recursively
 				if(fs::is_directory(current)){
-					walk(current, consumer);
+					//Call the folder consumer and get its output
+					bool shouldRecurse = folderConsumer(current);
+
+					//If the lambda returned true, then recursively run the function
+					if(shouldRecurse) walk(current, fileConsumer, folderConsumer);
 				}
 				else {
-					//Send the current path to the consumer lambda for further processing
-					consumer(current);
+					//Send the current path to the file consumer lambda for further processing
+					fileConsumer(current);
 				}
 
 				//Increment the counter

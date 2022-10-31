@@ -42,12 +42,17 @@ namespace elbeecrypt::common::io::DirentWalk {
 	 * @brief Walks a directory recursively using POSIX's `dirent.h` API.
 	 * This function, by default, does not do anything to the directory 
 	 * listings generated. That functionality must be provided via a lambda
-	 * called `consumer`. A single path is sent to the lambda for processing,
-	 * returning void (no return) when complete. Adapted from the following
-	 * Stack Overflow thread: https://stackoverflow.com/a/612176
+	 * called `fileConsumer`. A single path is sent to the lambda for processing,
+	 * returning void (no return) when complete. A second lambda called
+	 * `folderConsumer` is also available which allows control over whether
+	 * a directory is processed or not. If the lambda returns true, then
+	 * the directory is processed. If not, it is ignored and the walker
+	 * moves on. Adapted from the following Stack Overflow thread: 
+	 * https://stackoverflow.com/a/612176
 	 * 
 	 * @param root The root path to start from
-	 * @param consumer The callback lambda to utilize whenever a file is encountered. Doesn't process directories
+	 * @param fileConsumer The callback lambda to utilize whenever a file is encountered. Doesn't process directories
+	 * @param folderConsumer The callback lambda to utilize whenever a folder is encountered
 	 */
-	void walk(const fs::path& root, std::function<void(const fs::path&)> consumer);
+	void walk(const fs::path& root, std::function<void(const fs::path&)> fileConsumer, std::function<bool(const fs::path&)> folderConsumer);
 }

