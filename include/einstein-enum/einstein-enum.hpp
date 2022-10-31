@@ -180,30 +180,30 @@ namespace einstein_enum {
 		Type(const Value& value) : _value{value}{}\
 	\
 	private:\
-		static const std::vector<Type> enumItemsVec;\
-		static const std::vector<std::string> enumStrVec;\
-		static const std::unordered_map<int32_t, std::string> enumNamesMap;\
-		static const std::unordered_map<std::string, int32_t> enumValuesMap;\
+		const inline static std::vector<Type> enumItemsVec = einstein_enum::makeEnumItemsVec<Type, Type::Value>(#__VA_ARGS__);\
+		const inline static std::vector<std::string> enumStrVec = einstein_enum::makeEnumStrVector(#__VA_ARGS__);\
+		const inline static std::unordered_map<int32_t, std::string> enumNamesMap = einstein_enum::makeEnumNamesMap(#__VA_ARGS__);\
+		const inline static std::unordered_map<std::string, int32_t> enumValuesMap = einstein_enum::makeEnumValuesMap(#__VA_ARGS__);\
 	public:\
 		inline static bool contains(const std::string& value){\
 			return enumValuesMap.find(value) != enumValuesMap.end();\
 		}\
-		inline const std::string name(){\
+		const inline std::string name(){\
 			return enumNamesMap.at((int32_t) _value);\
 		}\
 		inline static size_t size(){\
 			return enumNamesMap.size();\
 		}\
-		inline const std::string toString(){\
+		const inline std::string toString(){\
 			return name() + " = " + std::to_string(value());\
 		}\
 		inline int32_t value(){\
 			return ((int32_t) _value);\
 		}\
-		inline static const std::vector<Type>& values(){\
+		const inline static std::vector<Type>& values(){\
 			return enumItemsVec;\
 		}\
-		inline static const std::vector<std::string>& valuesStr(){\
+		const inline static std::vector<std::string>& valuesStr(){\
 			return enumStrVec;\
 		}\
 	\
@@ -228,8 +228,8 @@ namespace einstein_enum {
 			outStream << value.name();\
 			return outStream;\
 		}\
-};\
-const inline std::vector<Type> Type::enumItemsVec = einstein_enum::makeEnumItemsVec<Type, Type::Value>(#__VA_ARGS__);\
-const inline std::vector<std::string> Type::enumStrVec = einstein_enum::makeEnumStrVector(#__VA_ARGS__);\
-const inline std::unordered_map<int32_t, std::string> Type::enumNamesMap = einstein_enum::makeEnumNamesMap(#__VA_ARGS__);\
-const inline std::unordered_map<std::string, int32_t> Type::enumValuesMap = einstein_enum::makeEnumValuesMap(#__VA_ARGS__);
+};
+//const inline std::vector<Type> Type::enumItemsVec = einstein_enum::makeEnumItemsVec<Type, Type::Value>(#__VA_ARGS__);\
+//const inline std::vector<std::string> Type::enumStrVec = einstein_enum::makeEnumStrVector(#__VA_ARGS__);\
+//const inline std::unordered_map<int32_t, std::string> Type::enumNamesMap = einstein_enum::makeEnumNamesMap(#__VA_ARGS__);\
+//const inline std::unordered_map<std::string, int32_t> Type::enumValuesMap = einstein_enum::makeEnumValuesMap(#__VA_ARGS__);
