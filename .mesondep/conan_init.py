@@ -84,14 +84,14 @@ def copyConanProfile(profilePath: Path, conanUserPath: Path, settings: ConanSett
 	profileIni.read(str(profilePath), "utf-8")
 
 	#Get the replaceable placeholder attributes that aren't already in the settings
-	compilerVersion: str = (getGCCVersion() if settings.usrCompiler == CompilerNames.GCC else getMSVCVersion()).split(".")[0]
+	compilerVersion: str = (getGCCVersion() if settings.usrCompiler.getData() == CompilerNames.GCC else getMSVCVersion()).split(".")[0]
 	
 	#Do placeholder replacement on the ini object
 	profileIni["settings"]["compiler.version"] = Template(profileIni["settings"]["compiler.version"]).substitute({"compiler_version": compilerVersion})
 	profileIni["settings"]["compiler.cppstd"] = Template(profileIni["settings"]["compiler.cppstd"]).substitute({"compiler_cppstd": settings.cppStd.getData().value[0]})
 
 	#Add in the GCC paths
-	if settings.usrCompiler == CompilerNames.GCC:
+	if settings.usrCompiler.getData() == CompilerNames.GCC:
 		profileIni["options"]["build_requires"]["env"]["CC"] = Template(profileIni["options"]["build_requires"]["env"]["CC"]).substitute({"compiler_cc_path": which("gcc")[0]})
 		profileIni["options"]["build_requires"]["env"]["CXX"] = Template(profileIni["options"]["build_requires"]["env"]["CXX"]).substitute({"compiler_cxx_path": which("g++")[0]})
 
@@ -282,3 +282,5 @@ if __name__ == '__main__':
 	print("If the above profile isn't correct, simply rerun this script again.")
 	copyConanProfile(selectedPath, Path.home() / USR_CONAN_PROFILE_DIR, settings)
 	print("Profile copied. It can be found under the following path: {}".format(Path.home() / USR_CONAN_PROFILE_DIR / OUTPUT_PROFILE_NAME))
+	
+#TODO: Add support for changing the build type (debug or release)
