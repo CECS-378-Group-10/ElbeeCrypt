@@ -46,9 +46,9 @@ Compilation has been tested and is confirmed to work on the following platforms:
 
 ### Steps (Automatic)
 
-1. Simply run either `build-gcc.bat` or `build-msvc.bat`. Each of these scripts will automatically build the project
+1. Simply run either `conan-build.bat`. The script will prompt you for settings customization, but leaving it at its default (simply press enter when prompted) should be okay. This script will then fetch the appropriate dependencies and build the project automatically.
 
-### Steps (Manual)
+### Steps (Manual); DEPRECATED: This section is no longer applicable, as the project requires Conan dependencies to run
 
 1. Run the command `meson build` in the root project build directory to generate the output folder. It will be under the name `build`. This directory name can be changed per Meson's syntax, but using the name `build` is standard convention. Additional steps and supporting scripts assume this to be the case, so it is recommended to leave the name as the default
 
