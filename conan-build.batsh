@@ -1,0 +1,23 @@
+//
+// This script builds the project using Conan and Meson (MSVC backend). Check README.md for more information.
+// See: https://stackoverflow.com/a/70505971
+//
+
+//List files
+files = readdir();
+
+//Setup Conan if the directory is nonexistant
+if(!exists("conan/conanbuildinfo.txt")){
+	//Initialize Conan
+	call("conan config init");
+
+    //Generate the necessary configs for Conan via the configuration utility (interactive)
+	call("python .mesondep/conan_init.py");
+
+	//Run Conan
+	call("mkdir conan");
+	call("conan install . --install-folder=conan --build=outdated --profile=conan-generated -s build_type=Debug");
+}
+
+//Build with Conan
+call("conan build . --build-folder conan");

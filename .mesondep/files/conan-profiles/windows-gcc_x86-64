@@ -1,0 +1,17 @@
+[settings]
+os=Windows
+os_build=Windows
+arch=x86_64
+arch_build=x86_64
+compiler=gcc
+compiler.version=$compiler_version
+compiler.cppstd=$compiler_cppstd
+compiler.libcxx=libstdc++11
+compiler.threads=posix
+build_type=Release
+
+[options]
+[build_requires]
+[env]
+CC=$compiler_cc_path
+CXX=$compiler_cxx_path

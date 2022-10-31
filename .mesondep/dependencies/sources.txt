@@ -1,0 +1,2 @@
+3rd party libraries can be found below:
+vslocate.py - https://github.com/mjansson/vslocate

@@ -7,7 +7,7 @@
 title Project Builder (MSVC)
 
 ::Get the location of vcvarsall via a Python script
-for /F "tokens=*" %%g in ('python .mesondep/msvc-locator.py') do (set VCVARSALL=%%g)
+for /F "tokens=*" %%g in ('python .mesondep/msvc_locator.py') do (set VCVARSALL=%%g)
 
 ::Announce the location of vcvarsall
 echo Found 'vcvarsall.bat' at path '%VCVARSALL%'
@@ -16,5 +16,4 @@ echo Found 'vcvarsall.bat' at path '%VCVARSALL%'
 call "%VCVARSALL%" x64
 
 ::Execute Meson
-meson build && meson compile -C build
-pause
+meson build --pkg-config-path conan/ && meson compile -C build

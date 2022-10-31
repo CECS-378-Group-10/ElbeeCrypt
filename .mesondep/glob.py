@@ -34,6 +34,7 @@ def glob(directory: str, extensions: list[str]) -> list[Path]:
 	#Return the globbed paths array
 	return globbedPaths
 
+
 ## Main
 if __name__ == "__main__":
 	#Get the globbed files

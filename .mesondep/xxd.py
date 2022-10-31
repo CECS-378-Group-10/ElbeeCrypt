@@ -59,6 +59,7 @@ def xxd(filePath: str) -> str:
 	#Return the output
 	return output
 
+
 ## Main
 if __name__ == "__main__":
 	if len(sys.argv) < 2 or not os.path.exists(sys.argv[1]):
