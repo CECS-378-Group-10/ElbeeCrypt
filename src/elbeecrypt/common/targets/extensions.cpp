@@ -66,7 +66,7 @@ namespace elbeecrypt::common::targets::Extensions {
 		int lastBSlash = utils::String::lastIndexOf(path, '\\');
 		int lastFSlash = utils::String::lastIndexOf(path, '/');
 
-		//Check if the string contains a period or a path seperator
+		//Check if the string contains a period or a path separator
 		if(lastPerInd != -1 || lastBSlash != -1 || lastFSlash != -1){
 			//Clone the input string to maintain immutability
 			std::string extension(path);
@@ -76,7 +76,7 @@ namespace elbeecrypt::common::targets::Extensions {
 				return extension.substr(lastPerInd + 1, extension.length() - 1);
 			}
 			else {
-				//Substring to the last index of the path seperator
+				//Substring to the last index of the path separator
 				return extension.substr(std::max(lastBSlash, lastFSlash) + 1, extension.length() - 1);
 			}
 		}
