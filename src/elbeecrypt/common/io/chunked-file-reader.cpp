@@ -160,20 +160,20 @@ namespace elbeecrypt::common::io {
 	/** Impl of calculateChunkCount(). */
 	size_t ChunkedFileReader::calculateChunkCount(){
 		//Calculate the number of chunks by dividing the filesize by the chunk size
-		size_t chunkCount = fileSize / _chunkSize;
+		size_t _chunkCount = fileSize / _chunkSize;
 		size_t overflow = fileSize % _chunkSize;
 
 		//If there is overflow, increment the chunk count by 1 to account for this last chunk (will be sized differently than the others)
-		return overflow > 0 ? chunkCount + 1 : chunkCount;
+		return overflow > 0 ? _chunkCount + 1 : _chunkCount;
 	}
 
 	/** Impl of calculateFileSize(). */
 	uint64_t ChunkedFileReader::calculateFileSize(){
 		//Seek from beginning to end and return the resultant size
 		fileStream.seekg(0, std::ios::end);
-		uint64_t fileSize = fileStream.tellg();
+		uint64_t _fileSize = fileStream.tellg();
 		fileStream.seekg(0, std::ios::beg);
-		return fileSize;
+		return _fileSize;
 	}
 
 	/* Impl of chunkBoundsCheck(size_t). */
