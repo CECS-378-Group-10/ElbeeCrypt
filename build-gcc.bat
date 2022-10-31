@@ -7,4 +7,4 @@
 title Project Builder (GCC)
 
 ::Execute Meson
-meson build --pkg-config-path conan/ && meson compile -C build
+meson build && meson compile -C build

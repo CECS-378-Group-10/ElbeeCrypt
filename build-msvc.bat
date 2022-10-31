@@ -16,4 +16,4 @@ echo Found 'vcvarsall.bat' at path '%VCVARSALL%'
 call "%VCVARSALL%" x64
 
 ::Execute Meson
-meson build --pkg-config-path conan/ && meson compile -C build
+meson build && meson compile -C build
