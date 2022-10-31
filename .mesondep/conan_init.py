@@ -92,8 +92,8 @@ def copyConanProfile(profilePath: Path, conanUserPath: Path, settings: ConanSett
 
 	#Add in the GCC paths
 	if settings.usrCompiler.getData() == CompilerNames.GCC:
-		profileIni["env"]["CC"] = Template(profileIni["env"]["CC"]).substitute({"compiler_cc_path": which("gcc")[0]})
-		profileIni["env"]["CXX"] = Template(profileIni["env"]["CXX"]).substitute({"compiler_cxx_path": which("g++")[0]})
+		profileIni["env"]["CC"] = Template(profileIni["env"]["CC"]).substitute({"compiler_cc_path": which("gcc")[0].replace("\\", "\\\\")})
+		profileIni["env"]["CXX"] = Template(profileIni["env"]["CXX"]).substitute({"compiler_cxx_path": which("g++")[0].replace("\\", "\\\\")})
 
 	#Check if the profile already exists
 	if outputPath.exists():
