@@ -229,7 +229,3 @@ namespace einstein_enum {
 			return outStream;\
 		}\
 };
-//const inline std::vector<Type> Type::enumItemsVec = einstein_enum::makeEnumItemsVec<Type, Type::Value>(#__VA_ARGS__);\
-//const inline std::vector<std::string> Type::enumStrVec = einstein_enum::makeEnumStrVector(#__VA_ARGS__);\
-//const inline std::unordered_map<int32_t, std::string> Type::enumNamesMap = einstein_enum::makeEnumNamesMap(#__VA_ARGS__);\
-//const inline std::unordered_map<std::string, int32_t> Type::enumValuesMap = einstein_enum::makeEnumValuesMap(#__VA_ARGS__);
