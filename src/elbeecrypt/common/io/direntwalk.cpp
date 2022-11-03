@@ -4,6 +4,15 @@
 //Windows doesn't come with this header, so it must be provided separately, else use the standard POSIX version
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 	#include "windirent/dirent.h"
+
+	//Use wdirent on Windows to prevent issues with reading files with non-ASCII filenames
+	//Huge thanks to https://stackoverflow.com/a/35065142
+	//In short, Windows will use UTF-16 filenames vs UTF-8 on POSIX, so use wdirent instead of dirent
+	#define dirent wdirent
+	#define DIR WDIR
+	#define opendir wopendir
+	#define readdir wreaddir
+	#define closedir wclosedir
 #else
 	#include <dirent.h>
 #endif
@@ -42,8 +51,15 @@ namespace elbeecrypt::common::io::DirentWalk {
 		//Construct the path to use for the dirent operation via janky absolute path creation
 		fs::path in = (fs::absolute(root.parent_path()) / root.filename()).lexically_normal();
 
+		//Get the c-string version of the path as either a wchar_t array (Windows) or a char array (POSIX)
+		#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+			dir = opendir(in.wstring().c_str());
+		#else
+			dir = opendir(in.string().c_str());
+		#endif
+
 		//If the directory is readable, perform a dirent list with it
-		if((dir = opendir(in.string().c_str())) != NULL){
+		if(dir != NULL){
 			//Perform the directory listing with dirent
 			size_t index = 0;
 			while((dirent = readdir(dir)) != NULL){
@@ -54,7 +70,12 @@ namespace elbeecrypt::common::io::DirentWalk {
 				}
 
 				//Construct a path object out of the current dirent listing
-				fs::path current = in / dirent->d_name;
+				//Use either a wstring (Windows) or a string (POSIX)
+				#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+					fs::path current = in / std::wstring(dirent->d_name);
+				#else
+					fs::path current = in / std::string(dirent->d_name);
+				#endif
 
 				//If the entry is a directory, call the walk method recursively
 				if(fs::is_directory(current)){

