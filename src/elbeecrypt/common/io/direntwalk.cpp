@@ -4,6 +4,7 @@
 //Windows doesn't come with this header, so it must be provided separately, else use the standard POSIX version
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 	#include "windirent/dirent.h"
+	#define DIRENTWALK_WINDOWS
 
 	//Use wdirent on Windows to prevent issues with reading files with non-ASCII filenames
 	//Huge thanks to https://stackoverflow.com/a/35065142
@@ -52,7 +53,7 @@ namespace elbeecrypt::common::io::DirentWalk {
 		fs::path in = (fs::absolute(root.parent_path()) / root.filename()).lexically_normal();
 
 		//Get the c-string version of the path as either a wchar_t array (Windows) or a char array (POSIX)
-		#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+		#ifdef DIRENTWALK_WINDOWS
 			dir = opendir(in.wstring().c_str());
 		#else
 			dir = opendir(in.string().c_str());
@@ -71,7 +72,7 @@ namespace elbeecrypt::common::io::DirentWalk {
 
 				//Construct a path object out of the current dirent listing
 				//Use either a wstring (Windows) or a string (POSIX)
-				#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+				#ifdef DIRENTWALK_WINDOWS
 					fs::path current = in / std::wstring(dirent->d_name);
 				#else
 					fs::path current = in / std::string(dirent->d_name);
