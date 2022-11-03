@@ -15,7 +15,7 @@ namespace elbeecrypt::common::io {
 	 * file into memory. This class uses C++'s native `fstream` class
 	 * to do this.
 	 * 
-	 * @author Spotlightsrule
+	 * @author CECS-378 Group 10
 	 * @file chunked-file-reader.hpp
 	 */
 	class ChunkedFileReader {

