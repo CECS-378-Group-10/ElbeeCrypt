@@ -401,7 +401,7 @@ namespace elbeecrypt::common::io {
 			 * @param headerSize
 			 * @throws std::invalid_argument If the sum of the two paddings is greater than or equal to the chunk size
 			 */
-			void paddingCheck(const uint32_t& headerSize, const uint32_t& footerSize);
+			void paddingCheck(const uint32_t& hSize, const uint32_t& fSize);
 
 			/**
 			 * @brief Converts an arbitrary datatype to a string using

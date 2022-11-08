@@ -185,7 +185,7 @@ namespace elbeecrypt::common::io {
 	}
 
 	/** Impl of dataStart(size_t). */
-	uint64_t ChunkedFileReader::dataStart(const size_t& index){
+	uint64_t ChunkedFileReader::dataStart(const size_t&){
 		return headerSize;
 	}
 
@@ -213,12 +213,12 @@ namespace elbeecrypt::common::io {
 	}
 
 	/** Impl of headerEnd(size_t). */
-	uint64_t ChunkedFileReader::headerEnd(const size_t& index){
+	uint64_t ChunkedFileReader::headerEnd(const size_t&){
 		return headerSize;
 	}
 
 	/** Impl of headerStart(size_t). */
-	uint64_t ChunkedFileReader::headerStart(const size_t& index){
+	uint64_t ChunkedFileReader::headerStart(const size_t&){
 		return 0;
 	}
 
@@ -307,10 +307,10 @@ namespace elbeecrypt::common::io {
 	}
 
 	/** Impl of paddingCheck(uint32_t, uint32_t). */
-	void ChunkedFileReader::paddingCheck(const uint32_t& headerSize, const uint32_t& footerSize){
-		if(headerSize + footerSize >= _chunkSize) throw std::invalid_argument(
+	void ChunkedFileReader::paddingCheck(const uint32_t& hSize, const uint32_t& fSize){
+		if(hSize + fSize >= _chunkSize) throw std::invalid_argument(
 			"Header and footer sizes must not exceed the maximum size of a chunk; header size: " +
-			ssString(headerSize) + " bytes, footer size: " + ssString(footerSize) + 
+			ssString(hSize) + " bytes, footer size: " + ssString(fSize) + 
 			" bytes. Maximum chunk size: " + ssString(_chunkSize) + " bytes"
 		);
 	}
