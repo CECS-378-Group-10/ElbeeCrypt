@@ -22,10 +22,10 @@ namespace elbeecrypt::common::io {
 		//Constants
 		private:
 			/** The default size of the post-data footer in each chunk in bytes. */
-			const static uint DEFAULT_FOOTER_SIZE = 0;
+			const static uint32_t DEFAULT_FOOTER_SIZE = 0;
 
 			/** The default size of the pre-data header in each chunk in bytes. */
-			const static uint DEFAULT_HEADER_SIZE = 0;
+			const static uint32_t DEFAULT_HEADER_SIZE = 0;
 
 
 		//Fields
@@ -46,10 +46,10 @@ namespace elbeecrypt::common::io {
 			std::ifstream fileStream;
 
 			/** The size of the post-data footer in each chunk in bytes. This will be 0 bytes in size by default. */
-			uint footerSize = DEFAULT_FOOTER_SIZE;
+			uint32_t footerSize = DEFAULT_FOOTER_SIZE;
 
 			/** The size of the pre-data header in each chunk in bytes. This will be 0 bytes in size by default. */
-			uint headerSize = DEFAULT_HEADER_SIZE;
+			uint32_t headerSize = DEFAULT_HEADER_SIZE;
 
 
 		//Constructors & Destructor
@@ -122,7 +122,7 @@ namespace elbeecrypt::common::io {
 			 * 
 			 * @return The size of the post-data footer in each chunk in bytes 
 			 */
-			uint getFooterSize();
+			uint32_t getFooterSize();
 
 			/**
 			 * @brief Gets the size the pre-data header in each chunk in bytes. 
@@ -132,7 +132,7 @@ namespace elbeecrypt::common::io {
 			 * 
 			 * @return The size of the pre-data header in each chunk in bytes 
 			 */
-			uint getHeaderSize();
+			uint32_t getHeaderSize();
 
 			/**
 			 * @brief Gets the source path from which the file was read.
@@ -153,7 +153,7 @@ namespace elbeecrypt::common::io {
 			 * @param newFooterSize The new size of the post-data footer in each chunk in bytes
 			 * @return The modified `ChunkedFileReader` object (allows call chaining)
 			 */
-			ChunkedFileReader& setFooterSize(const uint& newFooterSize);
+			ChunkedFileReader& setFooterSize(const uint32_t& newFooterSize);
 
 			/**
 			 * @brief Sets the size of the pre-data header in each chunk in 
@@ -164,7 +164,7 @@ namespace elbeecrypt::common::io {
 			 * @param newHeaderSize The new size of the pre-data header in each chunk in bytes
 			 * @return The modified `ChunkedFileReader` object (allows call chaining)
 			 */
-			ChunkedFileReader& setHeaderSize(const uint& newHeaderSize);
+			ChunkedFileReader& setHeaderSize(const uint32_t& newHeaderSize);
 
 
 		//Methods
@@ -401,7 +401,7 @@ namespace elbeecrypt::common::io {
 			 * @param headerSize
 			 * @throws std::invalid_argument If the sum of the two paddings is greater than or equal to the chunk size
 			 */
-			void paddingCheck(const uint& headerSize, const uint& footerSize);
+			void paddingCheck(const uint32_t& headerSize, const uint32_t& footerSize);
 
 			/**
 			 * @brief Converts an arbitrary datatype to a string using

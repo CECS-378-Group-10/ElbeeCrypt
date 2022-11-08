@@ -1,3 +1,4 @@
+#include <cstring>
 #include "elbeecrypt/common/io/chunked-file-reader.hpp"
 
 namespace elbeecrypt::common::io {
@@ -65,12 +66,12 @@ namespace elbeecrypt::common::io {
 	}
 
 	/** Impl of getFooterSize(). */
-	uint ChunkedFileReader::getFooterSize(){
+	uint32_t ChunkedFileReader::getFooterSize(){
 		return footerSize;
 	}
 
 	/** Impl of getHeaderSize(). */
-	uint ChunkedFileReader::getHeaderSize(){
+	uint32_t ChunkedFileReader::getHeaderSize(){
 		return headerSize;
 	}
 
@@ -81,8 +82,8 @@ namespace elbeecrypt::common::io {
 
 
 	//Setters
-	/** Impl of setFooterSize(uint). */
-	ChunkedFileReader& ChunkedFileReader::setFooterSize(const uint& newFooterSize){
+	/** Impl of setFooterSize(uint32_t). */
+	ChunkedFileReader& ChunkedFileReader::setFooterSize(const uint32_t& newFooterSize){
 		//Do a check to ensure the padding size doesn't exceed the size of the chunk
 		paddingCheck(headerSize, newFooterSize);
 
@@ -94,8 +95,8 @@ namespace elbeecrypt::common::io {
 		return *this;
 	}
 
-	/** Impl of setHeaderSize(uint). */
-	ChunkedFileReader& ChunkedFileReader::setHeaderSize(const uint& newHeaderSize){
+	/** Impl of setHeaderSize(uint32_t). */
+	ChunkedFileReader& ChunkedFileReader::setHeaderSize(const uint32_t& newHeaderSize){
 		//Do a check to ensure the padding size doesn't exceed the size of the chunk
 		paddingCheck(newHeaderSize, footerSize);
 
@@ -305,8 +306,8 @@ namespace elbeecrypt::common::io {
 		);
 	}
 
-	/** Impl of paddingCheck(uint, uint). */
-	void ChunkedFileReader::paddingCheck(const uint& headerSize, const uint& footerSize){
+	/** Impl of paddingCheck(uint32_t, uint32_t). */
+	void ChunkedFileReader::paddingCheck(const uint32_t& headerSize, const uint32_t& footerSize){
 		if(headerSize + footerSize >= _chunkSize) throw std::invalid_argument(
 			"Header and footer sizes must not exceed the maximum size of a chunk; header size: " +
 			ssString(headerSize) + " bytes, footer size: " + ssString(footerSize) + 
