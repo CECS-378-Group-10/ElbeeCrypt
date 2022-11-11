@@ -1,8 +1,10 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <string>
 #include <vector>
+#include "string.hpp"
 
 /**
  * @brief Contains a set of utilities for working with containers
@@ -14,6 +16,50 @@
  * @file container.hpp
  */
 namespace elbeecrypt::common::utils::Container {
+	/**
+	 * @brief Converts a C-style array of integers to a string.
+	 * 
+	 * @tparam T The datatype of the array
+	 * @param arr The array to convert
+	 * @param size The size of the array
+	 * @param format Whether to add brackets, commas, and "0x" to the items
+	 * @return The string representation of the array
+	 */
+	template<typename T>
+	std::string cIntArrayToStr(T arr[], size_t size, bool format){
+		//Ensure this function is called with an array of integers
+		static_assert(std::is_integral<T>::value, "Template argument 'T' must be a fundamental integer type (e.g. int, short, etc..).");
+
+		//Create the string object
+		std::string out = "";
+		if(format) out += "[";
+
+		//Add each element to the string
+		for(size_t i = 0; i < size; i++){
+			out += elbeecrypt::common::utils::String::intToHex(arr[i], format);
+			if(format && i < size - 1) out += ", ";
+		}
+
+		//Return the string
+		if(format) out += "]";
+		return out;
+	}
+
+	/**
+	 * @brief Converts a C-style array of integers to a string.
+	 * Assumes that the output string representation should be 
+	 * formatted and have "0x" appended to the items.
+	 * 
+	 * @tparam T The datatype of the array
+	 * @param arr The array to convert
+	 * @param size The size of the array
+	 * @return The string representation of the array
+	 */
+	template<typename T>
+	std::string cIntArrayToStr(T arr[], size_t size){
+		return cIntArrayToStr(arr, size, true);
+	}
+
 	/**
 	 * @brief Gets the total number of elements present in a 
 	 * group of vectors. Do keep in mind that each vector must
@@ -79,6 +125,35 @@ namespace elbeecrypt::common::utils::Container {
 	template<typename T>
 	bool contains(const std::vector<T>& vec, const T& target){ //Defined here or else the linker will fail the build
 		return std::find(vec.begin(), vec.end(), target) != vec.end();
+	}
+
+	/**
+	 * @brief Converts an `std::array` of integers to a string.
+	 * 
+	 * @tparam T The datatype of the array
+	 * @tparam size The size of the array. Wil be determined by the object passed in
+	 * @param arr The array to convert
+	 * @param format Whether to add brackets, commas, and "0x" to the items
+	 * @return The string representation of the array
+	 */
+	template<typename T, size_t size>
+	std::string intArrayToStr(const std::array<T, size>& arr, bool format){
+		return cIntArrayToStr(arr.data(), arr.size());
+	}
+
+	/**
+	 * @brief Converts an `std::array` of integers to a string.
+	 * Assumes that the output string representation should be 
+	 * formatted and have "0x" appended to the items.
+	 * 
+	 * @tparam T The datatype of the array
+	 * @tparam size The size of the array. Wil be determined by the object passed in
+	 * @param arr The array to convert
+	 * @return The string representation of the array
+	 */
+	template<typename T, size_t size>
+	std::string intArrayToStr(const std::array<T, size>& arr){
+		return cIntArrayToStr(arr.data(), arr.size(), true);
 	}
 
 	/**

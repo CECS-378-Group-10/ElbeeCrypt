@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iomanip>
+#include <sstream>
 #include <string>
 
 /**
@@ -61,6 +63,78 @@ namespace elbeecrypt::common::utils::String {
 	 * @return The first index of the character in the string, else -1 if it is not present
 	 */
 	int firstIndexOf(const std::string& str, const char& target);
+
+	/**
+	 * @brief Converts an integer into a hexadecimal string.
+	 * See https://stackoverflow.com/a/50517242
+	 * 
+	 * @author Loss Mentality
+	 * @tparam T The datatype of the integer
+	 * @param integer The integer to convert
+	 * @param format Whether a "0x" should be applied to the hexadecimal digit
+	 * @return The resultant string
+	 */
+	template<typename T>
+	std::string intToHex(T integer, bool format){
+		//Ensure this function is called with a template parameter that makes sense. Note: static_assert is only available in C++11 and higher.
+		static_assert(std::is_integral<T>::value, "Template argument 'T' must be a fundamental integer type (e.g. int, short, etc..).");
+
+		//Create the sstream object to hold the result
+		std::stringstream stream;
+
+		//Add the necessary formatting
+		if(format) stream << "0x";
+		stream << std::setfill('0') << std::setw(sizeof(T) * 2) << std::hex;
+
+		/*
+			If T is an 8-bit integer type (e.g. uint8_t or int8_t) it will be
+			treated as an ASCII code, giving the wrong result. So we use C++17's
+			"if constexpr" to have the compiler decides at compile-time if it's
+			converting an 8-bit int or not.
+		*/
+		if constexpr (std::is_same_v<std::uint8_t, T>){
+			/*
+				Unsigned 8-bit unsigned int type. Cast to int (thanks Lincoln) to
+				avoid ASCII code interpretation of the int. The number of hex digits
+				in the  returned string will still be two, which is correct for 8 bits,
+				because of the 'sizeof(T)' above.
+			*/
+			stream << static_cast<int>(integer);
+		}
+
+		//Check for a signed 8-bit integer
+		else if (std::is_same_v<std::int8_t, T>){
+			/*
+				For 8-bit signed int, same as above, except we must first cast to unsigned
+				int, because values above 127d (0x7f) in the int will cause further issues.
+				if we cast directly to int.
+			*/
+			stream << static_cast<int>(static_cast<uint8_t>(integer));
+		}
+
+		//No cast needed for ints wider than 8 bits.
+		else {
+			stream << integer;
+		}
+
+		//Return the hexadecimal digit
+		return stream.str();
+	}
+
+	/**
+	 * @brief Converts an integer into a hexadecimal string.
+	 * Assumes that a "0x" should be pre-appended to the digit.
+	 * See https://stackoverflow.com/a/50517242
+	 * 
+	 * @author Loss Mentality
+	 * @tparam T The datatype of the integer
+	 * @param integer The integer to convert
+	 * @return The resultant string
+	 */
+	template<typename T>
+	std::string intToHex(T integer){
+		return intToHex(integer, true);
+	}
 
 	/**
 	 * @brief Returns the last index of a char in a string. Returns 
