@@ -4,7 +4,7 @@
 #include <array>
 #include <string>
 #include <vector>
-#include "string.hpp"
+#include "elbeecrypt/common/utils/string.hpp"
 
 /**
  * @brief Contains a set of utilities for working with containers
