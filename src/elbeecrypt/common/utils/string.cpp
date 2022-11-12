@@ -3,6 +3,11 @@
 
 /** Impl of string.hpp */
 namespace elbeecrypt::common::utils::String {
+	/** Impl of boolStr(bool). */
+	const std::string boolStr(bool boolean){
+		return boolean ? "true" : "false";
+	}
+
 	/** Impl of contains(string, string, bool). */
 	bool contains(const std::string& str, const std::string& target, bool ignoreCase){
 		//Clone the input strings

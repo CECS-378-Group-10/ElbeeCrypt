@@ -15,6 +15,14 @@
  */
 namespace elbeecrypt::common::utils::String {
 	/**
+	 * @brief Returns the string representation of a boolean.
+	 * 
+	 * @param boolean The boolean to stringify
+	 * @return The boolean's value
+	 */
+	const std::string boolStr(bool boolean);
+
+	/**
 	 * @brief Checks if a string contains another string.
 	 * 
 	 * @param str The string to look in
