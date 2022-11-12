@@ -36,21 +36,22 @@ namespace elbeecrypt::common::utils::Stream {
 			"Template argument 'T' must be an fstream object, ie: 'std::ifstream' or 'std::ofstream'."
 		);
 
-		//Ensure the path doesn't point to a directory if this behavior isn't allowed
-		if(!allowDirectory && fs::is_directory(path)) return false;
+		//If the path points to a directory when not allowed to do so, mark a status boolean as true
+		bool illegalDirectoryPath = false;
+		if(!allowDirectory && fs::is_directory(path)) illegalDirectoryPath = true;
 
 		//Load the path into the fstream object
 		fileStream.open(path.string(), openMode);
 
 		//Check if the load was successful
-		if(fileStream.is_open()) return true;
+		if(fileStream.is_open() && !illegalDirectoryPath) return true;
 
 		//Determine what went wrong with the open process
 		std::string errorName;
 
 		//Check 1 & 2: file does not exist or points to a directory
 		if(!fs::exists(path)) errorName = "NONEXISTANT FILE";
-		if(!allowDirectory && fs::is_directory(path)) errorName = "DIRECTORY";
+		if(illegalDirectoryPath) errorName = "DIRECTORY";
 
 		//Check 3: file permissions
 		fs::perms perms = fs::status(path).permissions();
