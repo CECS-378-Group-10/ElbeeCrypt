@@ -46,12 +46,15 @@ namespace elbeecrypt::common::utils::Stream {
 		//Check if the load was successful
 		if(fileStream.is_open() && !illegalDirectoryPath) return true;
 
-		//Determine what went wrong with the open process
-		std::string errorName;
+		//Create an error handler lambda
+		auto handler = [&path](const std::string& errorName){
+			std::cerr << "Encountered exception while reading file at path '" << path.string() << "': " << errorName << std::endl;
+			return false; //Always return false
+		};
 
 		//Check 1 & 2: file does not exist or points to a directory
-		if(!fs::exists(path)) errorName = "NONEXISTANT FILE";
-		if(illegalDirectoryPath) errorName = "DIRECTORY";
+		if(!fs::exists(path)) return handler("NONEXISTANT FILE");
+		if(illegalDirectoryPath) return handler("DIRECTORY NOT ALLOWED");
 
 		//Check 3: file permissions
 		fs::perms perms = fs::status(path).permissions();
@@ -62,7 +65,7 @@ namespace elbeecrypt::common::utils::Stream {
 				(perms & fs::perms::owner_read) == fs::perms::none ||
 				(perms & fs::perms::group_read) == fs::perms::none ||
 				(perms & fs::perms::others_read) == fs::perms::none
-			) errorName = "NO READ PERMS (std::ifstream)";
+			) return handler("NO READ PERMS (std::ifstream)");
 		}
 
 		//Check 3b: write permissions (only for std::ofstream)
@@ -71,28 +74,22 @@ namespace elbeecrypt::common::utils::Stream {
 				(perms & fs::perms::owner_write) == fs::perms::none ||
 				(perms & fs::perms::group_write) == fs::perms::none ||
 				(perms & fs::perms::others_write) == fs::perms::none
-			) errorName = "NO WRITE PERMS (std::ofstream)";
+			) return handler("NO WRITE PERMS (std::ofstream)");
 		}
 		
 		//If no obvious error name exists, switch over the rdstate of the stream
-		if(errorName.size() == 0){
-			//See https://cplusplus.com/reference/ios/ios_base/iostate/
-			switch(fileStream.rdstate()){
-				case std::ios::badbit: //Read error during an I/O operation
-					errorName = "READ ERROR";
-					break;
-				case std::ios::failbit: //Logical error during an I/O operation
-					errorName = "LOGICAL ERROR";
-					break;
-				default: //Default state
-					errorName = "<UNKNOWN>";
-					break;
-			}
+		//See https://cplusplus.com/reference/ios/ios_base/iostate/
+		switch(fileStream.rdstate()){
+			case std::ios::badbit: //Read error during an I/O operation
+				return handler("READ ERROR");
+			case std::ios::failbit: //Logical error during an I/O operation
+				return handler("LOGICAL ERROR");
+			default: //Default state
+				break;
 		}
 
-		//Construct and output the error
-		std::cerr << "Encountered exception while reading file at path '" << path.string() << "': " << errorName << std::endl;
-		return false;
+		//Default state
+		return handler("<UNKNOWN>");
 	}
 
 	/**
