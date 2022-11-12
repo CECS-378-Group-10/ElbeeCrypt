@@ -36,11 +36,14 @@ namespace elbeecrypt::common::utils::Stream {
 			"Template argument 'T' must be an fstream object, ie: 'std::ifstream' or 'std::ofstream'."
 		);
 
+		//Ensure the path doesn't point to a directory if this behavior isn't allowed
+		if(!allowDirectory && fs::is_directory(path)) return false;
+
 		//Load the path into the fstream object
 		fileStream.open(path.string(), openMode);
 
-		//Check if the load was successful and the path doesn't point to a file
-		if(fileStream.is_open() && fs::is_directory(path) && allowDirectory) return true;
+		//Check if the load was successful
+		if(fileStream.is_open()) return true;
 
 		//Determine what went wrong with the open process
 		std::string errorName;
@@ -108,4 +111,3 @@ namespace elbeecrypt::common::utils::Stream {
 		return loadFStream(fileStream, path, openMode, false);
 	}
 }
-
