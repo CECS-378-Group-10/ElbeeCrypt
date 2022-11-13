@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <iostream>
 #include <fstream>
+#include "elbeecrypt/common/utils/fs.hpp"
 
 namespace fs = std::filesystem;
 
@@ -61,20 +62,14 @@ namespace elbeecrypt::common::utils::Stream {
 
 		//Check 3a: read permissions (only for std::ifstream)
 		if(std::is_same<std::ifstream, T>::value){
-			if(
-				(perms & fs::perms::owner_read) == fs::perms::none ||
-				(perms & fs::perms::group_read) == fs::perms::none ||
-				(perms & fs::perms::others_read) == fs::perms::none
-			) return handler("NO READ PERMS (std::ifstream)");
+			if(!elbeecrypt::common::utils::FS::hasFullRead(perms))
+				return handler("NO READ PERMS (std::ifstream)");
 		}
 
 		//Check 3b: write permissions (only for std::ofstream)
 		if(std::is_same<std::ofstream, T>::value){
-			if(
-				(perms & fs::perms::owner_write) == fs::perms::none ||
-				(perms & fs::perms::group_write) == fs::perms::none ||
-				(perms & fs::perms::others_write) == fs::perms::none
-			) return handler("NO WRITE PERMS (std::ofstream)");
+			if(!elbeecrypt::common::utils::FS::hasFullWrite(perms))
+				return handler("NO WRITE PERMS (std::ofstream)");
 		}
 		
 		//If no obvious error name exists, switch over the rdstate of the stream
