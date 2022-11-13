@@ -17,11 +17,6 @@ namespace elbeecrypt::common::io {
 	CryptorEngine::CryptorEngine(std::array<uint8_t, PRIVKEY_SIZE>& key, const uint32_t& chunkSize): _chunkSize(chunkSize), cipheredChunkSize(calculateCipheredChunkSize(chunkSize)){ //Constructor 1a impl
 		//Setup the keys
 		setupFromPrivkey(key);
-
-		#ifdef ELBEECRYPT_CRYPTOENGINE_ENABLE_LOGGING
-			std::cout << "Logging enabled!" << std::endl;
-		#endif
-		std::cout << "In Constructor" << std::endl;
 	}
 
 	/** Impl of CryptorEngine(array). */
@@ -69,7 +64,6 @@ namespace elbeecrypt::common::io {
 		sodium_memzero(privkey.data(), privkey.size());
 		sodium_memzero(pubkey.data(), pubkey.size());
 		sodium_memzero(sharedkey.data(), sharedkey.size());
-		std::cout << "In Destructor" << std::endl;
 	}
 
 
