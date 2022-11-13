@@ -15,10 +15,15 @@ namespace elbeecrypt::common::targets::extgroup::Video {
 	const std::vector<std::string> values = {
 		"3gp",
 		"3gpp",
+		"amv",
 		"avi",
 		"mkv",
 		"mp4",
+		"mpg",
+		"ogg",
 		"swf",
-		"webm"
+		"svi",
+		"webm",
+		"wmv"
 	};
 }
