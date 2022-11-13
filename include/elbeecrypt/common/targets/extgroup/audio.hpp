@@ -25,6 +25,7 @@ namespace elbeecrypt::common::targets::extgroup::Audio {
 		"mp2",
 		"mp3",
 		"raw",
+		"rf64",
 		"wav",
 		"wma"
 	};
