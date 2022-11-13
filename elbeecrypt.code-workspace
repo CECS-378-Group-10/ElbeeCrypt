@@ -92,7 +92,12 @@
 			"xstddef": "cpp",
 			"xtr1common": "cpp",
 			"map": "cpp",
-			"xtree": "cpp"
+			"xtree": "cpp",
+			"charconv": "cpp",
+			"format": "cpp",
+			"forward_list": "cpp",
+			"future": "cpp",
+			"queue": "cpp"
 		},
 		"mesonbuild.configureOnOpen": true,
 		"editor.insertSpaces": false,
