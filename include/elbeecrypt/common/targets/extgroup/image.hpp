@@ -13,9 +13,16 @@
 namespace elbeecrypt::common::targets::extgroup::Image {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
+		"avif",
+		"gif",
 		"jpeg",
 		"jpg",
+		"heif",
 		"png",
+		"pbm",
+		"pgm",
+		"pnm",
+		"ppm",
 		"tif",
 		"tiff",
 		"webp"
