@@ -21,6 +21,7 @@ namespace elbeecrypt::common::targets::extgroup::Executable {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
 		"bat",
+		"bin",
 		"com",
 		"cmd",
 		"dll",
@@ -28,7 +29,9 @@ namespace elbeecrypt::common::targets::extgroup::Executable {
 		"elf",
 		"exe",
 		"jar",
+		"mlx",
 		"phar",
+		"pyc",
 		"sh",
 		"so",
 		"sys",
