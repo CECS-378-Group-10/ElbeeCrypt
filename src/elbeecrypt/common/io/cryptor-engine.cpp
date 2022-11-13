@@ -310,7 +310,7 @@ namespace elbeecrypt::common::io {
 	void CryptorEngine::setupFromPrivkey(const std::array<uint8_t, CryptorEngine::PRIVKEY_SIZE>& key){
 		//Initialize LibSodium
 		init();
-		
+
 		//Generate the public key from the private key
 		privkey = key;
 		int pubkeyDerivRet = crypto_scalarmult_base(pubkey.data(), privkey.data());

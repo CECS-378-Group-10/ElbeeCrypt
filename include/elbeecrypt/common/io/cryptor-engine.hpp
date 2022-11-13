@@ -94,7 +94,7 @@ namespace elbeecrypt::common::io {
 			/** The size of each ciphered chunk in bytes. The value of this variable will always be `chunkSize + crypto_secretstream_xchacha20poly1305_ABYTES`. */
 			const uint32_t cipheredChunkSize;
 
-			
+
 		//Constructors & Destructor
 		public:
 			/**
@@ -170,7 +170,7 @@ namespace elbeecrypt::common::io {
 			 * @throws std::runtime_error If LibSodium failed to initialize or a keygen error occurred
 			 */
 			CryptorEngine(); //Constructor 3b: random keys
-			
+
 			/**
 			 * @brief Destroys the CryptorEngine object and securely
 			 * erases the keys used by zeroing them out.
@@ -334,7 +334,7 @@ namespace elbeecrypt::common::io {
 
 				//Write the key to the stream
 				keyStream.write((char*) key.data(), key.size());
-				
+
 				//Return true, assuming everything else went okay
 				return true;
 			}
@@ -371,7 +371,7 @@ namespace elbeecrypt::common::io {
 			 * @throws std::runtime_error If the private key could not be loaded
 			 */
 			static std::array<uint8_t, SHAREDKEY_SIZE> generateSharedSecret(const std::array<uint8_t, PRIVKEY_SIZE>& privkey, const std::array<uint8_t, PUBKEY_SIZE>& pubkey);
-	
+
 			/**
 			 * @brief Initializes LibSodium to ensure safe usage of its
 			 * features. See https://libsodium.gitbook.io/doc/usage
