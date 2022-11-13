@@ -157,6 +157,56 @@ namespace elbeecrypt::common::utils::Container {
 	}
 
 	/**
+	 * @brief Splits up a vector into equally sized portions and
+	 * inserts each portion into a map, including where the vector
+	 * shard is in relation to its source vector. Useful for 
+	 * applications where one may want to share the contents of
+	 * the vector across multiple threads to speed up the 
+	 * processing times. Do note that this should only be done
+	 * if the order of the contents does not matter in the 
+	 * processor in which this function is to be used. 
+	 * See https://stackoverflow.com/a/37708514
+	 * 
+	 * @author Yury
+	 * @tparam T The datatype of the vector items
+	 * @param target The target vector to derive the elements from
+	 * @param shardCount How many ways to split the source vector
+	 * @return A map containing the vector shard's first element's position in the parent and the shard itself
+	 */
+	template<typename T>
+	std::map<uint32_t, std::vector<T>> shardVector(const std::vector<T>& target, uint32_t shardCount){
+		//Ensure that the shard count is greater than 0
+		if(shardCount < 1) throw std::runtime_error("Argument \"shardCount\" must be greater than or equal to 1.");
+
+		//Get the number of elements per shard and the remainder
+		size_t elementsPerShard = target.size() / shardCount;
+		size_t elementsRemaining = target.size() % shardCount;
+
+		//Create the output map
+		std::map<uint32_t, std::vector<T>> out = {};
+
+		//Loop over the shard count
+		size_t begin = 0;
+		size_t end = 0;
+		for(size_t i = 0; i < std::min(shardCount, (uint32_t) target.size()); i++){
+			//Get the current end offset
+			end += (elementsRemaining > 0) ? (elementsPerShard + !!(elementsRemaining--)) : elementsPerShard;
+
+			//Create the vector shard
+			std::vector<T> shard(target.begin() + begin, target.begin() + end);
+
+			//Insert the vector shard and assign it as a value for the current i
+			out.insert_or_assign(i, shard);
+
+			//Set the beginning offset to be the current end offset
+			begin = end;
+		}
+
+		//Return the resulting map
+		return out;
+	}
+
+	/**
 	 * @brief Splits an input string up by a given regex. Based on a 
 	 * method described here: https://www.techiedelight.com/split-string-cpp-using-delimiter/
 	 * 
@@ -166,4 +216,31 @@ namespace elbeecrypt::common::utils::Container {
 	 * @return The split up string as a vector
 	 */
 	std::vector<std::string> tokenize(const std::string& str, const std::string& regexp);
+
+	/**
+	 * @brief Undoes the vector shard operation performed by the 
+	 * shard function by combining all of the vectors into one
+	 * big vector.
+	 * 
+	 * @tparam T The datatype of the vector items
+	 * @param target The target vector shard map
+	 * @return The resultant recombined vector
+	 */
+	template<typename T>
+	std::vector<T> unshardVector(const std::map<uint32_t, std::vector<T>>& target){
+		//Create a new vector to store the shards
+		std::vector<T> unsharded = {};
+
+		//Loop over the shard map
+		for(auto shardPair : target){
+			//Get the current shard item
+			std::vector<T> shard = shardPair.second;
+
+			//Push the vector's items into the unsharded vector
+			unsharded.insert(std::end(unsharded), std::begin(shard), std::end(shard));
+		}
+
+		//Return the unsharded vector
+		return unsharded;
+	}
 }
