@@ -14,4 +14,31 @@ namespace elbeecrypt::common::utils::Container {
 			std::sregex_token_iterator()
 		);
 	}
+
+	/** Impl of contains(vector, string, bool). */
+	bool contains(const std::vector<std::string>& vec, const std::string& target, bool ignoreCase){
+		//Clone the input string for immutability
+		std::string targetC = target;
+
+		//Create a lambda to act as the checker
+		//https://stackoverflow.com/a/36494706
+		auto comparator = std::find_if(vec.begin(), vec.end(), [&targetC, &ignoreCase](const std::string& s){
+        	if(s.size() != targetC.size()) return false;
+			return std::equal(s.cbegin(), s.cend(), targetC.cbegin(), targetC.cend(), [&ignoreCase](auto c1, auto c2){
+				//Return the comparison between each char, transforming to lowercase if case does not matter
+				return (
+					(ignoreCase ? std::tolower(c1) : c1) ==
+					(ignoreCase ? std::tolower(c2) : c2)
+				);
+			});
+		});
+
+		//Check if the target is in the vector and return the result
+		return comparator != vec.end();
+	}
+
+	/** Impl of contains(vector, string). */
+	bool contains(const std::vector<std::string>& vec, const std::string& target){
+		return std::find(vec.begin(), vec.end(), target) != vec.end();
+	}
 }

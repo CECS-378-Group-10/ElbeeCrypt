@@ -129,6 +129,26 @@ namespace elbeecrypt::common::utils::Container {
 	}
 
 	/**
+	 * @brief Checks if a given vector contains a given string.
+	 * 
+	 * @param vec The vector to search
+	 * @param target The string to search for
+	 * @param ignoreCase Whether case should be ignored
+	 * @return Whether the vector contains the string
+	 */
+	bool contains(const std::vector<std::string>& vec, const std::string& target, bool ignoreCase);
+
+	/**
+	 * @brief Checks if a given vector contains a given string. Assumes that the
+	 * search is case sensitive
+	 * 
+	 * @param vec The vector to search
+	 * @param target The string to search for
+	 * @return Whether the vector contains the string
+	 */
+	bool contains(const std::vector<std::string>& vec, const std::string& target);
+
+	/**
 	 * @brief Converts an `std::array` of integers to a string.
 	 * 
 	 * @tparam T The datatype of the array

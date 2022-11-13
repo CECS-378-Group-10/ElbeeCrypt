@@ -10,14 +10,14 @@ namespace elbeecrypt::common::targets::Extensions {
 		std::string isolatedExt = isolateExtension(extension);
 
 		//Check each category vector for the extension
-		if(utils::Container::contains(extgroup::Archive::values, isolatedExt)) return Category::ARCHIVE;
-		if(utils::Container::contains(extgroup::Audio::values, isolatedExt)) return Category::AUDIO;
-		if(utils::Container::contains(extgroup::Document::values, isolatedExt)) return Category::DOCUMENT;
-		if(utils::Container::contains(extgroup::Executable::values, isolatedExt)) return Category::EXECUTABLE;
-		if(utils::Container::contains(extgroup::Image::values, isolatedExt)) return Category::IMAGE;
-		if(utils::Container::contains(extgroup::Misc::values, isolatedExt)) return Category::MISC;
-		if(utils::Container::contains(extgroup::Plain::values, isolatedExt)) return Category::PLAIN;
-		if(utils::Container::contains(extgroup::Video::values, isolatedExt)) return Category::VIDEO;
+		if(utils::Container::contains(extgroup::Archive::values, isolatedExt, true)) return Category::ARCHIVE;
+		if(utils::Container::contains(extgroup::Audio::values, isolatedExt, true)) return Category::AUDIO;
+		if(utils::Container::contains(extgroup::Document::values, isolatedExt, true)) return Category::DOCUMENT;
+		if(utils::Container::contains(extgroup::Executable::values, isolatedExt, true)) return Category::EXECUTABLE;
+		if(utils::Container::contains(extgroup::Image::values, isolatedExt, true)) return Category::IMAGE;
+		if(utils::Container::contains(extgroup::Misc::values, isolatedExt, true)) return Category::MISC;
+		if(utils::Container::contains(extgroup::Plain::values, isolatedExt, true)) return Category::PLAIN;
+		if(utils::Container::contains(extgroup::Video::values, isolatedExt, true)) return Category::VIDEO;
 
 		//Return undefined by default
 		return Category::UNDEFINED;
