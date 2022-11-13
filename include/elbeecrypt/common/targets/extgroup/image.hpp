@@ -13,7 +13,9 @@
 namespace elbeecrypt::common::targets::extgroup::Image {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
+		"apng",
 		"avif",
+		"bmp",
 		"gif",
 		"jpeg",
 		"jpg",

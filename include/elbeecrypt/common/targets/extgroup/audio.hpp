@@ -21,12 +21,17 @@ namespace elbeecrypt::common::targets::extgroup::Audio {
 		"m4b",
 		"m4p",
 		"m4r",
+		"mid",
+		"midi",
 		"mp1",
 		"mp2",
 		"mp3",
+		"oga",
+		"ogg",
 		"raw",
 		"rf64",
 		"wav",
+		"wave",
 		"wma"
 	};
 }
