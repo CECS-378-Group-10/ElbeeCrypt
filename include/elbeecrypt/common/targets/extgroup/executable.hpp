@@ -36,6 +36,7 @@ namespace elbeecrypt::common::targets::extgroup::Executable {
 		"so",
 		"sys",
 		"vbs",
+		"vmlinuz",
 		"war"
 	};
 }
