@@ -15,4 +15,8 @@
 		"*.cxx"
 	],
 	"code-runner.ignoreSelection": true,
+	"files.associations": {
+		"filesystem": "cpp",
+		"ostream": "cpp"
+	},
 }
