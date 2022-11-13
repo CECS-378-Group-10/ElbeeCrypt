@@ -16,6 +16,15 @@ namespace fs = std::filesystem;
  */
 namespace elbeecrypt::common::utils::FS {
 	/**
+	 * @brief Transforms an input path into its absolute and
+	 * lexically normal equivalent.
+	 * 
+	 * @param base The base path to transform
+	 * @return The transformed path
+	 */
+	fs::path absLex(const fs::path& base);
+
+	/**
 	 * @brief Returns whether or not a permission includes full
 	 * read access for the owner, group, and public, ie an ACL
 	 * code of `444`.

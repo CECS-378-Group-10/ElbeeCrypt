@@ -2,6 +2,11 @@
 
 /** Impl of fs.hpp */
 namespace elbeecrypt::common::utils::FS {
+	/** Impl of absLex(path). */
+	fs::path absLex(const fs::path& base){
+		return fs::absolute(base).lexically_normal();
+	}
+
 	/** Impl of hasFullRead(perms). */
 	bool hasFullRead(const fs::perms& base){
 		return
