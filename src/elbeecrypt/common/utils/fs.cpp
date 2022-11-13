@@ -48,4 +48,22 @@ namespace elbeecrypt::common::utils::FS {
 		//Return the depth
 		return depth;
 	}
+
+	/** Impl of pathsVecToString(vector). */
+	std::string pathsVecToString(const std::vector<fs::path>& paths){
+		//Create the output string
+		std::string out = "[";
+
+		//Loop over the vector elements
+		for(size_t i = 0; i < paths.size(); i++){
+			//Append the current path to the output string
+			out += paths.at(i).string();
+
+			//Add a separator if the loop isn't at the end
+			if(i < paths.size() - 1) out += ", ";
+		}
+
+		//Return the output string
+		return out + "]";
+	}
 }

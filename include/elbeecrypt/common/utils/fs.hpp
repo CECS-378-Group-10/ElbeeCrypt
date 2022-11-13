@@ -1,6 +1,8 @@
 #pragma once
 
 #include <filesystem>
+#include <string>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -62,4 +64,13 @@ namespace elbeecrypt::common::utils::FS {
 	 * @return The depth of the path
 	 */
 	int pathDepth(const fs::path& path);
+
+	/**
+	 * @brief Converts a vector of paths to a formatted
+	 * string.
+	 * 
+	 * @param paths The input paths vector
+	 * @return The resultant string 
+	 */
+	std::string pathsVecToString(const std::vector<fs::path>& paths);
 }

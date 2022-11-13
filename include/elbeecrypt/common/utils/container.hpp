@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <array>
+#include <map>
 #include <string>
 #include <vector>
 #include "elbeecrypt/common/utils/string.hpp"
