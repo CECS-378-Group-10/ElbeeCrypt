@@ -13,9 +13,11 @@
 namespace elbeecrypt::common::targets::extgroup::Audio {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
+		"aac",
 		"flac",
 		"m4a",
 		"m4r",
+		"mp1",
 		"mp2",
 		"mp3",
 		"wav"
