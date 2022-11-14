@@ -4,3 +4,4 @@ This directory contains the header .hpp files.
 	- elbeecrypt/common: Headers shared between all modules of the ransomware
 
 Files in other directories are 3rd-party sources and carry the following extension: .hxx
+Credits can be found in 3p.txt

@@ -14,7 +14,11 @@
 namespace elbeecrypt::common::targets::extgroup::Plain {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
+<<<<<<< HEAD
 		"c",
+=======
+		"build",
+>>>>>>> master
 		"c++",
 		"cc",
 		"cpp",
