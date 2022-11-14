@@ -1,4 +1,5 @@
 #include "elbeecrypt/common/io/cryptor-engine.hpp"
+#include "elbeecrypt/common/utils/threadsafe_cerr.hpp"
 
 namespace elbeecrypt::common::io {
 	//Include namespace definitions
@@ -112,7 +113,7 @@ namespace elbeecrypt::common::io {
 		ciphertext.read((char*) headerBuf, H_BUF_SIZE);
 		if(crypto_secretstream_xchacha20poly1305_init_pull(&state, headerBuf, sharedkey.data()) != 0){
 			//Incomplete header
-			std::cerr << errorPrefix << "Incomplete header" << std::endl;
+			Cerr{} << errorPrefix << "Incomplete header" << std::endl;
 			cleanup(ciphertext, plaintext, plaintextBuf, ciphertextBuf, headerBuf);
 			return Status::FAIL;
 		}
@@ -134,7 +135,7 @@ namespace elbeecrypt::common::io {
 			*/
 			if(crypto_secretstream_xchacha20poly1305_pull(&state, plaintextBuf, &reinterpret_cast<unsigned long long&>(wlen), &tag, ciphertextBuf, rlen, NULL, 0) != 0){
 				//Corrupted chunk
-				std::cerr << errorPrefix << "Corrupt chunk @ pos " << index << std::endl;
+				Cerr{} << errorPrefix << "Corrupt chunk @ pos " << index << std::endl;
 				cleanup(ciphertext, plaintext, plaintextBuf, ciphertextBuf, headerBuf);
 				return Status::FAIL;
 			}
@@ -142,7 +143,7 @@ namespace elbeecrypt::common::io {
 			//Check if the stream terminates prematurely
 			if(tag == crypto_secretstream_xchacha20poly1305_TAG_FINAL && !eof){
 				//Premature end (end of file reached before the end of the stream)
-				std::cerr << errorPrefix << "Premature EOF @ pos " << index << std::endl;
+				Cerr{} << errorPrefix << "Premature EOF @ pos " << index << std::endl;
 				cleanup(ciphertext, plaintext, plaintextBuf, ciphertextBuf, headerBuf);
 				return Status::FAIL;
 			}

