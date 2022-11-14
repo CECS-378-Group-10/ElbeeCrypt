@@ -76,7 +76,7 @@ namespace elbeecrypt::common::targets::extgroup::Misc {
 		"ini",
 		"jsp",
 		"key",
-		"keychain:,
+		"keychain",
 		"lay",
 		"ldf",
 		"lnk",
