@@ -34,7 +34,7 @@ namespace elbeecrypt::common::targets::extgroup::Image {
 		"gif",
 		"heif",
 		"j2c",
-		"j2k"",
+		"j2k",
 		"jfif",
 		"jp2",
 		"jpeg",
