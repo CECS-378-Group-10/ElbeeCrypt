@@ -11,13 +11,13 @@ namespace elbeecrypt::common::utils::FS {
 	fs::path appendExt(const fs::path& path, const std::string& ext){
     	//Clone the extension string for immutability
     	std::string extC = ext;
-    
+
     	//Check if the ext starts with a dot
     	if(extC[0] == '.'){
       	  //Remove the dot
        	 extC = extC.substr(1);
   		}
-    
+
 		//Concat the path and the extension
 		return fs::path(path.string() + "." + extC);
 	}
