@@ -13,8 +13,7 @@ namespace fs = std::filesystem;
  * functionality. More can be done using this base function by
  * passing in lambdas (anonymous functions) that can do more with
  * the results than the base function or included implementations
- * can provide. These lambdas should be declared with the following
- * header: 
+ * can provide.
  * 
  * @author CECS-378 Group 10
  * @file direntwalk.hpp
