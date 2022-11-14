@@ -1,0 +1,7 @@
+einstein-enum: https://github.com/therocode/smartenum
+gui_lite: https://github.com/idea4good/GuiLite
+registry: https://github.com/m4x1m1l14n/Registry
+thread-pool: https://github.com/bshoshany/thread-pool
+windirent: https://github.com/tronkko/dirent
+
+*Combinations of multiple C++ source and header files done via Rang: https://github.com/agauniyal/rang
