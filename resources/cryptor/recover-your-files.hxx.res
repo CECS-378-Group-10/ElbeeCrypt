@@ -17,6 +17,7 @@ namespace bin2cpp
   class File
   {
   public:
+  virtual ~File() = default; //This is here to get rid of a GCC warning. Perhaps add a pull request
     virtual size_t getSize() const = 0;
     /* DEPRECATED */ virtual inline const char * getFilename() const { return getFileName(); }
     virtual const char * getFileName() const = 0;
