@@ -99,7 +99,9 @@
 			"future": "cpp",
 			"queue": "cpp",
 			"coroutine": "cpp",
-			"resumable": "cpp"
+			"resumable": "cpp",
+			"*.res": "cpp",
+			"set": "cpp"
 		},
 		"mesonbuild.configureOnOpen": true,
 		"editor.insertSpaces": false,
