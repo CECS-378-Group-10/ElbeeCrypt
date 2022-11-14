@@ -1,7 +1,11 @@
 einstein-enum: https://github.com/therocode/smartenum
+fmt: https://github.com/fmtlib/fmt
 gui_lite: https://github.com/idea4good/GuiLite
+libsodium: https://github.com/jedisct1/libsodium
 registry: https://github.com/m4x1m1l14n/Registry
 thread-pool: https://github.com/bshoshany/thread-pool
 windirent: https://github.com/tronkko/dirent
+
+
 
 *Combinations of multiple C++ source and header files done via Rang: https://github.com/agauniyal/rang
