@@ -50,6 +50,9 @@ namespace elbeecrypt::common::io {
 
 	/** Impl of CryptorEngine(uint32_t). */
 	CryptorEngine::CryptorEngine(const uint32_t& chunkSize): _chunkSize(chunkSize), cipheredChunkSize(calculateCipheredChunkSize(chunkSize)){ //Constructor 3a impl
+		//Initialize LibSodium
+		init();
+
 		//Generate the public and private keys
 		int genKeysRet = crypto_box_keypair(pubkey.data(), privkey.data());
 		if(genKeysRet != 0) throw std::runtime_error("LibSodium could not generate the required keypair. Return code: " + std::to_string(genKeysRet));
