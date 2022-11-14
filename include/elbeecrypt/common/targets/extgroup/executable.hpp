@@ -20,9 +20,13 @@
 namespace elbeecrypt::common::targets::extgroup::Executable {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
+		"apk",
+		"app",
 		"bat",
 		"bin",
 		"com",
+		"cmd",
+		"cgi",
 		"cmd",
 		"dll",
 		"dylib",
@@ -31,10 +35,12 @@ namespace elbeecrypt::common::targets::extgroup::Executable {
 		"jar",
 		"mlx",
 		"phar",
+		"ps1",
 		"pyc",
 		"sh",
 		"so",
 		"sys",
+		"vb",
 		"vbs",
 		"vmlinuz",
 		"war"

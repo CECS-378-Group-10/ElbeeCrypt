@@ -14,11 +14,31 @@
 namespace elbeecrypt::common::targets::extgroup::Plain {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
+		"c",
 		"c++",
+		"cc",
 		"cpp",
+		"cs",
+		"cxx",
+		"h",
+		"hpp",
+		"htm",
+		"html",
+		"hwp",
+		"hxx",
 		"java",
+		"js",
 		"json",
+		"log",
+		"msg",
+		"pages",
+		"php",
+		"rb",
+		"rtf",
+		"sxw",
+		"tex",
 		"toml",
 		"txt"
+		"uot"
 	};
 }

@@ -13,17 +13,28 @@
 namespace elbeecrypt::common::targets::extgroup::Video {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
+		"3g2",
 		"3gp",
 		"3gpp",
+		"3gpp2",
 		"amv",
+		"asf",
+		"asx",
 		"avi",
+		"flv",
+		"m4u"
 		"m4v",
 		"mkv",
+		"mov",
 		"mp4",
 		"mpg",
+		"mpeg",
 		"ogv",
+		"rm",
+		"srt",
 		"swf",
 		"svi",
+		"vob",
 		"webm",
 		"wmv"
 	};

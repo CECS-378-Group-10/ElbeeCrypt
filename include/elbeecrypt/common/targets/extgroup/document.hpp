@@ -13,6 +13,7 @@
 namespace elbeecrypt::common::targets::extgroup::Document {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
+		"602"
 		"accda",
 		"accdb",
 		"accde",
@@ -29,8 +30,14 @@ namespace elbeecrypt::common::targets::extgroup::Document {
 		"ecf",
 		"mda",
 		"mde",
+		"odb",
+		"odp",
+		"ods",
 		"odt",
 		"one",
+		"otp",
+		"ots"
+		"ott",
 		"pa",
 		"pdf",
 		"pot",
@@ -47,15 +54,28 @@ namespace elbeecrypt::common::targets::extgroup::Document {
 		"pub",
 		"sldm",
 		"sldx",
+		"stc",
+		"sti",
+		"stw",
+		"sxc",
+		"sxi",
+		"tax2012",
+		"tax2014",
+		"tbk",
 		"wbk",
+		"wks",
 		"wll",
+		"wpd"
+		"wps",
 		"wwl",
 		"xla",
 		"xla5",
 		"xla8",
 		"xlam",
+		"xlc",
 		"xll",
 		"xlm",
+		"xlr",
 		"xls",
 		"xlsb",
 		"xlsm",
@@ -64,6 +84,9 @@ namespace elbeecrypt::common::targets::extgroup::Document {
 		"xltm",
 		"xltx",
 		"xlw",
-		"xps"
+		"xml",
+		"xps",
+		"yaml",
+		"yml",
 	};
 }

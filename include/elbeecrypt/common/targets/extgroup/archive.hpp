@@ -13,21 +13,29 @@
 namespace elbeecrypt::common::targets::extgroup::Archive {
 	/** The list of extensions in this group. */
 	const std::vector<std::string> values = {
-		"7z",
+		"7-zip",
+		"7z",		
 		"ace",
 		"apk",
 		"arc",
+		"arj",
 		"ark",
 		"br",
 		"bz2",
+		"cbr",
+		"deb",	
 		"gz",
+		"gzip",
 		"iso",
 		"lz",
 		"lz4",
+		"lzh"
 		"lzma",
 		"mar",
 		"pea",
+		"pkg",
 		"rar",
+		"rpm",
 		"rz",
 		"sfx",
 		"sz",
@@ -39,7 +47,9 @@ namespace elbeecrypt::common::targets::extgroup::Archive {
 		"wim",
 		"xar",
 		"xz",
+		"z",
 		"zip",
+		"zipx",
 		"zst"
 	};
 }
