@@ -27,24 +27,6 @@ namespace elbeecrypt::common::utils::FS {
 	fs::path absLex(const fs::path& base);
 
 	/**
-	 * @brief Appends an extension onto the end of a file path.
-	 * 
-	 * @param path The target path
-	 * @param ext The extension to add
-	 * @return The path with the added extension 
-	 */
-	fs::path appendExt(const fs::path& path, const std::string& ext);
-
-	/**
-	 * @brief Appends an extension onto the end of a file path.
-	 * 
-	 * @param path The target path
-	 * @param ext The extension to add
-	 * @return The path with the added extension 
-	 */
-	fs::path appendExt(const fs::path& path, const fs::path& ext);
-
-	/**
 	 * @brief Returns whether or not a permission includes full
 	 * read access for the owner, group, and public, ie an ACL
 	 * code of `444`.
