@@ -1,4 +1,4 @@
-einstein-enum: https://github.com/therocode/smartenum
+einstein-enum (fork of smartenum): https://github.com/therocode/smartenum
 fmt: https://github.com/fmtlib/fmt
 gui_lite: https://github.com/idea4good/GuiLite
 libsodium: https://github.com/jedisct1/libsodium
