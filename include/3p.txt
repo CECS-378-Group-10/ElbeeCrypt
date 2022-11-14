@@ -1,0 +1,11 @@
+einstein-enum (fork of smartenum): https://github.com/therocode/smartenum
+fmt: https://github.com/fmtlib/fmt
+gui_lite: https://github.com/idea4good/GuiLite
+libsodium: https://github.com/jedisct1/libsodium
+registry: https://github.com/m4x1m1l14n/Registry
+thread-pool: https://github.com/bshoshany/thread-pool
+windirent: https://github.com/tronkko/dirent
+
+The following 3rd party libraries are handled separately by Conan: fmt, libsodium
+
+*Combinations of multiple C++ source and header files done via Quom: https://github.com/Viatorus/quom
