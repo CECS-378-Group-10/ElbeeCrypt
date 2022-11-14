@@ -6,6 +6,6 @@ registry: https://github.com/m4x1m1l14n/Registry
 thread-pool: https://github.com/bshoshany/thread-pool
 windirent: https://github.com/tronkko/dirent
 
-
+The following 3rd party libraries are handled separately by Conan: fmt, libsodium
 
 *Combinations of multiple C++ source and header files done via Rang: https://github.com/agauniyal/rang
