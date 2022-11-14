@@ -22,7 +22,7 @@ namespace elbeecrypt::common::targets::extgroup::Video {
 		"asx",
 		"avi",
 		"flv",
-		"m4u"
+		"m4u",
 		"m4v",
 		"mkv",
 		"mov",

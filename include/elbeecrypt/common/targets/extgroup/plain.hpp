@@ -30,16 +30,26 @@ namespace elbeecrypt::common::targets::extgroup::Plain {
 		"java",
 		"js",
 		"json",
+		"kt",
+		"kts",
 		"log",
 		"msg",
 		"pages",
 		"php",
+		"py",
 		"rb",
+		"rs",
 		"rtf",
 		"sxw",
 		"tex",
 		"toml",
-		"txt"
-		"uot"
+		"tml",
+		"txt",
+		"uot",
+		"wk1",
+		"xhtm",
+		"xhtml",
+		"yaml",
+		"yml"
 	};
 }

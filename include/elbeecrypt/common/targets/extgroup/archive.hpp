@@ -29,7 +29,7 @@ namespace elbeecrypt::common::targets::extgroup::Archive {
 		"iso",
 		"lz",
 		"lz4",
-		"lzh"
+		"lzh",
 		"lzma",
 		"mar",
 		"pea",

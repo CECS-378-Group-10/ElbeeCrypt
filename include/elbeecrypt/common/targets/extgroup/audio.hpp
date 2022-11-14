@@ -19,7 +19,8 @@ namespace elbeecrypt::common::targets::extgroup::Audio {
 		"dss",
 		"flac",
 		"iff",
-		"m3u"
+		"m3u",
+		"m3u8",
 		"m4a",
 		"m4b",
 		"m4p",
