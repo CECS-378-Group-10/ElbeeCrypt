@@ -45,6 +45,15 @@ namespace elbeecrypt::common::utils::FS {
 	fs::path appendExt(const fs::path& path, const fs::path& ext);
 
 	/**
+	 * @brief Gets a list of parent paths for a list of given paths,
+	 * removing any duplicates in the process.
+	 * 
+	 * @param paths The list of paths to get the parents of
+	 * @return The list of parent paths
+	 */
+	std::vector<fs::path> getParents(const std::vector<fs::path>& paths);
+
+	/**
 	 * @brief Returns whether or not a permission includes full
 	 * read access for the owner, group, and public, ie an ACL
 	 * code of `444`.

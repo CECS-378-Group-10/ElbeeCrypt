@@ -1,3 +1,4 @@
+#include "elbeecrypt/common/utils/container.hpp"
 #include "elbeecrypt/common/utils/fs.hpp"
 
 /** Impl of fs.hpp */
@@ -25,6 +26,22 @@ namespace elbeecrypt::common::utils::FS {
 	/** Impl of appendExt(path, path). */
 	fs::path appendExt(const fs::path& path, const fs::path& ext){
 		return appendExt(path, ext.string());
+	}
+
+	/** Impl of getParents(vector). */
+	std::vector<fs::path> getParents(const std::vector<fs::path>& paths){
+		//Create a new vector to store the parent paths
+		std::vector<fs::path> parents = {};
+
+		//Loop over the list of paths
+		for(fs::path path : paths){
+			//Append the parent path of the current path to the vector of parent paths
+			parents.push_back(path.parent_path());
+		}
+
+		//Remove duplicates and return the list
+		elbeecrypt::common::utils::Container::removeDuplicates(parents);
+		return parents;
 	}
 
 	/** Impl of hasFullRead(perms). */

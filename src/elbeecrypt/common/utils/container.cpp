@@ -41,4 +41,26 @@ namespace elbeecrypt::common::utils::Container {
 	bool contains(const std::vector<std::string>& vec, const std::string& target){
 		return std::find(vec.begin(), vec.end(), target) != vec.end();
 	}
+
+	/** Impl of vecStr(vector). */
+	std::string vecStr(const std::vector<std::string>& vec){
+		//Define the lambda to convert the paths to strings (basically a no-op)
+		std::function<std::string(const std::string&)> converter = [](const std::string& str){
+			return str;
+		};
+
+		//Convert the vector
+		return vecStr(vec, converter);
+	}
+
+	/** Impl of vecStr(vector). */
+	std::string vecPathStr(const std::vector<fs::path>& vec){
+		//Define the lambda to convert the paths to strings
+		std::function<std::string(const fs::path&)> converter = [](const fs::path& path){
+			return path.string();
+		};
+
+		//Convert the vector
+		return vecStr(vec, converter);
+	}
 }

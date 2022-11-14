@@ -2,10 +2,15 @@
 
 #include <algorithm>
 #include <array>
+#include <filesystem>
+#include <functional>
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 #include "elbeecrypt/common/utils/string.hpp"
+
+namespace fs = std::filesystem;
 
 /**
  * @brief Contains a set of utilities for working with containers
@@ -178,6 +183,22 @@ namespace elbeecrypt::common::utils::Container {
 	}
 
 	/**
+	 * @brief Removes duplicate elements from a vector using a set.
+	 * See: https://stackoverflow.com/a/31748822
+	 * 
+	 * @author yury
+	 * @tparam T The datatype of the elements
+	 * @param vec THe vector to remove the duplicates from
+	 */
+	template<typename T>
+	void removeDuplicates(std::vector<T>& vec){
+		std::set<T> values;
+		vec.erase(std::remove_if(vec.begin(), vec.end(), [&](const T& value){ 
+			return !values.insert(value).second; 
+		}), vec.end());
+	}
+
+	/**
 	 * @brief Splits up a vector into equally sized portions and
 	 * inserts each portion into a map, including where the vector
 	 * shard is in relation to its source vector. Useful for 
@@ -264,4 +285,46 @@ namespace elbeecrypt::common::utils::Container {
 		//Return the unsharded vector
 		return unsharded;
 	}
+
+	/**
+	 * @brief Converts a vector of items to a string version
+	 * of the vector.
+	 * 
+	 * @param vec The vector to convert
+	 * @param converter The lambda used to convert the item to a string
+	 * @return The resultant string
+	 */
+	template<typename T>
+	std::string vecStr(const std::vector<T>& vec, std::function<std::string(const T&)> converter){
+		//Create a string to hold the contents of the data to be outputted
+		std::string out = "[";
+
+		//Loop over the vector
+		for(size_t i = 0; i < vec.size(); i++){
+			if(i > 0) out += ", "; //Add a delimiter if i > 0
+			out += converter(vec.at(i));
+		}
+
+		//Add the right bracket and return
+		out += "]";
+		return out;
+	}
+
+	/**
+	 * @brief Converts a vector of strings to a string version
+	 * of the vector.
+	 * 
+	 * @param vec The vector to convert
+	 * @return The resultant string
+	 */
+	std::string vecStr(const std::vector<std::string>& vec);
+
+	/**
+	 * @brief Converts a vector of paths to a string version
+	 * of the vector.
+	 * 
+	 * @param vec The vector to convert
+	 * @return The resultant string
+	 */
+	std::string vecPathStr(const std::vector<fs::path>& vec);
 }
