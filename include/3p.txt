@@ -8,4 +8,4 @@ windirent: https://github.com/tronkko/dirent
 
 The following 3rd party libraries are handled separately by Conan: fmt, libsodium
 
-*Combinations of multiple C++ source and header files done via Rang: https://github.com/agauniyal/rang
+*Combinations of multiple C++ source and header files done via Quom: https://github.com/Viatorus/quom
