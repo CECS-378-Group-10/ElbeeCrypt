@@ -43,8 +43,7 @@ meson_dep_loc = '.mesondep/'
 ####################################
 ## Set the dependencies needed by the project (Conan will take care of this section)
 dependencies = [
-	dependency('libsodium'),
-	dependency('fmt')
+	dependency('libsodium')
 ]
 
 ####################################

@@ -9,8 +9,7 @@ class Builder(ConanFile):
 	## Project settings
 	#Name, version, and dependencies (name and version are to be determined by Meson, not Conan)
 	requires = [
-		"libsodium/cci.20220430", #LibSodium
-		"fmt/9.1.0" #{fmt}
+		"libsodium/cci.20220430" #LibSodium
 	]
 	
 	#Compiler settings and source resolution
