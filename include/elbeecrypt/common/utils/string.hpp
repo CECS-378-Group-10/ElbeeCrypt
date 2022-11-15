@@ -111,7 +111,7 @@ namespace elbeecrypt::common::utils::String {
 		}
 
 		//Check for a signed 8-bit integer
-		else if (std::is_same_v<std::int8_t, T>){
+		else if(std::is_same_v<std::int8_t, T>){
 			/*
 				For 8-bit signed int, same as above, except we must first cast to unsigned
 				int, because values above 127d (0x7f) in the int will cause further issues.

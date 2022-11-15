@@ -44,7 +44,7 @@ namespace elbeecrypt::common::utils::Container {
 
 	/** Impl of vecStr(vector). */
 	std::string vecStr(const std::vector<std::string>& vec){
-		//Define the lambda to convert the paths to strings (basically a no-op)
+		//Define the lambda to convert the strings to strings (basically a no-op)
 		std::function<std::string(const std::string&)> converter = [](const std::string& str){
 			return str;
 		};

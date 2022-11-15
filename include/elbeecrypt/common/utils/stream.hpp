@@ -1,8 +1,8 @@
 #pragma once
 
 #include <filesystem>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include "elbeecrypt/common/utils/fs.hpp"
 
 namespace fs = std::filesystem;
@@ -103,4 +103,63 @@ namespace elbeecrypt::common::utils::Stream {
 	bool loadFStream(T &fileStream, const fs::path& path, const std::ios_base::openmode& openMode){
 		return loadFStream(fileStream, path, openMode, false);
 	}
+
+		/**
+	 * @brief Writes a vector of items to a file.
+	 * 
+	 * @tparam The datatype of the items in the vector
+	 * @param target The path to the file
+	 * @param content The content to write to the file
+	 * @param converter The lambda used to convert the item to a string
+	 * @return Whether the write succeeded
+	 */
+	template<typename T>
+	bool writeToFile(const fs::path& target, const std::vector<T>& content, std::function<std::string(const T&)> converter){
+		//Open the file using the safe stream API
+		std::ofstream file;
+		bool opened = loadFStream(file, target, std::ios_base::out);
+
+		//If the load failed, exit early
+		if(!opened) return false;
+	
+		//Loop over the content vector
+		for(T item : content){
+			//Get the string representation of the current item using the converter lambda
+			std::string line = converter(item);
+
+			//Write the line to the file
+			file << line << std::endl;
+		}
+
+		//Close the file and return true
+		file.close();
+		return true;
+	}
+
+	/**
+	 * @brief Writes a vector of strings to a file.
+	 * 
+	 * @param target The path to the file
+	 * @param lines The lines to write to the file
+	 * @return Whether the write succeeded
+	 */
+	bool writeToFile(const fs::path& target, const std::vector<std::string>& lines);
+
+	/**
+	 * @brief Writes a vector of paths to a file.
+	 * 
+	 * @param target The path to the file
+	 * @param paths The paths to write to the file
+	 * @return Whether the write succeeded
+	 */
+	bool writeToFile(const fs::path& target, const std::vector<fs::path>& paths);
+
+	/**
+	 * @brief Writes a single line to a file.
+	 * 
+	 * @param target The path to the file
+	 * @param line The line to write to the file
+	 * @return Whether the write succeeded
+	 */
+	bool writeToFile(const fs::path& target, const std::string& line);
 }
