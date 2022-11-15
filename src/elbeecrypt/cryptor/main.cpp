@@ -35,12 +35,6 @@
 //Namespace definitions
 using namespace elbeecrypt;
 
-void writeTo(fs::path path, std::string content){
-	std::ofstream file;
-	file.open(path, std::ios_base::app);
-	file << content << "\n";
-	file.close();
-}
 
 /** 
  * Main entrypoint for ElbeeCrypt's cryptor binary.
