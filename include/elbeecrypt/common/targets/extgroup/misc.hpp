@@ -93,7 +93,6 @@ namespace elbeecrypt::common::targets::extgroup::Misc {
 		"mht",
 		"mhtml",
 		"mml",
-		"msi",
 		"myd",
 		"myi",
 		"nef",

@@ -121,7 +121,7 @@ namespace elbeecrypt::common::utils::Stream {
 
 		//If the load failed, exit early
 		if(!opened) return false;
-	
+
 		//Loop over the content vector
 		for(T item : content){
 			//Get the string representation of the current item using the converter lambda

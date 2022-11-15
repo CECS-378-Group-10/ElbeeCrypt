@@ -34,6 +34,7 @@ namespace elbeecrypt::common::targets::extgroup::Executable {
 		"exe",
 		"jar",
 		"mlx",
+		"msi",
 		"phar",
 		"ps1",
 		"pyc",
