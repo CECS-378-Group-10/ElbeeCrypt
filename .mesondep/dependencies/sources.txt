@@ -1,2 +1,3 @@
 3rd party libraries can be found below:
 vslocate.py - https://github.com/mjansson/vslocate
+bin2cpp - https://github.com/end2endzone/bin2cpp
