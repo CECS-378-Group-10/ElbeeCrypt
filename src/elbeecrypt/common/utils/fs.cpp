@@ -103,4 +103,23 @@ namespace elbeecrypt::common::utils::FS {
 		//Return the output string
 		return out + "]";
 	}
+
+	/** Impl of removeTrailingExtension(path). */
+	fs::path removeTrailingExtension(const fs::path &path){
+		//Clone path for immutability
+		fs::path pathC = path;
+
+		//Get the path filename and stem
+		std::string filename = path.filename().string();
+		std::string stem = path.stem().string();
+
+		//Check if the two pieces are unequal. If they are, the path has a filename
+		if(filename != stem){
+			//Remove the trailing extension via stem
+			pathC = pathC.parent_path() / pathC.stem();
+		}
+
+		//Return the path, modified or not
+		return pathC;
+	}
 }

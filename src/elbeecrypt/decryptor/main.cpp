@@ -118,7 +118,7 @@ std::vector<fs::path> decryptor::Main::decrypt(const std::vector<fs::path>& root
 		//Loop over the targets
 		for(fs::path target : targets){
 			//Create the path in which the target decrypted file will be dropped
-			fs::path decryptedOut = target.stem();
+			fs::path decryptedOut = common::utils::FS::removeTrailingExtension(target);
 
 			//Decrypt the file with the cryptor engine
 			common::io::CryptorEngine::Status decryptionResult = cryptorEngine.decryptFile(target, decryptedOut);

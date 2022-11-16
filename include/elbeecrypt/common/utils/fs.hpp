@@ -102,4 +102,14 @@ namespace elbeecrypt::common::utils::FS {
 	 * @return The resultant string 
 	 */
 	std::string pathsVecToString(const std::vector<fs::path>& paths);
+
+	/**
+	 * @brief Removes a trailing extension from the end of a 
+	 * file path if one exists. If not, the output path and the
+	 * input path will be equal.
+	 * 
+	 * @param path The target path
+	 * @return The path with the last extension stripped away
+	 */
+	fs::path removeTrailingExtension(const fs::path& path);
 }
