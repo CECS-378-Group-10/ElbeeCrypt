@@ -216,7 +216,7 @@ namespace elbeecrypt::common::utils::Container {
 	 * @return A map containing the vector shard's first element's position in the parent and the shard itself
 	 */
 	template<typename T>
-	std::map<uint32_t, std::vector<T>> shardVector(const std::vector<T>& target, uint32_t shardCount){
+	std::map<size_t, std::vector<T>> shardVector(const std::vector<T>& target, size_t shardCount){
 		//Ensure that the shard count is greater than 0
 		if(shardCount < 1) throw std::runtime_error("Argument \"shardCount\" must be greater than or equal to 1.");
 
@@ -225,12 +225,12 @@ namespace elbeecrypt::common::utils::Container {
 		size_t elementsRemaining = target.size() % shardCount;
 
 		//Create the output map
-		std::map<uint32_t, std::vector<T>> out = {};
+		std::map<size_t, std::vector<T>> out = {};
 
 		//Loop over the shard count
 		size_t begin = 0;
 		size_t end = 0;
-		for(size_t i = 0; i < std::min(shardCount, (uint32_t) target.size()); i++){
+		for(size_t i = 0; i < std::min(shardCount, target.size()); i++){
 			//Get the current end offset
 			end += (elementsRemaining > 0) ? (elementsPerShard + !!(elementsRemaining--)) : elementsPerShard;
 

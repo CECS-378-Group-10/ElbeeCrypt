@@ -104,7 +104,7 @@ std::vector<fs::path> decryptor::Main::decrypt(const std::vector<fs::path>& root
 	}
 
 	//Shard the targets vector x ways
-	std::map<uint32_t, std::vector<fs::path>> shards = common::utils::Container::shardVector(hunter.getTargets(), common::Settings::ENCRYPTION_THREADS);
+	std::map<size_t, std::vector<fs::path>> shards = common::utils::Container::shardVector(hunter.getTargets(), common::Settings::ENCRYPTION_THREADS);
 
 	//Create vectors to store the lists of successfully and unsuccessfully decrypted files
 	std::vector<fs::path> successfullyDecrypted = {};

