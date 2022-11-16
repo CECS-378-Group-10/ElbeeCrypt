@@ -4,10 +4,13 @@ gui_lite: https://github.com/idea4good/GuiLite
 libsodium: https://github.com/jedisct1/libsodium
 Quom: https://github.com/Viatorus/quom
 registry: https://github.com/m4x1m1l14n/Registry
+Resource Hacker: http://www.angusj.com/resourcehacker/
 thread-pool: https://github.com/bshoshany/thread-pool
 windirent: https://github.com/tronkko/dirent
 
 The following 3rd party libraries are handled separately by Conan: libsodium
-The following 3rd party libraries are used to process resources: bin2cpp, Quom
+The following 3rd party tools are used to process resources: bin2cpp, Quom
+The following 3rd party tools are used to disguise the resulting executables: Resource Hacker
+Build toolchain: Conan (dependencies), Meson (project management/project builder), Ninja (compiler toolchain)
 
 *Combinations of multiple C++ source and header files done via Quom
