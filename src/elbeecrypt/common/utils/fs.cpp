@@ -28,7 +28,7 @@ namespace elbeecrypt::common::utils::FS {
 		return appendExt(path, ext.string());
 	}
 
-	/** Impl of getParents(vector). */
+	/** Impl of getParents(vector<path>). */
 	std::vector<fs::path> getParents(const std::vector<fs::path>& paths){
 		//Create a new vector to store the parent paths
 		std::vector<fs::path> parents = {};
@@ -86,7 +86,7 @@ namespace elbeecrypt::common::utils::FS {
 		return depth;
 	}
 
-	/** Impl of pathsVecToString(vector). */
+	/** Impl of pathsVecToString(vector<path>). */
 	std::string pathsVecToString(const std::vector<fs::path>& paths){
 		//Create the output string
 		std::string out = "[";

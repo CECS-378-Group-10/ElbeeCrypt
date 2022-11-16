@@ -3,7 +3,7 @@
 
 /** Impl of stream.hpp */
 namespace elbeecrypt::common::utils::Stream {
-	/** Impl of writeToFile(path, vector). */
+	/** Impl of writeToFile(path, vector<string>). */
 	bool writeToFile(const fs::path& target, const std::vector<std::string>& lines){
 		//Define the lambda to convert the strings to strings (basically a no-op)
 		std::function<std::string(const std::string&)> converter = [](const std::string& str){
@@ -14,7 +14,7 @@ namespace elbeecrypt::common::utils::Stream {
 		return writeToFile(target, lines, converter);
 	}
 
-	/** Impl of writeToFile(path, vector). */
+	/** Impl of writeToFile(path, vector<path>). */
 	bool writeToFile(const fs::path& target, const std::vector<fs::path>& paths){
 		//Define the lambda to convert the paths to strings
 		std::function<std::string(const fs::path&)> converter = [](const fs::path& path){

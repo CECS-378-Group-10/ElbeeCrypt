@@ -1,6 +1,7 @@
 #include <cstring>
 #include "elbeecrypt/common/io/chunked-file-reader.hpp"
 
+/** Impl of chunked-file-reader.hpp */
 namespace elbeecrypt::common::io {
 	//Constructors & Destructor
 	/** Impl of ChunkedFileReader(path, uint64_t). */

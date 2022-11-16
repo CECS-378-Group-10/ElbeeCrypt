@@ -15,7 +15,7 @@ namespace elbeecrypt::common::utils::Container {
 		);
 	}
 
-	/** Impl of contains(vector, string, bool). */
+	/** Impl of contains(vector<string>, string, bool). */
 	bool contains(const std::vector<std::string>& vec, const std::string& target, bool ignoreCase){
 		//Clone the input string for immutability
 		std::string targetC = target;
@@ -37,12 +37,12 @@ namespace elbeecrypt::common::utils::Container {
 		return comparator != vec.end();
 	}
 
-	/** Impl of contains(vector, string). */
+	/** Impl of contains(vector<string>, string). */
 	bool contains(const std::vector<std::string>& vec, const std::string& target){
 		return std::find(vec.begin(), vec.end(), target) != vec.end();
 	}
 
-	/** Impl of vecStr(vector). */
+	/** Impl of vecStr(vector<string>). */
 	std::string vecStr(const std::vector<std::string>& vec){
 		//Define the lambda to convert the strings to strings (basically a no-op)
 		std::function<std::string(const std::string&)> converter = [](const std::string& str){
@@ -53,7 +53,7 @@ namespace elbeecrypt::common::utils::Container {
 		return vecStr(vec, converter);
 	}
 
-	/** Impl of vecStr(vector). */
+	/** Impl of vecStr(vector<path>). */
 	std::string vecPathStr(const std::vector<fs::path>& vec){
 		//Define the lambda to convert the paths to strings
 		std::function<std::string(const fs::path&)> converter = [](const fs::path& path){

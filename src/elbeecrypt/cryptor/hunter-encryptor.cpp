@@ -3,6 +3,7 @@
 #include "elbeecrypt/common/targets/extensions.hpp"
 #include "elbeecrypt/cryptor/hunter-encryptor.hpp"
 
+/** Impl of hunter-encryptor.hpp */
 namespace elbeecrypt::cryptor {
 	//Include namespace definitions
 	using namespace elbeecrypt::common;

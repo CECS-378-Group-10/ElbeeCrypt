@@ -4,12 +4,13 @@
 #include "elbeecrypt/common/utils/fs.hpp"
 #include "elbeecrypt/common/utils/string.hpp"
 
+/** Impl of hunter.hpp */
 namespace elbeecrypt::common::io {
 	//Include namespace definitions
 	using namespace elbeecrypt::common;
 
 	//Constructors & Destructor
-	/** Impl of Hunter(vector). */
+	/** Impl of Hunter(vector<path>). */
 	Hunter::Hunter(const std::vector<fs::path>& roots): _roots(roots){
 		//Targets should be empty by default
 		targets = {};
@@ -52,7 +53,7 @@ namespace elbeecrypt::common::io {
 
 
 	//Private methods
-	/** Impl of hunt(roots). */
+	/** Impl of hunt(vector<path>). */
 	void Hunter::hunt(const std::vector<fs::path>& roots){
 		//Define the lambda to collect the directory listings
 		auto fileConsumer = [this](const fs::path& path){

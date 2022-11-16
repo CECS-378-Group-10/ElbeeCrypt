@@ -4,6 +4,7 @@
 #include "elbeecrypt/common/utils/string.hpp"
 #include "elbeecrypt/decryptor/hunter-decryptor.hpp"
 
+/** Impl of hunter-decryptor.hpp */
 namespace elbeecrypt::decryptor {
 	//Include namespace definitions
 	using namespace elbeecrypt::common;
