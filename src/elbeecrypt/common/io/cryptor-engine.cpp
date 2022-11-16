@@ -14,35 +14,23 @@ namespace elbeecrypt::common::io {
 
 
 	//Constructors & Destructor
-	/** Impl of CryptorEngine(array, uint32_t). */
-	CryptorEngine::CryptorEngine(std::array<uint8_t, PRIVKEY_SIZE>& key, const uint32_t& chunkSize): _chunkSize(chunkSize), cipheredChunkSize(calculateCipheredChunkSize(chunkSize)){ //Constructor 1a impl
-		//Setup the keys
-		setupFromPrivkey(key);
+	/** Impl of CryptorEngine(array<uint8_t>, uint32_t). */
+	CryptorEngine::CryptorEngine(const std::array<uint8_t, KEY_SIZE>& skey, const uint32_t& chunkSize): _chunkSize(chunkSize), cipheredChunkSize(calculateCipheredChunkSize(chunkSize)){
+		//Load the key from the given argument, initialize LibSodium, and lock its memory location
+		key = skey;
+		init();
+		lockKeyMem(key);
 	}
 
-	/** Impl of CryptorEngine(array). */
-	CryptorEngine::CryptorEngine(std::array<uint8_t, PRIVKEY_SIZE>& key): CryptorEngine(key, DEFAULT_PT_BUF_SIZE){} //Redirects to Constructor 1a
+	/** Impl of CryptorEngine(array<uint8_t>). */
+	CryptorEngine::CryptorEngine(const std::array<uint8_t, KEY_SIZE>& skey): CryptorEngine(skey, DEFAULT_PT_BUF_SIZE){} //Redirects to Constructor 1a
 
 	/** Impl of CryptorEngine(path, uint32_t). */
 	CryptorEngine::CryptorEngine(const fs::path& keyPath, const uint32_t& chunkSize): _chunkSize(chunkSize), cipheredChunkSize(calculateCipheredChunkSize(chunkSize)){ //Constructor 2a impl
-		//Load the key from the given file
-		std::ifstream keyStream;
-		if(!Stream::loadFStream(keyStream, keyPath, std::ios::ate | std::ios::binary | std::ios::in))
-			throw std::runtime_error("Could not load the key located at path: '" + keyPath.string() + "'");
-
-		//Ensure the file size is correct for a private key
-		if(keyStream.tellg() != PRIVKEY_SIZE)
-			throw std::runtime_error("Key size mismatch (" + std::to_string(keyStream.tellg()) + " bytes) for key located at path: '" + keyPath.string() + "'");
-
-		//Create an array to store the key
-		std::array<uint8_t, PRIVKEY_SIZE> key;
-
-		//Load the key into the array
-		keyStream.seekg(0); //Make sure to do this before loading the key since the file was loaded in append mode to get the size
-		keyStream.read((char*) key.data(), PRIVKEY_SIZE);
-
-		//Setup the keys
-		setupFromPrivkey(key);
+		//Load the key from the given file, initialize LibSodium, and lock its memory location
+		key = importKey(keyPath);
+		init();
+		lockKeyMem(key);
 	}
 
 	/** Impl of CryptorEngine(path). */
@@ -50,13 +38,10 @@ namespace elbeecrypt::common::io {
 
 	/** Impl of CryptorEngine(uint32_t). */
 	CryptorEngine::CryptorEngine(const uint32_t& chunkSize): _chunkSize(chunkSize), cipheredChunkSize(calculateCipheredChunkSize(chunkSize)){ //Constructor 3a impl
-		//Initialize LibSodium
+		//Initialize LibSodium, generate the symmetric key, and lock its memory location
 		init();
-
-		//Generate the public and private keys
-		int genKeysRet = crypto_box_keypair(pubkey.data(), privkey.data());
-		if(genKeysRet != 0) throw std::runtime_error("LibSodium could not generate the required keypair. Return code: " + std::to_string(genKeysRet));
-		sharedkey = generateSharedSecret(privkey, pubkey);
+		crypto_secretstream_xchacha20poly1305_keygen(key.data());
+		lockKeyMem(key);
 	}
 
 	/** Impl of CryptorEngine(). */
@@ -64,28 +49,29 @@ namespace elbeecrypt::common::io {
 
 	/** Impl of ~CryptorEngine(). */
 	CryptorEngine::~CryptorEngine(){
-		//Zero out the key arrays to securely erase them
+		//Zero out the key array to securely erase it
 		//See: https://libsodium.gitbook.io/doc/memory_management
-		sodium_memzero(privkey.data(), privkey.size());
-		sodium_memzero(pubkey.data(), pubkey.size());
-		sodium_memzero(sharedkey.data(), sharedkey.size());
+		sodium_memzero(key.data(), key.size());
+
+		//Unlock the memory location where the key is held
+		unlockKeyMem(key);
 	}
 
 
 	//Getters
-	/** Impl of getPrivkey(). */
-	const std::array<uint8_t, CryptorEngine::PRIVKEY_SIZE>& CryptorEngine::getPrivkey() const {
-		return privkey;
+	/** Impl of getKey(). */
+	const std::array<uint8_t, CryptorEngine::KEY_SIZE>& CryptorEngine::getKey() const {
+		return key;
 	}
 
-	/** Impl of getPubkey(). */
-	const std::array<uint8_t, CryptorEngine::PUBKEY_SIZE>& CryptorEngine::getPubkey() const {
-		return pubkey;
+	/** Impl of getChunkSize(). */
+	uint32_t CryptorEngine::getChunkSize(){
+		return _chunkSize;
 	}
 
-	/** Impl of getSharedkey(). */
-	const std::array<uint8_t, CryptorEngine::SHAREDKEY_SIZE>& CryptorEngine::getSharedkey() const {
-		return sharedkey;
+	/** Impl of getCipheredChunkSize(). */
+	uint32_t CryptorEngine::getCipheredChunkSize(){
+		return cipheredChunkSize;
 	}
 
 
@@ -115,7 +101,7 @@ namespace elbeecrypt::common::io {
 
 		//Check if the ciphertext header is intact
 		ciphertext.read((char*) headerBuf, H_BUF_SIZE);
-		if(crypto_secretstream_xchacha20poly1305_init_pull(&state, headerBuf, sharedkey.data()) != 0){
+		if(crypto_secretstream_xchacha20poly1305_init_pull(&state, headerBuf, key.data()) != 0){
 			//Incomplete header
 			Cerr{} << errorPrefix << "Incomplete header" << std::endl;
 			cleanup(ciphertext, plaintext, plaintextBuf, ciphertextBuf, headerBuf);
@@ -187,7 +173,7 @@ namespace elbeecrypt::common::io {
 		int eof; //Whether the current chunk is the last one to process
 
 		//Create the ciphertext header and write it to the ciphertext stream
-		crypto_secretstream_xchacha20poly1305_init_push(&state, headerBuf, sharedkey.data());
+		crypto_secretstream_xchacha20poly1305_init_push(&state, headerBuf, key.data());
 		ciphertext.write((char*) headerBuf, H_BUF_SIZE);
 
 		//Begin encrypting the file
@@ -221,23 +207,13 @@ namespace elbeecrypt::common::io {
 	}
 
 	/** Impl of exportPrivkey(path). */
-	bool CryptorEngine::exportPrivkey(const fs::path& dest){
-		return CryptorEngine::exportKey(privkey, dest);
-	}
-
-	/** Impl of exportPubkey(path). */
-	bool CryptorEngine::exportPubkey(const fs::path& dest){
-		return CryptorEngine::exportKey(pubkey, dest);
+	bool CryptorEngine::exportKey(const fs::path& dest){
+		return CryptorEngine::exportKey(key, dest);
 	}
 	
-	/** Impl of privkeyFingerprint(). */
-	std::string CryptorEngine::privkeyFingerprint(){
-		return fingerprint(privkey);
-	}
-
-	/** Impl of pubkeyFingerprint(). */
-	std::string CryptorEngine::pubkeyFingerprint(){
-		return fingerprint(pubkey);
+	/** Impl of keyFingerprint(). */
+	std::string CryptorEngine::keyFingerprint(){
+		return CryptorEngine::fingerprint(key);
 	}
 
 	/** Impl of toString(). */
@@ -248,7 +224,7 @@ namespace elbeecrypt::common::io {
 		//Add the relevant attributes
 		out += "cipherSuite=" + CIPHER_ALGO + ", ";
 		out += "keyType=" + KEY_TYPE + ", ";
-		out += "pubkeyFingerprint=" + pubkeyFingerprint() + ", ";
+		out += "keyFingerprint=" + keyFingerprint() + ", ";
 		out += "chunkSize=" + std::to_string(_chunkSize) + ", ";
 		out += "cipheredChunkSize=" + std::to_string(cipheredChunkSize);
 
@@ -264,7 +240,58 @@ namespace elbeecrypt::common::io {
 	}
 
 
-	//Private methods
+	//Utility functions
+	/** Impl of exportKey(array<uint8_t>, path). */
+	bool CryptorEngine::exportKey(const std::array<uint8_t, KEY_SIZE>& key, const fs::path& dest){
+		//Create the stream to write the key to
+		std::ofstream keyStream;
+		if(!elbeecrypt::common::utils::Stream::loadFStream(keyStream, dest, std::ios::binary | std::ios::out)) return false;
+
+		//Write the key to the stream
+		keyStream.write((char*) key.data(), key.size());
+
+		//Return true, assuming everything else went okay
+		keyStream.close();
+		return true;
+	}
+
+	/** Impl of fingerprint(array<uint8_t>). */
+	std::string CryptorEngine::fingerprint(const std::array<uint8_t, KEY_SIZE>& key){
+		//Create the output array to store the digest bytes
+		uint8_t hash[crypto_hash_sha256_BYTES];
+
+		//Digest the key using SHA-256
+		int digestRet = crypto_hash_sha256(hash, key.data(), key.size());
+		if(digestRet != 0) return "";
+
+		//Convert the digest array to a string and return it
+		return elbeecrypt::common::utils::Container::cIntArrayToStr(hash, crypto_hash_sha256_BYTES, false);
+	}
+
+	/** Impl of importKey(path). */
+	std::array<uint8_t, CryptorEngine::KEY_SIZE> CryptorEngine::importKey(const fs::path& src){
+		//Create the stream to read the key from
+		std::ifstream keyStream;
+		if(!Stream::loadFStream(keyStream, src, std::ios::ate | std::ios::binary | std::ios::in))
+			throw std::runtime_error("Could not load the key located at path: '" + src.string() + "'");
+
+		//Ensure the file size is correct for a private key
+		if(keyStream.tellg() != CryptorEngine::KEY_SIZE)
+			throw std::runtime_error("Key size mismatch (" + std::to_string(keyStream.tellg()) + " bytes) for key located at path: '" + src.string() + "'");
+
+		//Create an array to store the key
+		std::array<uint8_t, CryptorEngine::KEY_SIZE> key;
+
+		//Load the key into the array
+		keyStream.seekg(0); //Make sure to do this before loading the key since the file was loaded in append mode to get the size
+		keyStream.read((char*) key.data(), CryptorEngine::KEY_SIZE);
+
+		//Return the key array
+		return key;
+	}
+
+
+	//Private utility functions
 	/** Impl of calculateCipheredChunkSize(uint32_t). */
 	uint32_t CryptorEngine::calculateCipheredChunkSize(const uint32_t& chunkSize){
 		return chunkSize + crypto_secretstream_xchacha20poly1305_ABYTES;
@@ -282,22 +309,6 @@ namespace elbeecrypt::common::io {
 		delete[] bufferC;
 	}
 
-	/** Impl of generateSharedSecret(array, array). */
-	std::array<uint8_t, CryptorEngine::SHAREDKEY_SIZE> CryptorEngine::generateSharedSecret(const std::array<uint8_t, CryptorEngine::PRIVKEY_SIZE>& privkey, const std::array<uint8_t, CryptorEngine::PUBKEY_SIZE>& pubkey){
-		//This might be called very early so ensure LibSodium is loaded first
-		init();
-
-		//Generate the shared secret
-		std::array<uint8_t, CryptorEngine::SHAREDKEY_SIZE> sharedkey;
-		int sharedKeyRet = crypto_box_beforenm(sharedkey.data(), pubkey.data(), privkey.data());
-
-		//Throw a runtime error if the process failed
-		if(sharedKeyRet != 0) throw std::runtime_error("LibSodium could not generate the required shared secret. Return code: " + std::to_string(sharedKeyRet));
-
-		//Return the shared secret
-		return sharedkey;
-	}
-
 	/** Impl of init(). */
 	void CryptorEngine::init(){
 		//Initialize LibSodium
@@ -305,17 +316,17 @@ namespace elbeecrypt::common::io {
 		if(sodiumInitRetVal == -1) throw std::runtime_error("LibSodium could not be safely initialized. Return code: " + sodiumInitRetVal);
 	}
 
-	/** Impl of setupFromPrivkey(array). */
-	void CryptorEngine::setupFromPrivkey(const std::array<uint8_t, CryptorEngine::PRIVKEY_SIZE>& key){
-		//Initialize LibSodium
-		init();
+	/** Impl of lockKeyMem(array<uint8_t>). */
+	void CryptorEngine::lockKeyMem(std::array<uint8_t, KEY_SIZE>& key){
+		//Lock the key's memory location
+		int memLockRet = sodium_mlock(&key, key.size());
+		if(memLockRet != 0) throw std::runtime_error("LibSodium could not lock the key's memory location. Return code: " + std::to_string(memLockRet));
+	}
 
-		//Generate the public key from the private key
-		privkey = key;
-		int pubkeyDerivRet = crypto_scalarmult_base(pubkey.data(), privkey.data());
-		if(pubkeyDerivRet != 0) throw std::runtime_error("LibSodium could not generate the required public key. Return code: " + std::to_string(pubkeyDerivRet));
-
-		//Generate the shared secret
-		sharedkey = generateSharedSecret(privkey, pubkey);
+	/** Impl of unlockKeyMem(array<uint8_t>). */
+	void CryptorEngine::unlockKeyMem(std::array<uint8_t, KEY_SIZE>& key){
+		//Unlock the key's memory location
+		int memUnlockRet = sodium_munlock(&key, key.size());
+		if(memUnlockRet != 0) throw std::runtime_error("LibSodium could not unlock the key's memory location. Return code: " + std::to_string(memUnlockRet));
 	}
 }
