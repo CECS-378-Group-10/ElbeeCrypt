@@ -12,6 +12,9 @@ namespace elbeecrypt::common::Settings {
 	/** The size of the chunks used in the cryptor engine (0.5 MB by default). */
 	const uint32_t CRYPTO_CHUNK_SIZE = 524300;
 
+	/** The name of the decrypted files log. */
+	const std::string DECRYPTED_FILES_LIST_NAME = "elbeecrypt-decrypted.txt";
+
 	/** The extension to use for encrypted files. */
 	const std::string ENCRYPTED_EXTENSION = "elbeecrypt";
 

