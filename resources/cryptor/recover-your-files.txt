@@ -1,6 +1,6 @@
 ### ELBEECRYPT ###
 
-If you are reading this, it means your personal files were locked by ElbeeCrypt, an experimental ransomware sample made as a project for CSULB's CECS-378 computer security class. All of your images, videos, music, documents, etc have been securely encrypted using public key cryptography. More information about this run, including the fingerprint of the public key used, can be found below:
+If you are reading this, it means your personal files were locked by ElbeeCrypt, an experimental ransomware sample made as a project for CSULB's CECS-378 computer security class. All of your images, videos, music, documents, etc have been securely encrypted using symmetric key cryptography. More information about this run, including the fingerprint of the key used, can be found below:
 
 Encryption scheme: %encryption_scheme%
 Keypair type: %keypair_type%
