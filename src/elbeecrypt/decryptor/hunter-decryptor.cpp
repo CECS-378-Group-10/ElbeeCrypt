@@ -18,8 +18,8 @@ namespace elbeecrypt::decryptor {
 
 
 	//Overrides
-	/** Impl of isTargetable(path). */
-	bool HunterDecryptor::isTargetable(const fs::path& path){
+	/** Impl of isTargetable(path, uint32_t). */
+	bool HunterDecryptor::isTargetable(const fs::path& path, const uint32_t&){ //Depth is not used when decrypting
 		//Isolate the extension from the path
 		std::string isolatedExt = targets::Extensions::isolateExtension(path);
 

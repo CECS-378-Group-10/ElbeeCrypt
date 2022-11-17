@@ -91,9 +91,10 @@ namespace elbeecrypt::common::io {
 			 * abstract method and is meant to be overridden in subclasses.
 			 * 
 			 * @param path The path to check
+			 * @param depth The depth of the file from the starting directory
 			 * @return Whether the current path is targetable
 			 */
-			virtual bool isTargetable(const fs::path& path) = 0;
+			virtual bool isTargetable(const fs::path& path, const uint32_t& depth) = 0;
 
 
 		//Private methods

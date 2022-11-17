@@ -49,8 +49,9 @@ namespace elbeecrypt::cryptor {
 			 * based on the extension of the file in question.
 			 * 
 			 * @param path The path to check
+			 * @param depth The depth of the file from the starting directory
 			 * @return Whether the current path is targetable
 			 */
-			bool isTargetable(const fs::path& path);
+			bool isTargetable(const fs::path& path, const uint32_t& depth);
 	};
 }

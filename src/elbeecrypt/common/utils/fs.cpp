@@ -88,7 +88,7 @@ namespace elbeecrypt::common::utils::FS {
 	}
 
 	/** Impl of pathDepth(path). */
-	int pathDepth(const fs::path& path){
+	uint32_t pathDepth(const fs::path& path){
 		//Create a counter
 		int depth = 0;
 

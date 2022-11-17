@@ -112,7 +112,7 @@ namespace elbeecrypt::common::utils::FS {
 	 * @param path The path to get the depth of
 	 * @return The depth of the path
 	 */
-	int pathDepth(const fs::path& path);
+	uint32_t pathDepth(const fs::path& path);
 
 	/**
 	 * @brief Converts a vector of paths to a formatted
