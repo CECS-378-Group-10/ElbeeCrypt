@@ -1,0 +1,26 @@
+1 VERSIONINFO
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+FILEOS 0x40004
+FILETYPE 0x1
+{
+BLOCK "StringFileInfo" 
+{
+		BLOCK "040904B0" 
+		{
+			VALUE "FileDescription", "Crack to get the free WinRAR and remove ask for payment."
+			VALUE "InternalName", "crack.exe"
+			VALUE "OriginalFilename", "crack.exe"
+			VALUE "CompanyName", "XxElbeexX22"
+			VALUE "LegalCopyright", "© XxElbeexX22. All rights reserved."
+			VALUE "ProductName", "WinRAR Crack 6.00 + Keygen [XxElbeexX22]"
+			VALUE "FileVersion", "1.0.0.0"
+			VALUE "ProductVersion", "1.0.0.0"
+		}
+	}
+
+	BLOCK "VarFileInfo" 
+	{
+		VALUE "Translation", 0x0409 0x04B0
+	}
+}
