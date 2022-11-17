@@ -2,11 +2,11 @@
 
 ## What Is It?
 
-TBA
+ElbeeCrypt is a file-encrypting ransomware that utilizes LibSodium, a lightweight cryptography library, to encrypt a user's files using symmetric-key cryptography. This sample is a proof of concept, and does NOT seek to be malicious in any way. A decryptor is available for this ransomware and is built in conjunction with the encryptor. By using the code contained in this repository, we assume **NO RESPONSIBILITY** for any damage to your files or system as a whole.
 
 ## Why?
 
-TBA
+Ransomware is a growing threat to the internet. Large companies and organizations providing essential services such as energy, food, etc are especially at risk. This project was created to better understand the threat from the perspective of an attacker. By completing this project, we now have a deeper understanding of how ransomware works, what it does under the hood, and how defenses can be put up to combat threats such as this in the future.
 
 ## Building Instructions
 
@@ -67,9 +67,3 @@ Compilation has been tested and is confirmed to work on the following platforms:
 ## Contributing
 
 Feel free to contribute ideas or fixes as either an issue or a pull request. However, please follow the guidelines outlined in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) to ensure your input is successfully received. Please keep any and all discussion civil and related to the project. Those not abiding by these guidelines will be prohibited from contributing further. Political discussion of any kind **WILL NOT BE TOLERATED**.
-
-## Miscellaneous
-
-### To-Do
-
-TBA
