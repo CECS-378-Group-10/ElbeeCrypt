@@ -38,10 +38,10 @@ using namespace elbeecrypt;
  * @return The status code on conclusion of execution
  */
 int main(int argc, char** argv){
-	//If argc is 0, then launch a GUI
+	//If argc is 1, then launch a GUI
 	if(argc == 1){
-		std::cout << "GUI" << std::endl;
-		return 0;
+		//std::cout << "GUI" << std::endl;
+		//return 0;
 	}
 
 	//Get the symmetric key path from argv[1]
