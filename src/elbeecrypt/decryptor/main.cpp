@@ -42,7 +42,7 @@ int main(int argc, char** argv){
 	if(argc == 1){
 		//std::cout << "GUI" << std::endl;
 		std::cout << "ERROR: You must provide an input path to an ElbeeCrypt symmetric key file." << std::endl;
-		std::cout << "\tExample: " << argv[0] << " " << "<path to elbeecrypt_(SHA-256 of your key)_-key." << common::Settings::ENCRYPTION_KEY_EXTENSION << ">" << std::endl;
+		std::cout << "\tExample: " << argv[0] << " " << "<path to elbeecrypt_(SHA-256 of your key)-key." << common::Settings::ENCRYPTION_KEY_EXTENSION << ">" << std::endl;
 		return -1;
 	}
 
