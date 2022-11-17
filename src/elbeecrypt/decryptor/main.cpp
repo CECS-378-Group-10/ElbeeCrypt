@@ -119,6 +119,17 @@ std::vector<fs::path> decryptor::Main::decrypt(const std::vector<fs::path>& root
 	auto decryptor = [&cryptorEngine, &successfullyDecrypted, &failedDecrypted](const std::vector<fs::path>& targets){
 		//Loop over the targets
 		for(fs::path target : targets){
+			//Before doing anything, check if the file is readable and writable
+			if(!common::utils::FS::canRead(target) || !common::utils::FS::canWrite(target)){
+				//Get the reason for failure
+				std::string reason = common::utils::FS::canRead(target) ? "unwritable" : "unreadable";
+
+				//Add target to the failed list and skip the loop
+				failedDecrypted.push_back(target);
+				std::cout << "Skipped file at path '" << target.string() << "'. Reason: " << reason << std::endl;
+				continue;
+			}
+
 			//Create the path in which the target decrypted file will be dropped
 			fs::path decryptedOut = common::utils::FS::removeTrailingExtension(target);
 

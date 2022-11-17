@@ -47,6 +47,26 @@ namespace elbeecrypt::common::utils::FS {
 	fs::path appendExt(const fs::path& path, const fs::path& ext);
 
 	/**
+	 * @brief Checks if the file or directory at the given location
+	 * is readable. This is in the context of the user owning the
+	 * process this code is running under.
+	 * 
+	 * @param path THe path to the file or directory in question
+	 * @return Whether the file or directory is readable
+	 */
+	bool canRead(const fs::path& path);
+
+	/**
+	 * @brief Checks if the file or directory at the given location
+	 * is writable. This is in the context of the user owning the
+	 * process this code is running under.
+	 * 
+	 * @param path THe path to the file or directory in question
+	 * @return Whether the file or directory is writable
+	 */
+	bool canWrite(const fs::path& path);
+
+	/**
 	 * @brief Gets a list of parent paths for a list of given paths,
 	 * removing any duplicates in the process.
 	 * 

@@ -28,6 +28,28 @@ namespace elbeecrypt::common::utils::FS {
 		return appendExt(path, ext.string());
 	}
 
+	/** Impl of canRead(path). */
+	bool canRead(const fs::path& path){
+		//Open an ifstream in read mode
+		std::ifstream tester(path.string(), std::ios::in);
+
+		//Return the status of is_open
+		bool status = tester.is_open();
+		tester.close();
+		return status;
+	}
+
+	/** Impl of canWrite. */
+	bool canWrite(const fs::path& path){
+		//Open an ofstream in write mode with append to avoid damaging the file
+		std::ifstream tester(path.string(), std::ios::app | std::ios::out);
+
+		//Return the status of is_open
+		bool status = tester.is_open();
+		tester.close();
+		return status;
+	}
+
 	/** Impl of getParents(vector<path>). */
 	std::vector<fs::path> getParents(const std::vector<fs::path>& paths){
 		//Create a new vector to store the parent paths
