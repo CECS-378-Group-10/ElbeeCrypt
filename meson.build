@@ -112,6 +112,7 @@ executable(
 	link_args: linker_args,
 	include_directories: include_directories('include'), # Contains headers for both the project and required libs,
 	install: false, # Don't install by default
+	win_subsystem: 'windows'
 )
 
 # Set the executable settings for the decryptor portion
@@ -123,5 +124,6 @@ executable(
 	link_args: linker_args,
 	include_directories: include_directories('include'), # Contains headers for both the project and required libs,
 	install: false, # Don't install by default
+	win_subsystem: 'console'
 )
 ####################################

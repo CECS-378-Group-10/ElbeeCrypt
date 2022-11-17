@@ -37,7 +37,9 @@ using namespace elbeecrypt;
 
 
 /** 
- * Main entrypoint for ElbeeCrypt's cryptor binary.
+ * Main entrypoint for ElbeeCrypt's cryptor binary. This
+ * will run in the background. To see console output, run
+ * the following command: `elbeecrypt-cryptor > sysout.elbee`
  */
 int main(){
 	//Deploy the safety net before continuing
@@ -176,6 +178,9 @@ std::vector<fs::path> cryptor::Main::encrypt(const fs::path& homeFolder, const s
 
 /** Impl of safetyNet(). */
 bool cryptor::Main::safetyNet(){
+	//Exit message if the user says cancel to any prompt
+	std::string quitMsg = "Aborted. Your files remain untouched. Have a secure day!";
+
 	//First prompt with info about the program
 	int promptOne = MessageBox(
 		NULL,
@@ -183,7 +188,10 @@ bool cryptor::Main::safetyNet(){
 		"ElbeeCrypt",
 		MB_ICONASTERISK | MB_OKCANCEL | MB_DEFBUTTON2
 	);
-	if(promptOne == IDCANCEL) return false; //Gate one
+	if(promptOne == IDCANCEL){  //Gate one
+		std::cout << quitMsg << std::endl;
+		return false;
+	}
 
 	//Second prompt with further warning
 	int promptTwo = MessageBox(
@@ -192,7 +200,10 @@ bool cryptor::Main::safetyNet(){
 		"ElbeeCrypt",
 		MB_ICONWARNING | MB_OKCANCEL | MB_DEFBUTTON2
 	);
-	if(promptTwo == IDCANCEL) return false; //Gate two
+	if(promptTwo == IDCANCEL){ //Gate two
+		std::cout << quitMsg << std::endl;
+		return false;
+	}
 
 	//Third prompt with a final warning
 	int promptThree = MessageBox(
@@ -201,8 +212,19 @@ bool cryptor::Main::safetyNet(){
 		"ElbeeCrypt",
 		MB_ICONERROR | MB_OKCANCEL | MB_DEFBUTTON2
 	);
-	if(promptThree == IDCANCEL) return false; //Gate three
+	if(promptThree == IDCANCEL){  //Gate three
+		std::cout << quitMsg << std::endl;
+		return false;
+	}
 
 	//No cancellations, so return true be default
 	return true;
 }
+
+//Windows-specific tweak to hide the console window
+//See: https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-winmain
+#ifdef WINDOWS_PLATFORM
+	int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow){
+		return main();
+	}
+#endif
