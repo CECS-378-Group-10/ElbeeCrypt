@@ -1,9 +1,9 @@
 bin2cpp: https://github.com/end2endzone/bin2cpp
-enum (fork of smartenum): https://github.com/therocode/smartenum
-gui_lite: https://github.com/idea4good/GuiLite
+einsteinenum (fork of smartenum): https://github.com/therocode/smartenum
+gui_lite (cut for release, but still considered): https://github.com/idea4good/GuiLite
 libsodium: https://github.com/jedisct1/libsodium
 Quom: https://github.com/Viatorus/quom
-registry: https://github.com/m4x1m1l14n/Registry
+registry (cut for release, but still considered): https://github.com/m4x1m1l14n/Registry
 Resource Hacker: http://www.angusj.com/resourcehacker/
 thread-pool: https://github.com/bshoshany/thread-pool
 windirent: https://github.com/tronkko/dirent
