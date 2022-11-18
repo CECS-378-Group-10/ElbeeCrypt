@@ -21,7 +21,8 @@ if !_0! NEQ 1 (
   python .mesondep/conan_init.py
   rem Run Conan
   mkdir conan
-  conan install . --install-folder^=conan --build^=outdated --profile^=conan-generated -s build_type^=Debug
+  rem conan install . --install-folder^=conan --build^=outdated --profile^=conan-generated -s build_type^=Debug
+  conan install . --install-folder^=conan --build^=outdated --profile^=conan-generated
 )
 rem Build with Conan
 conan build . --build-folder conan

@@ -16,7 +16,8 @@ if(!exists("conan/conanbuildinfo.txt")){
 
 	//Run Conan
 	call("mkdir conan");
-	call("conan install . --install-folder=conan --build=outdated --profile=conan-generated -s build_type=Debug");
+	//call("conan install . --install-folder=conan --build=outdated --profile=conan-generated -s  build_type=Debug");
+	call("conan install . --install-folder=conan --build=outdated --profile=conan-generated");
 }
 
 //Build with Conan
