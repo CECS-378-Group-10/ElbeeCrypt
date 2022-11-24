@@ -42,7 +42,7 @@ namespace elbeecrypt::common::utils::FS {
 	/** Impl of canWrite. */
 	bool canWrite(const fs::path& path){
 		//Open an ofstream in write mode with append to avoid damaging the file
-		std::ifstream tester(path.string(), std::ios::app | std::ios::out);
+		std::ofstream tester(path.string(), std::ios::app | std::ios::out);
 
 		//Return the status of is_open
 		bool status = tester.is_open();
