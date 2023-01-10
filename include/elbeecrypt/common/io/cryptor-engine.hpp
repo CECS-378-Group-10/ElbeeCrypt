@@ -88,7 +88,7 @@ namespace elbeecrypt::common::io {
 			/**
 			 * @brief Constructs a new CryptorEngine object with a 
 			 * given symmetric key and a defined chunk size of x bytes. 
-			 * Throws a `runtime_error` if LibSodium fails to initializeKB
+			 * Throws a `runtime_error` if LibSodium fails to initialize
 			 * or the keygen operation failed.
 			 * 
 			 * @param skey The symmetric key to use
@@ -159,7 +159,7 @@ namespace elbeecrypt::common::io {
 			CryptorEngine(); //Constructor 3b: random key
 
 			/**
-			 * @brief Destroys the CryptorEngineHuge object and securely 
+			 * @brief Destroys the CryptorEngine object and securely 
 			 * erases the key used by zeroing it out. This is done for
 			 * security reasons. See why here: https://libsodium.gitbook.io/doc/memory_management
 			 */

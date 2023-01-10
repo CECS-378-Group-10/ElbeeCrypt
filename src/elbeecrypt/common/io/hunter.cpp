@@ -54,7 +54,7 @@ namespace elbeecrypt::common::io {
 
 	//Private methods
 	/** Impl of hunt(vector<path>). */
-	void Hunter::hunt(const std::vector<fs::path>& roots){
+	void Hunter::hunt(const std::vector<fs::path>& roots){ //TODO: add folder pattern blacklist feature
 		//Define the depth for the current directory
 		uint32_t currentDepth = 0;
 
