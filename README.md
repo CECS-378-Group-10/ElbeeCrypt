@@ -1,5 +1,27 @@
 # ElbeeCrypt - A PoC file-encrypting ransomware for CECS-378
 
+<Originally authored in Fall, 2022; publicly released on June 14, 2025>
+
+## IMPORTANT DISCLAIMER
+
+This project and all associated code, binaries, build tools, and documentation are provided **strictly for educational and research purposes only**. ElbeeCrypt is a proof-of-concept, file-encrypting ransomware designed to aid in the study and understanding of ransomware threats, defensive strategies, and implementation of cryptography in a platform agnostic manner.
+
+By accessing, downloading, compiling, or using any part of this repository, you acknowledge and agree to the following:
+
+- **No Malicious Intent:** The authors do not condone or support the use of this code for malicious, illegal, or unauthorized purposes. Any use of this project for activities that violate laws or regulations is strictly prohibited.
+
+- **Use at Your Own Risk:** The code and binaries in this repository can be destructive if misused, potentially resulting in irreversible data loss or system instability. You assume full responsibility and risk for any use, misuse, or consequences arising from interacting with this project.
+
+- **No Warranty:** The project is provided **AS IS**, without any warranty, express or implied, including but not limited to fitness for a particular purpose, non-infringement, or absence of defects.
+
+- **No Liability:** The authors and contributors accept **no liability** for any damages, losses, or legal consequences arising directly or indirectly from the use, misuse, or distribution of this project, including but not limited to data loss, system compromise, or weaponization by bad actors.
+
+- **Legal Compliance:** It is your responsibility to ensure that your use of this project complies with all applicable local, national, and international laws and regulations. Possession, distribution, or use of malicious software, including file-encrypting ransomware, may be illegal in some jurisdictions and could result in severe penalties.
+
+- **Intended Audience:** This project is intended solely for security researchers, educators, and students in controlled, isolated, and lawful environments. Do not deploy or test this software on systems or networks you do not own or have explicit permission to use. This project was developed under careful supervision and in a specially crafted development environment to eliminate the risk of infection and destruction of personal files.
+
+**If you do not agree with these terms, do not use, download, or distribute any part of this repository.**
+
 ## What Is It?
 
 ElbeeCrypt is a file-encrypting ransomware that utilizes LibSodium, a lightweight cryptography library, to encrypt a user's files using symmetric-key cryptography. This sample is a proof of concept, and does NOT seek to be malicious in any way. A decryptor is available for this ransomware and is built in conjunction with the encryptor. By using the code contained in this repository, we assume **NO RESPONSIBILITY** for any damage to your files or system as a whole.
